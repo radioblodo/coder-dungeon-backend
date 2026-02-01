@@ -1,0 +1,908 @@
+{
+  "problems": {
+    "l1_c1_p1": {
+      "description": "Move all even integers to the back of the linked list, preserving relative order of odds and evens.",
+      "type": "code_function",
+      "test_cases": [
+        {
+          "id": "evens_tc_01",
+          "input": "1,2,3,4,5",
+          "expected_output": "1,3,5,2,4",
+          "fail_node_id": "node_evens_core"
+        },
+        {
+          "id": "evens_tc_02",
+          "input": "2,4,6",
+          "expected_output": "2,4,6",
+          "fail_node_id": "node_evens_all_even"
+        },
+        {
+          "id": "evens_tc_03",
+          "input": "1,3,5",
+          "expected_output": "1,3,5",
+          "fail_node_id": "node_evens_all_odd"
+        },
+        {
+          "id": "evens_tc_04",
+          "input": "2,1,4,3,6,5",
+          "expected_output": "1,3,5,2,4,6",
+          "fail_node_id": "node_evens_stability"
+        }
+      ]
+    },
+    "l1_c1_p2": {
+      "description": "Move the node with the maximum value to the front of the linked list.",
+      "type": "code_function",
+      "test_cases": [
+        {
+          "id": "max_tc_01",
+          "input": "1,2,3,4,5",
+          "expected_output": "5,1,2,3,4",
+          "fail_node_id": "node_max_not_front"
+        },
+        {
+          "id": "max_tc_02",
+          "input": "5,4,3,2,1",
+          "expected_output": "5,4,3,2,1",
+          "fail_node_id": "node_max_already_front"
+        },
+        {
+          "id": "max_tc_03",
+          "input": "2,2,2,2",
+          "expected_output": "2,2,2,2",
+          "fail_node_id": "node_max_all_equal"
+        },
+        {
+          "id": "max_tc_04",
+          "input": "1,5,3,5,4",
+          "expected_output": "5,1,3,5,4",
+          "fail_node_id": "node_max_multiple"
+        }
+      ]
+    },
+    "l1_c2_p1": {
+      "description": "Remove duplicates from a sorted linked list so that each value appears only once.",
+      "type": "code_function",
+      "test_cases": [
+        {
+          "id": "dup_tc_01",
+          "input": "1,1,2,3,3,3",
+          "expected_output": "1,2,3",
+          "fail_node_id": "node_dups_core"
+        },
+        {
+          "id": "dup_tc_02",
+          "input": "1,2,3,4",
+          "expected_output": "1,2,3,4",
+          "fail_node_id": "node_dups_nochange"
+        },
+        {
+          "id": "dup_tc_03",
+          "input": "2,2,2,2",
+          "expected_output": "2",
+          "fail_node_id": "node_dups_all_same"
+        },
+        {
+          "id": "dup_tc_04",
+          "input": "1,1,1,2,2,3,3,3,3",
+          "expected_output": "1,2,3",
+          "fail_node_id": "node_dups_multiple_blocks"
+        }
+      ]
+    },
+    "l1_c3_p1": {
+      "description": "Identify the 5 bugs (2 syntax, 3 logical) in the linked-list door unlocking code.",
+      "type": "scroll_bug_finder",
+      "bug_targets": [
+        {
+          "id": "bug_last_node_assignment",
+          "concept_node_id": "node_circ_last_next_assignment"
+        },
+        {
+          "id": "bug_erroneous_return_statement",
+          "concept_node_id": "node_erroneous_return_statement"
+        },
+        {
+          "id": "bug_half_unlock_missing_arg",
+          "concept_node_id": "node_func_call_missing_arguments"
+        },
+        {
+          "id": "bug_bptr_uses_a_index",
+          "concept_node_id": "node_wrong_variable_bptr"
+        },
+        {
+          "id": "bug_main_guard_usage",
+          "concept_node_id": "node_main_guard_usage"
+        }
+      ]
+    },
+    "l1_c4_p1": {
+      "description": "Choose Aptr and Bptr on a 10-node circular list so that full_unlock splits the circle into two equal rings.",
+      "type": "circle_two_pointers",
+      "checker": "circle_two_pointers",
+      "params": {
+        "n_nodes": 10,
+        "correct_aptr_idx": 2,
+        "correct_bptr_idx": 7,
+        "must_match_order": false
+      },
+      "error_mapping": {
+        "ERR_SAME": "node_circle_same",
+        "ERR_ADJACENT": "node_circle_adjacent",
+        "ERR_WRONG_DISTANCE": "node_circle_wrong_distance",
+        "ERR_WRONG_ORDER": "node_circle_swapped"
+      }
+    },
+    "l2_c1_p1": {
+      "type": "puzzle",
+      "expression": "x = a + b * c % d >> e",
+      "tests_concepts": [
+        "infix_to_postfix",
+        "operator_precedence",
+        "stack_usage"
+      ],
+      "error_patterns": [
+        "ignore_precedence_add_vs_mult",
+        "ignore_precedence_shift_vs_add",
+        "assignment_operator_wrong_place",
+        "no_stack_just_read_left_to_right"
+      ]
+    },
+    "l2_c1_p2": {
+      "description": "Convert the prefix expression '= y && << a b >> c + d e' into a correct infix expression.",
+      "type": "puzzle",
+      "concepts": [
+        "prefix_to_infix",
+        "operator_precedence",
+        "stack_usage",
+        "expression_grouping"
+      ],
+      "error_patterns": [
+        "l2_c1_p2_ignore_precedence_add_vs_shift",
+        "l2_c1_p2_ignore_precedence_shift_vs_and",
+        "l2_c1_p2_assignment_wrong_position",
+        "l2_c1_p2_stack_not_used",
+        "l2_c1_p2_missing_and_operator",
+        "l2_c1_p2_random_walk"
+      ]
+    },
+    "l2_c1_p3": {
+      "description": "Convert the postfix expression 'x a b c * d % + e >> =' into a correct prefix expression.",
+      "type": "puzzle",
+      "concepts": [
+        "postfix_to_prefix",
+        "operator_precedence",
+        "stack_usage",
+        "expression_grouping",
+        "assignment_operator"
+      ],
+      "error_patterns": [
+        "l2_c1_p3_stack_not_used",
+        "l2_c1_p3_assignment_wrong_position",
+        "l2_c1_p3_wrong_grouping_add_vs_shift",
+        "l2_c1_p3_random_walk"
+      ]
+    },
+    "l2_c2_p1": {
+      "description": "Reverse all items in the stack using only queue operations. You may only push and pop from the top of the stack, and enqueue/dequeue from the ends of the queue.",
+      "type": "puzzle",
+      "concepts": [
+        "stack_reversal",
+        "queue_usage",
+        "stack",
+        "queue",
+        "algorithmic_thinking"
+      ],
+      "error_patterns": [
+        "l2_c2_p1_never_used_queue",
+        "l2_c2_p1_rotated_before_transfer",
+        "l2_c2_p1_messed_partial_order",
+        "l2_c2_p1_wrong_operation_order",
+        "l2_c2_p1_random_walk"
+      ]
+    },
+    "l2_c2_p2": {
+      "description": "Reorder the first k items of the queue using the stack so that those k items are restored to the correct order, while the remaining items stay in their original positions.",
+      "type": "puzzle",
+      "concepts": [
+        "queue_k_reversal",
+        "queue",
+        "stack",
+        "algorithmic_thinking"
+      ],
+      "error_patterns": [
+        "l2_c2_p2_missing_stack",
+        "l2_c2_p2_touched_tail_segment",
+        "l2_c2_p2_rotated_too_early",
+        "l2_c2_p2_wrong_operation_order",
+        "l2_c2_p2_random_walk"
+      ]
+    },
+    "l2_c2_p3": {
+      "description": "Sort a stack in ascending order using only push/pop operations and one temporary stack.",
+      "type": "code_function",
+      "test_cases": [
+        {
+          "id": "sortstack_tc_01_basic",
+          "input": "3,1,4,2",
+          "expected_output": "1,2,3,4",
+          "fail_node_id": "node_sortstack_core"
+        },
+        {
+          "id": "sortstack_tc_02_already_sorted",
+          "input": "1,2,3,4",
+          "expected_output": "1,2,3,4",
+          "fail_node_id": "node_sortstack_already_sorted"
+        },
+        {
+          "id": "sortstack_tc_03_reverse_sorted",
+          "input": "4,3,2,1",
+          "expected_output": "1,2,3,4",
+          "fail_node_id": "node_sortstack_reverse_sorted"
+        },
+        {
+          "id": "sortstack_tc_04_with_duplicates",
+          "input": "3,1,2,1,3",
+          "expected_output": "1,1,2,3,3",
+          "fail_node_id": "node_sortstack_duplicates"
+        },
+        {
+          "id": "sortstack_tc_05_single",
+          "input": "7",
+          "expected_output": "7",
+          "fail_node_id": "node_sortstack_single"
+        }
+      ]
+    },
+    "l3_c1_p1": {
+      "description": "Click the binary tree nodes in the correct In-order traversal sequence. A wrong click resets the puzzle.",
+      "type": "puzzle",
+      "concepts": [
+        "binary_tree",
+        "tree_traversal",
+        "inorder_traversal",
+        "recursion"
+      ],
+      "error_patterns": [
+        "l3_c1_p1_bt_inorder_root_first",
+        "l3_c1_p1_bt_inorder_left_not_finished",
+        "l3_c1_p1_bt_inorder_skipped_right_subtree",
+        "l3_c1_p1_bt_inorder_visual_guessing",
+        "l3_c1_p1_bt_inorder_bst_sorted_assumption",
+        "l3_c1_p1_bt_inorder_random_walk"
+      ]
+    },
+    "l3_c1_p2": {
+      "description": "Click the binary tree nodes in the correct Pre-order traversal sequence. A wrong click resets the puzzle.",
+      "type": "puzzle",
+      "concepts": [
+        "binary_tree",
+        "tree_traversal",
+        "preorder_traversal",
+        "recursion"
+      ],
+      "error_patterns": [
+        "l3_c1_p2_bt_preorder_not_root_first",
+        "l3_c1_p2_bt_preorder_left_skipped",
+        "l3_c1_p2_bt_preorder_right_before_left",
+        "l3_c1_p2_bt_preorder_visual_guessing",
+        "l3_c1_p2_bt_preorder_subtree_not_finished",
+        "l3_c1_p2_bt_preorder_random_walk"
+      ]
+    },
+    "l3_c1_p3": {
+      "description": "Place the nodes in the tree using information from the previous 2 puzzles.",
+      "type": "puzzle",
+      "concepts": ["preorder_traversal", "inorder_traversal"],
+      "error_patterns": [
+        "l3_c1_p3_wrong_node_for_root",
+        "l3_c1_p3_wrong_side_of_binary_tree",
+        "l3_c1_p3_generic_mistake",
+        "l3_c1_p3_generic_reply"
+      ]
+    },
+    "l3_c2_p1": {
+  "description": "Find the max depth of a Binary Tree and return it.",
+  "type": "code_function",
+  "test_cases": [
+    {
+      "id": "maxdepth_tc_01_empty",
+      "input": "1-N",
+      "expected_output": "0",
+      "fail_node_id": "node_maxdepth_empty_tree"
+    },
+    {
+      "id": "maxdepth_tc_02_single",
+      "input": "1-N",
+      "expected_output": "0",
+      "fail_node_id": "node_maxdepth_single_node"
+    },
+    {
+      "id": "maxdepth_tc_03_two_levels",
+      "input": "1,2,3-N,L,R",
+      "expected_output": "1",
+      "fail_node_id": "node_maxdepth_basic_height"
+    },
+    {
+      "id": "maxdepth_tc_04_left_skewed",
+      "input": "1,2,3,4-N,L,LL,LLL",
+      "expected_output": "3",
+      "fail_node_id": "node_maxdepth_skewed_left"
+    },
+    {
+      "id": "maxdepth_tc_05_right_skewed",
+      "input": "1,2,3,4-N,R,RR,RRR",
+      "expected_output": "3",
+      "fail_node_id": "node_maxdepth_skewed_right"
+    },
+    {
+      "id": "maxdepth_tc_06_unbalanced_deeper_left",
+      "input": "1,2,3,4,5-N,L,R,LL,LLL",
+      "expected_output": "3",
+      "fail_node_id": "node_maxdepth_unbalanced_tree"
+    },
+    {
+      "id": "maxdepth_tc_07_sparse_with_nulls",
+      "input": "1,2,3,4,5-N,L,R,LR,RL",
+      "expected_output": "2",
+      "fail_node_id": "node_maxdepth_null_children_handling"
+    },
+    {
+      "id": "maxdepth_tc_08_complete_three_levels",
+      "input": "1,2,3,4,5,6,7-N,L,R,LL,LR,RL,RR",
+      "expected_output": "2",
+      "fail_node_id": "node_maxdepth_complete_tree"
+    },
+    {
+      "id": "maxdepth_tc_09_zigzag_chain",
+      "input": "1,2,3,4,5-N,L,LR,LRL,LRLR",
+      "expected_output": "4",
+      "fail_node_id": "node_maxdepth_zigzag_structure"
+    }
+  ]
+},
+
+"l3_c2_p2": {
+  "type": "puzzle",
+  "description": "Perform level-order traversal (BFS) on the binary tree using a queue. Use the buttons to dequeue into cur, print cur.item, and enqueue cur's children to match the expected output.",
+  "tests_concepts": [
+    "level_order_traversal_bfs",
+    "queue_fifo",
+    "dequeue_sets_cur",
+    "enqueue_children_left_then_right",
+    "null_child_handling"
+  ],
+  "error_patterns": [
+    "print_before_dequeue_cur_is_null",
+    "enqueue_right_before_left_wrong_order",
+    "forget_enqueue_one_child",
+    "enqueue_null_child_or_no_null_check",
+    "treat_queue_like_stack_lifo",
+    "dequeue_too_many_times_skips_nodes",
+    "dequeue_when_queue_is_empty"
+  ]
+},
+"l3_c2_p3": {
+  "type": "puzzle",
+  "description": "Search for the node with the target value by choosing left or right.",
+  "error_patterns": [
+    "choosing_a_smaller_value_than_target_value",
+    "choosing_a_larger_value_than_target_value"
+  ]
+},
+"l4_c1_p4": {
+  "description": "Find the minimal element in a cyclically (rotated) sorted sequence in O(log n). The input may contain duplicates. m and n are the indices of the first and last elements respectively.",
+  "type": "code_function",
+  "test_cases": [
+    {
+      "id": "min_tc_01_sorted_no_rotation",
+      "input": "1,2,3,4,5",
+      "expected_output": "1",
+      "fail_node_id": "node_min_already_sorted_segment"
+    },
+    {
+      "id": "min_tc_02_simple_rotation",
+      "input": "4,5,1,2,3",
+      "expected_output": "1",
+      "fail_node_id": "node_min_rotation_binary_search"
+    },
+    {
+      "id": "min_tc_03_single_element",
+      "input": "7",
+      "expected_output": "7",
+      "fail_node_id": "node_min_single_element"
+    },
+    {
+      "id": "min_tc_04_two_elements_rotated",
+      "input": "2,1",
+      "expected_output": "1",
+      "fail_node_id": "node_min_boundary_two_elements"
+    },
+    {
+      "id": "min_tc_05_duplicates_not_rotated",
+      "input": "2,2,2,2",
+      "expected_output": "2",
+      "fail_node_id": "node_min_duplicates_equal_values"
+    },
+    {
+      "id": "min_tc_06_duplicates_rotated_tricky",
+      "input": "4,5,2,3,4",
+      "expected_output": "2",
+      "fail_node_id": "node_min_duplicates_break_sorted_check"
+    },
+    {
+      "id": "min_tc_07_duplicates_with_pivot",
+      "input": "3,3,3,1,2,3",
+      "expected_output": "1",
+      "fail_node_id": "node_min_duplicates_shrink_high"
+    },
+    {
+      "id": "min_tc_08_negative_values_rotated",
+      "input": "0,1,2,-3,-2,-1",
+      "expected_output": "-3",
+      "fail_node_id": "node_min_handle_negatives"
+    }
+  ]
+},
+"l5_c1_p1": {
+    "type": "puzzle",
+    "description": "Return the books to the correct shelves so that each row’s load factor matches its target. A row’s load factor is α = n / m, where n is the total number of books placed in that row and m is the number of shelves in that row.",
+    "tests_concepts": [
+      "load_factor_n_over_m",
+      "m_is_number_of_shelves_fixed",
+      "required_n_equals_target_times_m",
+      "row_underfilled_vs_overfilled",
+      "integer_count_matches_target"
+    ],
+    "error_patterns": [
+      "bookreturn_n_over_m_definition",
+      "bookreturn_m_is_shelves_fixed",
+      "bookreturn_required_n_equals_target_times_m",
+      "bookreturn_row_underfilled",
+      "bookreturn_row_overfilled"
+    ]
+  },
+  "l5_c1_p2": {
+  "type": "puzzle",
+  "description": "Drag and drop books (keys) into the highlighted shelf row to create the required hash table scenario under Open Addressing + Linear Probing. Colors are randomized; only the letter (key) matters. Hover 'Evaluate' to see which row is graded. After arranging correctly, answer 1 MCQ about the average insertion cost at load factor 0.5.",
+  "tests_concepts": [
+    "hash_table_open_addressing",
+    "linear_probing",
+    "collision_vs_no_collision",
+    "best_case_no_probing",
+    "average_case_some_probing",
+    "worst_case_primary_clustering",
+    "hash_output_not_unique"
+  ],
+  "error_patterns": [
+    "l5_hash_unique_key_implies_unique_hash",
+    "l5_hash_visual_spacing_affects_hashing",
+    "l5_hash_best_case_means_spread_out_visually",
+    "l5_hash_confuse_row_highlight",
+    "l5_hash_overfill_or_underfill_solution_row"
+  ]
+}
+  },
+
+  "graph_nodes": {
+    "node_evens_core": {
+      "hint_text": "Your odds and evens are not ending up in the right halves. First keep all odd numbers in their original order, then all even numbers in their original order.",
+      "related_concept": "Linked Lists"
+    },
+    "node_evens_all_even": {
+      "hint_text": "When every value is even, moving them to the back should not change the list at all.",
+      "related_concept": "Edge Cases"
+    },
+    "node_evens_all_odd": {
+      "hint_text": "If there are no even numbers, the list should remain exactly the same after your function.",
+      "related_concept": "Edge Cases"
+    },
+    "node_evens_stability": {
+      "hint_text": "Be careful not to shuffle the order of odds among themselves or evens among themselves when you move nodes around.",
+      "related_concept": "Pointer Manipulation"
+    },
+
+    "node_max_not_front": {
+      "hint_text": "After your function runs, the largest value in the list should be the very first node.",
+      "related_concept": "Linked Lists"
+    },
+    "node_max_already_front": {
+      "hint_text": "If the maximum value is already at the head, your function should not duplicate nodes or break the list.",
+      "related_concept": "Edge Cases"
+    },
+    "node_max_all_equal": {
+      "hint_text": "When all values are the same, there is no real 'maximum' to move. The list should look unchanged.",
+      "related_concept": "Edge Cases"
+    },
+    "node_max_multiple": {
+      "hint_text": "When there are several equal maximum values, usually only the first one is moved to the front. Make sure you don't lose or reorder the others incorrectly.",
+      "related_concept": "Pointer Manipulation"
+    },
+
+    "node_dups_core": {
+      "hint_text": "You should remove consecutive duplicates so each value appears once. Make sure you keep skipping nodes while the next value is the same.",
+      "related_concept": "Linked Lists"
+    },
+    "node_dups_nochange": {
+      "hint_text": "If there are no duplicates in the list, your function should leave it completely unchanged.",
+      "related_concept": "Edge Cases"
+    },
+    "node_dups_all_same": {
+      "hint_text": "When all elements are equal, the final list should contain just a single node with that value.",
+      "related_concept": "Edge Cases"
+    },
+    "node_dups_multiple_blocks": {
+      "hint_text": "There can be multiple groups of duplicates. Make sure you correctly collapse every group, not just the first one.",
+      "related_concept": "Pointer Manipulation"
+    },
+
+    "node_circ_last_next_assignment": {
+      "hint_text": "To make the list circular, you must update the last node's next pointer so it points back to the head. Using a comparison operator here will not change the list.",
+      "related_concept": "Linked Lists / Assignment vs Comparison"
+    },
+
+    "node_erroneous_return_statement": {
+      "hint_text": "Please check all the return statements in your code. Make sure you are returning the correct variable representing the head of the list, rather than returning None or another unintended value.",
+      "related_concept": "Return Statements"
+    },
+
+    "node_func_call_missing_arguments": {
+      "hint_text": "Check the definition of half_unlock. Every call to this function should pass the same number of arguments as the parameter list requires.",
+      "related_concept": "Function Calls / Parameters"
+    },
+
+    "node_wrong_variable_bptr": {
+      "hint_text": "When finding b_ptr, use the index that was read for Bptr, not the one for Aptr. Compare how you compute a_ptr and b_ptr.",
+      "related_concept": "Variables / Logic Errors"
+    },
+
+    "node_main_guard_usage": {
+      "hint_text": "Think about how this code will be run in the grading environment. Do you actually need a 'if __name__ == \"__main__\"' block here, or should the judge call your functions directly?",
+      "related_concept": "Program Structure / Execution Environment"
+    },
+
+    "node_circle_same": {
+      "hint_text": "Aptr and Bptr must be two different nodes. Choose two distinct points on the circle.",
+      "related_concept": "Pointers"
+    },
+    "node_circle_adjacent": {
+      "hint_text": "Aptr and Bptr are too close. Look for nodes that are opposite each other on the ring, not neighbours.",
+      "related_concept": "Circular Linked Lists"
+    },
+    "node_circle_wrong_distance": {
+      "hint_text": "Try counting how many nodes you move when you walk from Aptr to Bptr. It should be half of the total nodes in the circle.",
+      "related_concept": "Circular Linked Lists"
+    },
+    "node_circle_swapped": {
+      "hint_text": "Your distance looks right, but the roles of Aptr and Bptr might be swapped. Try switching which node is Aptr and which is Bptr.",
+      "related_concept": "Function Parameters"
+    },
+    "l2_c1_p1_stack_not_used": {
+      "related_concept": "stack_usage",
+      "hint_text": "If you just follow the infix order, some operators will appear too early. A stack lets you delay outputting operators until it is their turn."
+    },
+    "l2_c1_p1_ignore_precedence_add_vs_mult": {
+      "related_concept": "operator_precedence",
+      "hint_text": "Remember that *, /, and % have higher precedence than + and -. Try first converting 'a + b * c' to postfix."
+    },
+    "l2_c1_p1_assignment_wrong_position": {
+      "related_concept": "infix_to_postfix",
+      "hint_text": "In postfix, '=' usually comes after the entire right-hand side expression."
+    },
+    "l2_c1_p1_random_walk": {
+      "related_concept": "general",
+      "hint_text": "Try breaking the expression into smaller parts and converting them one by one."
+    },
+    "l2_c1_p2_stack_not_used": {
+      "related_concept": "stack_usage",
+      "hint_text": "If you output operators as soon as you see them, <<, >> or && may appear too early. Use a stack so that higher-precedence parts are delayed until it is their turn."
+    },
+
+    "l2_c1_p2_ignore_precedence_add_vs_shift": {
+      "related_concept": "operator_precedence",
+      "hint_text": "Remember that + has higher precedence than << and >>. The sum d + e should be formed first, then used in the right-shift with c."
+    },
+
+    "l2_c1_p2_ignore_precedence_shift_vs_and": {
+      "related_concept": "operator_precedence",
+      "hint_text": "Shifts (<<, >>) have higher precedence than logical &&. Treat a << b and c >> (d + e) as two complete pieces before applying && between them."
+    },
+
+    "l2_c1_p2_assignment_wrong_position": {
+      "related_concept": "infix_to_postfix",
+      "hint_text": "In postfix, '=' comes after the entire right-hand side expression. Build the full result of 'a << b && c >> d + e' before placing '='."
+    },
+
+    "l2_c1_p2_missing_and_operator": {
+      "related_concept": "logical_and",
+      "hint_text": "Your path never uses &&. The final expression should combine the left shift and the right shift with a logical AND in between."
+    },
+
+    "l2_c1_p2_random_walk": {
+      "related_concept": "general",
+      "hint_text": "Try to see the expression as two big parts: a << b and c >> (d + e). Convert each part carefully, then join them with && and finally '='."
+    },
+    "l2_c1_p3_stack_not_used": {
+      "related_concept": "stack_usage",
+      "hint_text": "If you simply read the postfix expression left-to-right or just reverse it, operators will attach to the wrong operands. For postfix to prefix, use a stack: scan symbols, push operands, and when you see an operator, pop the right number of operands and build a sub-expression."
+    },
+
+    "l2_c1_p3_assignment_wrong_position": {
+      "related_concept": "assignment_operator",
+      "hint_text": "In prefix form, the assignment operator '=' should appear at the very beginning. Its two operands are the variable on the left (x) and the entire right-hand expression built from the rest of the symbols."
+    },
+
+    "l2_c1_p3_wrong_grouping_add_vs_shift": {
+      "related_concept": "expression_grouping",
+      "hint_text": "Treat 'a b c * d % +' as one big sub-expression before combining it with e using '>>'. In prefix, that inner part becomes '+ a % * b c d', which is then shifted with e and finally assigned to x."
+    },
+
+    "l2_c1_p3_random_walk": {
+      "related_concept": "general",
+      "hint_text": "Try simulating the postfix-to-prefix algorithm step by step on paper: start with an empty stack, scan each symbol from left to right, push operands, and when you see an operator, pop operands, build a small prefix fragment, and push it back."
+    },
+    "l2_c2_p1_never_used_queue": {
+      "related_concept": "queue_usage",
+      "hint_text": "A stack alone cannot reverse itself. You must transfer items into the queue to reverse their order, then move them back into the stack."
+    },
+    "l2_c2_p1_rotated_before_transfer": {
+      "related_concept": "queue_rotation",
+      "hint_text": "Before rotating the queue, make sure all stack items have been moved into the queue. Rotating too early will scramble the intended reversed order."
+    },
+    "l2_c2_p1_messed_partial_order": {
+      "related_concept": "stack_reversal",
+      "hint_text": "To reverse the entire stack, all items must be removed from the stack, enqueued in order, and then dequeued back into the stack. A partial reversal will not work."
+    },
+    "l2_c2_p1_wrong_operation_order": {
+      "related_concept": "algorithm_steps",
+      "hint_text": "Try following this structure: 1) Pop every item from the stack and enqueue it. 2) Dequeue items back into the stack. This sequence fully reverses the stack."
+    },
+    "l2_c2_p2_missing_stack": {
+      "related_concept": "stack_usage",
+      "hint_text": "A queue alone cannot reverse the first k logs. Try moving the first k logs into the stack and then back to the queue so that their order is flipped."
+    },
+
+    "l2_c2_p2_touched_tail_segment": {
+      "related_concept": "queue_segments",
+      "hint_text": "Only the first k logs should be rearranged. If you dequeue or move too many logs, you will disturb the items that are supposed to stay in their original positions."
+    },
+
+    "l2_c2_p2_rotated_too_early": {
+      "related_concept": "queue_rotation",
+      "hint_text": "Rotating the queue (moving head items to the tail) is useful only after the first k logs have been reversed. If you rotate too early, both the front and back segments become scrambled."
+    },
+
+    "l2_c2_p2_wrong_operation_order": {
+      "related_concept": "algorithm_steps",
+      "hint_text": "Think in stages: first move the first k logs from the queue into the stack, then pop them back into the queue, and only after that rotate the queue so the reversed segment moves to the front."
+    },
+
+    "l2_c2_p2_random_walk": {
+      "related_concept": "general",
+      "hint_text": "Break the problem into smaller steps. Use the stack to reverse the first k logs, then use queue operations to rotate the queue until the reversed part is at the front and the rest is unchanged."
+    },
+    "node_sortstack_core": {
+      "hint_text": "Use one temporary stack. Pop from the original stack and insert into the temp stack in sorted position by moving larger items back to the original stack, then push them back.",
+      "related_concept": "Stacks"
+    },
+    "node_sortstack_already_sorted": {
+      "hint_text": "If the stack is already in ascending order, your algorithm should not disturb it. Double-check your comparison condition inside the while-loop.",
+      "related_concept": "Correctness"
+    },
+    "node_sortstack_reverse_sorted": {
+      "hint_text": "A reverse-sorted stack forces the most moves. Make sure you repeatedly move items between the two stacks until the temp stack remains sorted after each insertion.",
+      "related_concept": "Algorithmic Thinking"
+    },
+    "node_sortstack_duplicates": {
+      "hint_text": "Handle equal values carefully. Decide whether your inner loop should move values only when tempTop > current (strict) or >= current (non-strict) so duplicates end up correct.",
+      "related_concept": "Edge Cases"
+    },
+    "node_sortstack_single": {
+      "hint_text": "With one element, no operations are needed. If this fails, your function may be popping/pushing incorrectly when the stack becomes empty.",
+      "related_concept": "Edge Cases"
+    },
+    "l3_c1_p1_bt_inorder_root_first": {
+      "hint_text": "In-order traversal does not start by clicking the root. You must finish the entire left subtree first, then visit the node, then the right subtree (Left -> Node -> Right).",
+      "related_concept": "Traversal Types"
+    },
+    "l3_c1_p1_bt_inorder_left_not_finished": {
+      "hint_text": "You clicked a node before completing everything in its left subtree. In-order is recursive: completely traverse the left subtree before clicking the parent node.",
+      "related_concept": "Recursion / Subtrees"
+    },
+    "l3_c1_p1_bt_inorder_skipped_right_subtree": {
+      "hint_text": "After you visit a node, you must traverse its right subtree before moving back up. In-order always follows Left -> Node -> Right.",
+      "related_concept": "In-order Rule"
+    },
+    "l3_c1_p1_bt_inorder_visual_guessing": {
+      "hint_text": "Don't click based on screen position. Traversal order depends on the tree structure: left subtree first, then node, then right subtree.",
+      "related_concept": "Abstract Data Structures"
+    },
+    "l3_c1_p1_bt_inorder_bst_sorted_assumption": {
+      "hint_text": "In-order traversal is not \"sorted order\" unless it's a BST with values. Focus on the structural rule: Left -> Node -> Right.",
+      "related_concept": "Binary Tree vs BST"
+    },
+    "l3_c1_p1_bt_inorder_random_walk": {
+      "hint_text": "Try a consistent method: start from the leftmost node, then work upward applying Left -> Node -> Right at every subtree. Don't guess, instead, trace the next node logically.",
+      "related_concept": "Tracing / Strategy"
+    },
+    "l3_c1_p2_bt_preorder_not_root_first": {
+      "hint_text": "Pre-order traversal ALWAYS starts at the root node. The rule is Node -> Left -> Right, so the root must be clicked first.",
+      "related_concept": "Traversal Types"
+    },
+    "l3_c1_p2_bt_preorder_left_skipped": {
+      "hint_text": "After visiting a node in pre-order, you must immediately traverse its left subtree before going right.",
+      "related_concept": "Pre-order Rule"
+    },
+    "l3_c1_p2_bt_preorder_right_before_left": {
+      "hint_text": "You moved to the right subtree too early. Pre-order traversal always explores the LEFT subtree before the RIGHT subtree.",
+      "related_concept": "Left vs Right Subtrees"
+    },
+    "l3_c1_p2_bt_preorder_visual_guessing": {
+      "hint_text": "Don't rely on visual layout. Pre-order traversal depends on tree structure, not screen position: Node -> Left -> Right.",
+      "related_concept": "Abstract Data Structures"
+    },
+    "l3_c1_p2_bt_preorder_subtree_not_finished": {
+      "hint_text": "Once you enter a subtree in pre-order, fully traverse it before moving back up. Each subtree follows Node -> Left -> Right recursively.",
+      "related_concept": "Recursion / Subtrees"
+    },
+    "l3_c1_p2_bt_preorder_random_walk": {
+      "hint_text": "Use a systematic approach: start at the root, then repeatedly apply Node -> Left -> Right at every subtree. Avoid guessing.",
+      "related_concept": "Tracing / Strategy"
+    },
+    "l3_c1_p3_wrong_node_for_root": {
+      "hint_text": "Please check the root node again. The Pre-order traversal always starts with the root node.",
+      "related_concept": "Pre-order traversal"
+    },
+    "l3_c1_p3_wrong_side_of_binary_tree": {
+      "hint_text": "Are you sure that node is on the right side of the tree? Check the traversal order again!",
+      "related_concept": "Tracing"
+    },
+    "l3_c1_p3_generic_mistake": {
+      "hint_text": "Please check the placement of the nodes again.",
+      "related_concept": "Carelessness"
+    },
+    "l3_c1_p3_generic_reply": {
+      "hint_text": "Please ensure that all nodes have been placed in the tree.",
+      "related_concept": "Reminder"
+    },
+    "node_maxdepth_empty_tree": {
+        "hint_text": "Remember that a Binary tree could also be an empty tree!",
+        "related_concept": "Empty Binary Tree"
+    },
+    "node_maxdepth_single_node": {
+        "hint_text": "Remember that a Binary Tree could also consists of a single node!",
+        "related_concept": "Single node Binary Tree"
+    },
+    "node_maxdepth_basic_height": {
+        "hint_text": "You are close! Check your code again!",
+        "related_concept": "Wrong logic"
+    },
+    "node_maxdepth_skewed_left": {
+        "hint_text": "You are close! Check your code again!",
+        "related_concept": "Wrong logic"
+    },
+    "node_maxdepth_skewed_right": {
+        "hint_text": "You are close! Check your code again!",
+        "related_concept": "Wrong logic"
+    },"node_maxdepth_unbalanced_tree": {
+        "hint_text": "You are close! Check your code again!",
+        "related_concept": "Wrong logic"
+    },"node_maxdepth_null_children_handling": {
+        "hint_text": "You are close! Check your code again!",
+        "related_concept": "Wrong logic"
+    },"node_maxdepth_complete_tree": {
+        "hint_text": "You are close! Check your code again!",
+        "related_concept": "Wrong logic"
+    },"node_maxdepth_zigzag_structure": {
+        "hint_text": "You are close! Check your code again!",
+        "related_concept": "Wrong logic"
+    },"node_maxdepth_ignore_node_values": {
+        "hint_text": "You are close! Check your code again!",
+        "related_concept": "Wrong logic"
+    },
+  "l3_c2_p2_print_before_dequeue_cur_is_null": {
+    "related_concept": "dequeue_sets_cur",
+    "hint_text": "Cur is still null. You need to dequeue a node from the queue before you can print cur.item."
+  },
+  "l3_c2_p2_enqueue_right_before_left_wrong_order": {
+    "related_concept": "enqueue_children_left_then_right",
+    "hint_text": "In level-order traversal, enqueue the left child before the right child to preserve the correct order within each level."
+  },
+  "l3_c2_p2_forget_enqueue_one_child": {
+    "related_concept": "level_order_traversal_bfs",
+    "hint_text": "If a node has two children, both usually need to be enqueued. Skipping one child will cause missing values in the output."
+  },
+  "l3_c2_p2_enqueue_null_child_or_no_null_check": {
+    "related_concept": "null_child_handling",
+    "hint_text": "Only enqueue children that exist. Enqueuing null nodes leads to invalid steps later when dequeuing."
+  },
+  "l3_c2_p2_treat_queue_like_stack_lifo": {
+    "related_concept": "queue_fifo",
+    "hint_text": "A queue is FIFO, not LIFO. The first node enqueued should be the first node dequeued—don’t treat it like a stack."
+  },
+  "l3_c2_p2_dequeue_too_many_times_skips_nodes": {
+    "related_concept": "level_order_traversal_bfs",
+    "hint_text": "After dequeuing a node, you should process it fully (print it and enqueue its children) before dequeuing again."
+  },
+  "l3_c2_p2_dequeue_when_queue_is_empty": {
+    "related_concept": "empty_queue",
+    "hint_text": "Your enqueue is empty, there is nothing to dequeue!"
+  },
+  "l3_c2_p3_choosing_a_smaller_value_than_target_value": {
+    "related_concept": "Arrangement of nodes in Binary Search Tree",
+    "hint_text": "In a Binary Search Tree, the left child has a value smaller than the parents value."
+  },
+  "l3_c2_p3_choosing_a_larger_value_than_target_value": {
+    "related_concept": "Arrangement of nodes in Binary Search Tree",
+    "hint_text": "In a Binary Search Tree, the right child has a value larger than the parent value."
+  },
+  "node_min_already_sorted_segment": {
+  "hint_text": "If the current search range is already in increasing order, the first element of that range is the minimum. But be careful: with duplicates, equality at the ends can be misleading.",
+  "related_concept": "Binary Search"
+},
+"node_min_rotation_binary_search": {
+  "hint_text": "Use binary search by comparing the middle element with the rightmost element to decide which half contains the minimum.",
+  "related_concept": "Divide and Conquer"
+},
+"node_min_single_element": {
+  "hint_text": "If there is only one element in the range, that element must be the minimum.",
+  "related_concept": "Edge Cases"
+},
+"node_min_boundary_two_elements": {
+  "hint_text": "For two elements, make sure your logic still returns the smaller one even if the array is rotated (e.g., [2,1]).",
+  "related_concept": "Boundary Conditions"
+},
+"node_min_duplicates_equal_values": {
+  "hint_text": "When many values are identical, comparisons may not tell you which side to search. Your method should still return the correct minimum.",
+  "related_concept": "Edge Cases"
+},
+"node_min_duplicates_break_sorted_check": {
+  "hint_text": "If the first and last elements are equal, the segment might NOT be fully sorted (e.g., [4,5,2,3,4]). Avoid using a simple 'already sorted' shortcut in this case.",
+  "related_concept": "Duplicates in Binary Search"
+},
+"node_min_duplicates_shrink_high": {
+  "hint_text": "When array[mid] equals array[high], you can't decide which half is correct—shrink the search range safely (e.g., decrease high by 1) and continue.",
+  "related_concept": "Duplicates in Binary Search"
+},
+"node_min_handle_negatives": {
+  "hint_text": "The same rotated-array logic works with negative numbers too. Don't assume values are non-negative—only rely on comparisons.",
+  "related_concept": "Comparison-Based Algorithms"
+},
+  "l5_c1_p1_bookreturn_n_over_m_definition": {
+    "related_concept": "load_factor_n_over_m",
+    "hint_text": "Load factor is α = n / m. Here, n is the total number of books placed in the row, and m is the number of shelves in that row."
+  },
+  "l5_c1_p1_bookreturn_m_is_shelves_fixed": {
+    "related_concept": "m_is_number_of_shelves_fixed",
+    "hint_text": "m is fixed by the row layout: it’s the number of shelves in that row. You can only change α by changing n (how many books are placed)."
+  },
+  "l5_c1_p1_bookreturn_required_n_equals_target_times_m": {
+    "related_concept": "required_n_equals_target_times_m",
+    "hint_text": "Convert the target into a required book count: n = α × m. Multiply the target load factor by the number of shelves in the row to get exactly how many books that row must contain."
+  },
+  "l5_c1_p1_bookreturn_row_underfilled": {
+    "related_concept": "row_underfilled_vs_overfilled",
+    "hint_text": "This row is underfilled: it has too few books for its target. Add more books into this row until n matches the required count."
+  },
+  "l5_c1_p1_bookreturn_row_overfilled": {
+    "related_concept": "row_underfilled_vs_overfilled",
+    "hint_text": "This row is overfilled: it has too many books for its target. Remove or move some books out until n matches the required count."
+  },
+  "l5_c1_p2_row_underfilled": {
+    "related_concept": "hashing",
+	  "hint_text": "All slots have to be filled. You have too little books on the bookshelf."
+  },
+  "l5_c1_p2_best_case_no_probing": {
+	  "related_concept": "hint",
+	  "hint_text": "Best-case for linear probing means: every key lands in its first hashed slot with no collisions, so no probing happens."
+	},
+	"l5_c1_p2_worst_case_primary_clustering": {
+	  "related_concept": "hint",
+	  "hint_text": "Worst-case happens when many keys collide and form one long contiguous cluster. Linear probing then checks many slots before finding an empty one."
+	},
+	"l5_c1_p2_generic_reply": {
+	  "related_concept": "Carelessness",
+	  "hint_text": "Please check your arrangement again."
+	}
+  }
+}
