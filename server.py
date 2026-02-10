@@ -42,6 +42,27 @@ USERS = {
     "testAccount1": "password@123"
 }
 
+@app.before_request
+def handle_preflight():
+    if request.method == "OPTIONS":
+        return ("", 204)
+
+@app.after_request
+def add_cors_headers(resp):
+    origin = request.headers.get("Origin")
+    allowed = {
+        "https://sage-bunny-f8e38a.netlify.app",
+        "http://localhost:3000",
+        "http://localhost:5173",
+    }
+    if origin in allowed:
+        resp.headers["Access-Control-Allow-Origin"] = origin
+        resp.headers["Vary"] = "Origin"
+        resp.headers["Access-Control-Allow-Credentials"] = "true"
+        resp.headers["Access-Control-Allow-Methods"] = "GET,POST,PATCH,PUT,DELETE,OPTIONS"
+        resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    return resp
+
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json(force=True) or {}
@@ -59,66 +80,54 @@ def token():
     if request.method == "OPTIONS":
         return ("", 204)
 
-    # Accept JSON or form
+    # Try parse JSON or form
     data = request.get_json(silent=True) or request.form.to_dict() or {}
 
-    # Support multiple possible field names / formats
     username = (
         data.get("username")
         or data.get("userName")
         or data.get("email")
-        or ""
+        or "testAccount1"   # fallback for now
     )
     password = (
         data.get("password")
         or data.get("pass")
         or data.get("pwd")
-        or ""
+        or None
     )
 
-    # Case A: normal token login (username + password)
-    if username and password:
-        if USERS.get(username) == password:
-            return jsonify({
-                "access_token": "dummy-token",
-                "token_type": "bearer",
-                "id": 0,
-                "username": username
-            })
+    # If password is provided, validate it. If not, allow issuing a token (compat).
+    if password is not None and USERS.get(username) != password:
         return jsonify({"message": "Invalid username or password"}), 401
 
-    # Case B: some clients call /token after /api/login and only send username
-    # If your /api/login already validated, allow issuance of a dummy token
-    if username and USERS.get(username) is not None:
-        return jsonify({
-            "access_token": "dummy-token",
-            "token_type": "bearer",
-            "id": 0,
-            "username": username
-        })
-
-    # If we reach here, we don't know what the client sent
     return jsonify({
-        "message": "Bad token request (missing username/password).",
-        "received": data
-    }), 400
+        "access_token": "dummy-token",
+        "token_type": "bearer",
+        "id": 0,
+        "username": username
+    })
+
 
 
 @app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])
 def playerdata(player_id):
+    if request.method == "OPTIONS":
+        return ("", 204)
+
     path = os.path.join(STORE_FILE_PATH, f"playerdata_{player_id}.json")
 
     if request.method == "GET":
         if os.path.exists(path):
             with open(path, "r") as f:
                 return jsonify(json.load(f))
-        return jsonify({})  # default empty
+        return jsonify({})
 
-    # PATCH: save puzzle progress
-    data = request.get_json(force=True) or {}
+    data = request.get_json(silent=True) or {}
     with open(path, "w") as f:
         json.dump(data, f)
+
     return jsonify({"ok": True, "player_id": player_id})
+
 
 # 2. THE GENERIC SUBMISSION ENGINE
 # Unity sends: file, problem_id (e.g., "l1_c1_p1")
