@@ -6,10 +6,17 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": [
-    "https://sage-bunny-f8e38a.netlify.app",  # your Netlify domain
-    "http://localhost:8000",                 # local testing
-]}})
+CORS(
+    app,
+    resources={r"/*": {"origins": [
+        "https://sage-bunny-f8e38a.netlify.app",   # your Netlify site
+        "http://localhost:3000",                  # if you test locally
+        "http://localhost:5173"
+    ]}},
+    supports_credentials=True,
+    methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"]
+)
 
 STORE_FILE_PATH = "./store/"
 GRAPH_FILE_PATH = "knowledge_graph.json"
