@@ -137,10 +137,6 @@ def submit_code():
 
     print(f"Evaluating submission for: {problem_id}")
 
-    # A. Validate Problem ID
-    if problem_id not in knowledge_graph["problems"]:
-        return jsonify({"status": "error", "message": "Invalid Problem ID"})
-
     # B. Save File
     if "file" not in request.files:
         return jsonify({"status": "error", "message": "No file uploaded"})
