@@ -54,15 +54,42 @@ def login():
 
 # --- Senior compatibility endpoints ---
 
-@app.route("/token", methods=["POST"])
+@app.route("/token", methods=["POST", "OPTIONS"])
 def token():
-    data = request.get_json(force=True) or {}
-    username = data.get("username", "")
-    password = data.get("password", "")
+    if request.method == "OPTIONS":
+        return ("", 204)
 
-    if USERS.get(username) == password:
-        # Senior design expects a token + id usually.
-        # Keep it simple: id=0 for now if your Session.Instance.Id uses that.
+    # Accept JSON or form
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+
+    # Support multiple possible field names / formats
+    username = (
+        data.get("username")
+        or data.get("userName")
+        or data.get("email")
+        or ""
+    )
+    password = (
+        data.get("password")
+        or data.get("pass")
+        or data.get("pwd")
+        or ""
+    )
+
+    # Case A: normal token login (username + password)
+    if username and password:
+        if USERS.get(username) == password:
+            return jsonify({
+                "access_token": "dummy-token",
+                "token_type": "bearer",
+                "id": 0,
+                "username": username
+            })
+        return jsonify({"message": "Invalid username or password"}), 401
+
+    # Case B: some clients call /token after /api/login and only send username
+    # If your /api/login already validated, allow issuance of a dummy token
+    if username and USERS.get(username) is not None:
         return jsonify({
             "access_token": "dummy-token",
             "token_type": "bearer",
@@ -70,7 +97,11 @@ def token():
             "username": username
         })
 
-    return jsonify({"message": "Invalid username or password"}), 401
+    # If we reach here, we don't know what the client sent
+    return jsonify({
+        "message": "Bad token request (missing username/password).",
+        "received": data
+    }), 400
 
 
 @app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])
