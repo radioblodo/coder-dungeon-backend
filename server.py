@@ -52,6 +52,43 @@ def login():
         return jsonify({"ok": True, "username": username})
     return jsonify({"ok": False, "message": "Invalid username or password"}), 401
 
+# --- Senior compatibility endpoints ---
+
+@app.route("/token", methods=["POST"])
+def token():
+    data = request.get_json(force=True) or {}
+    username = data.get("username", "")
+    password = data.get("password", "")
+
+    if USERS.get(username) == password:
+        # Senior design expects a token + id usually.
+        # Keep it simple: id=0 for now if your Session.Instance.Id uses that.
+        return jsonify({
+            "access_token": "dummy-token",
+            "token_type": "bearer",
+            "id": 0,
+            "username": username
+        })
+
+    return jsonify({"message": "Invalid username or password"}), 401
+
+
+@app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])
+def playerdata(player_id):
+    path = os.path.join(STORE_FILE_PATH, f"playerdata_{player_id}.json")
+
+    if request.method == "GET":
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                return jsonify(json.load(f))
+        return jsonify({})  # default empty
+
+    # PATCH: save puzzle progress
+    data = request.get_json(force=True) or {}
+    with open(path, "w") as f:
+        json.dump(data, f)
+    return jsonify({"ok": True, "player_id": player_id})
+
 # 2. THE GENERIC SUBMISSION ENGINE
 # Unity sends: file, problem_id (e.g., "l1_c1_p1")
 @app.route("/submit-code", methods=["POST"])
