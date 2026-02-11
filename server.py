@@ -13,7 +13,7 @@ CORS(
         "http://localhost:3000",                  # if you test locally
         "http://localhost:5173"
     ]}},
-    supports_credentials=True,
+    supports_credentials=False,
     methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"]
 )
@@ -258,7 +258,7 @@ def submit_code():
 
 
 # Endpoint 2: For non-coding puzzle
-@app.route("/request-hint", methods=["POST"])
+@app.route("/request-hint", methods=["POST", "OPTIONS"])
 def request_hint():
     print("Processing hint request...")
     data = request.get_json()
