@@ -131,36 +131,84 @@ def playerdata(player_id):
 
 # 2. THE GENERIC SUBMISSION ENGINE
 # Unity sends: file, problem_id (e.g., "l1_c1_p1")
-@app.route("/submit-code", methods=["POST"])
+@app.route("/submit-code", methods=["POST", "OPTIONS"])
 def submit_code():
-    problem_id = request.form.get("problem_id")
+    if request.method == "OPTIONS":
+        return ("", 204)
+
+    # --- 1) Get problem_id + python file path (supports JSON OR multipart) ---
+    problem_id = None
+    file_path = None
+
+    # Case A: Unity non-local path sends JSON: {"problem_id": "...", "code": "..."}
+    if request.is_json:
+        data = request.get_json(silent=True) or {}
+        problem_id = data.get("problem_id")
+        code = data.get("code", "")
+
+        if not problem_id:
+            return jsonify({"status": "error", "message": "Missing problem_id"}), 400
+        if not isinstance(code, str) or code.strip() == "":
+            return jsonify({"status": "error", "message": "Missing code"}), 400
+
+        safe_name = "".join(c for c in problem_id if c.isalnum() or c in ("_", "-"))
+        file_name = f"{safe_name}_submission.py"
+        file_path = os.path.join(STORE_FILE_PATH, file_name)
+
+        try:
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(code)
+        except Exception as e:
+            return jsonify({"status": "error", "message": f"Failed to save code: {e}"}), 500
+
+    # Case B: Local path sends multipart form-data with "file" + "problem_id"
+    else:
+        problem_id = request.form.get("problem_id")
+        if not problem_id:
+            return jsonify({"status": "error", "message": "Missing problem_id"}), 400
+
+        if "file" not in request.files:
+            return jsonify({
+                "status": "error",
+                "message": "No file uploaded",
+                "debug": {
+                    "content_type": request.content_type,
+                    "form_keys": list(request.form.keys()),
+                    "file_keys": list(request.files.keys())
+                }
+            }), 400
+
+        uploaded_file = request.files["file"]
+        if not uploaded_file or uploaded_file.filename == "":
+            return jsonify({"status": "error", "message": "Empty file upload"}), 400
+
+        file_name = uploaded_file.filename
+        file_path = os.path.join(STORE_FILE_PATH, file_name)
+
+        try:
+            uploaded_file.save(file_path)
+        except Exception as e:
+            return jsonify({"status": "error", "message": f"Failed to save file: {e}"}), 500
 
     print(f"Evaluating submission for: {problem_id}")
 
-    # B. Save File
-    if "file" not in request.files:
-        return jsonify({"status": "error", "message": "No file uploaded"})
+    # --- 2) Validate problem_id ---
+    if problem_id not in knowledge_graph.get("problems", {}):
+        return jsonify({"status": "error", "message": f"Invalid Problem ID: {problem_id}"}), 400
 
-    uploaded_file = request.files["file"]
-    file_name = uploaded_file.filename
-    file_path = os.path.join(STORE_FILE_PATH, file_name)
-    uploaded_file.save(file_path)
-
-    # C. Retrieve Test Cases from Graph (NOT from Unity)
-    # This prevents students from faking inputs
     problem_data = knowledge_graph["problems"][problem_id]
-    test_cases = problem_data["test_cases"]
+    test_cases = problem_data.get("test_cases", [])
+    if not test_cases:
+        return jsonify({"status": "error", "message": f"No test cases configured for {problem_id}"}), 500
 
     outputs_log = ""
 
+    # --- 3) Execute code against test cases ---
     try:
-        # D. Run Loop
         for case in test_cases:
-            input_val = case["input"]
-            expected_val = case["expected_output"]
+            input_val = str(case.get("input", ""))
+            expected_val = str(case.get("expected_output", ""))
 
-            # Execute Student Code
-            # Timeout added to prevent infinite loops freezing your server
             result = subprocess.run(
                 ["python3", file_path, input_val],
                 capture_output=True,
@@ -168,53 +216,45 @@ def submit_code():
                 timeout=5,
             )
 
-            actual_output = result.stdout.strip()  # Remove trailing newlines
+            actual_output = (result.stdout or "").strip()
+            stderr_output = (result.stderr or "").strip()
+
             outputs_log += f"In: {input_val} | Out: {actual_output}\n"
 
-            # E. CHECK FOR FAILURE (The Graph Logic)
-            # If crash (stderr) OR wrong output
-            if result.stderr or actual_output != expected_val:
+            if stderr_output or actual_output != expected_val:
+                fail_node_id = case.get("fail_node_id")
 
-                # 1. Identify the Node
-                fail_node_id = case["fail_node_id"]
-
-                # 2. Retrieve the Hint
-                node_data = knowledge_graph["graph_nodes"].get(fail_node_id, {})
+                node_data = knowledge_graph.get("graph_nodes", {}).get(fail_node_id, {}) if fail_node_id else {}
                 hint_message = node_data.get("hint_text", "Check your logic.")
                 concept = node_data.get("related_concept", "General")
 
-                return jsonify(
-                    {
-                        "status": "failed",
-                        "hint": hint_message,
-                        "failed_test_case": input_val,
-                        "student_output": actual_output,
-                        "expected_output": expected_val,
-                        "concept_gap": concept,
-                        "stderr": result.stderr,
-                    }
-                )
+                return jsonify({
+                    "status": "failed",
+                    "hint": hint_message,
+                    "failed_test_case": input_val,
+                    "student_output": actual_output,
+                    "expected_output": expected_val,
+                    "concept_gap": concept,
+                    "stderr": stderr_output,
+                })
 
-        # F. If loop finishes without returning, Success!
-        return jsonify(
-            {
-                "status": "success",
-                "message": "All test cases passed!",
-                "stdout": outputs_log,
-            }
-        )
+        return jsonify({
+            "status": "success",
+            "message": "All test cases passed!",
+            "stdout": outputs_log,
+        })
 
     except subprocess.TimeoutExpired:
-        return jsonify(
-            {
-                "status": "failed",
-                "hint": "Your code timed out. Do you have an infinite loop?",
-                "concept_gap": "Complexity",
-            }
-        )
+        return jsonify({
+            "status": "failed",
+            "hint": "Your code timed out. Do you have an infinite loop?",
+            "concept_gap": "Complexity",
+        })
+
     except Exception as e:
         print(e)
-        return jsonify({"status": "error", "message": str(e)})
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 
 
 # Endpoint 2: For non-coding puzzle
