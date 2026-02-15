@@ -302,216 +302,226 @@
       ]
     },
     "l3_c2_p1": {
-  "description": "Find the max depth of a Binary Tree and return it.",
-  "type": "code_function",
-  "test_cases": [
-    {
-      "id": "maxdepth_tc_01_empty",
-      "input": "1-N",
-      "expected_output": "0",
-      "fail_node_id": "node_maxdepth_empty_tree"
+      "description": "Find the max depth of a Binary Tree and return it.",
+      "type": "code_function",
+      "test_cases": [
+        {
+          "id": "maxdepth_tc_01_empty",
+          "input": "1-N",
+          "expected_output": "0",
+          "fail_node_id": "node_maxdepth_empty_tree"
+        },
+        {
+          "id": "maxdepth_tc_02_single",
+          "input": "1-N",
+          "expected_output": "0",
+          "fail_node_id": "node_maxdepth_single_node"
+        },
+        {
+          "id": "maxdepth_tc_03_two_levels",
+          "input": "1,2,3-N,L,R",
+          "expected_output": "1",
+          "fail_node_id": "node_maxdepth_basic_height"
+        },
+        {
+          "id": "maxdepth_tc_04_left_skewed",
+          "input": "1,2,3,4-N,L,LL,LLL",
+          "expected_output": "3",
+          "fail_node_id": "node_maxdepth_skewed_left"
+        },
+        {
+          "id": "maxdepth_tc_05_right_skewed",
+          "input": "1,2,3,4-N,R,RR,RRR",
+          "expected_output": "3",
+          "fail_node_id": "node_maxdepth_skewed_right"
+        },
+        {
+          "id": "maxdepth_tc_06_unbalanced_deeper_left",
+          "input": "1,2,3,4,5-N,L,R,LL,LLL",
+          "expected_output": "3",
+          "fail_node_id": "node_maxdepth_unbalanced_tree"
+        },
+        {
+          "id": "maxdepth_tc_07_sparse_with_nulls",
+          "input": "1,2,3,4,5-N,L,R,LR,RL",
+          "expected_output": "2",
+          "fail_node_id": "node_maxdepth_null_children_handling"
+        },
+        {
+          "id": "maxdepth_tc_08_complete_three_levels",
+          "input": "1,2,3,4,5,6,7-N,L,R,LL,LR,RL,RR",
+          "expected_output": "2",
+          "fail_node_id": "node_maxdepth_complete_tree"
+        },
+        {
+          "id": "maxdepth_tc_09_zigzag_chain",
+          "input": "1,2,3,4,5-N,L,LR,LRL,LRLR",
+          "expected_output": "4",
+          "fail_node_id": "node_maxdepth_zigzag_structure"
+        }
+      ]
     },
-    {
-      "id": "maxdepth_tc_02_single",
-      "input": "1-N",
-      "expected_output": "0",
-      "fail_node_id": "node_maxdepth_single_node"
-    },
-    {
-      "id": "maxdepth_tc_03_two_levels",
-      "input": "1,2,3-N,L,R",
-      "expected_output": "1",
-      "fail_node_id": "node_maxdepth_basic_height"
-    },
-    {
-      "id": "maxdepth_tc_04_left_skewed",
-      "input": "1,2,3,4-N,L,LL,LLL",
-      "expected_output": "3",
-      "fail_node_id": "node_maxdepth_skewed_left"
-    },
-    {
-      "id": "maxdepth_tc_05_right_skewed",
-      "input": "1,2,3,4-N,R,RR,RRR",
-      "expected_output": "3",
-      "fail_node_id": "node_maxdepth_skewed_right"
-    },
-    {
-      "id": "maxdepth_tc_06_unbalanced_deeper_left",
-      "input": "1,2,3,4,5-N,L,R,LL,LLL",
-      "expected_output": "3",
-      "fail_node_id": "node_maxdepth_unbalanced_tree"
-    },
-    {
-      "id": "maxdepth_tc_07_sparse_with_nulls",
-      "input": "1,2,3,4,5-N,L,R,LR,RL",
-      "expected_output": "2",
-      "fail_node_id": "node_maxdepth_null_children_handling"
-    },
-    {
-      "id": "maxdepth_tc_08_complete_three_levels",
-      "input": "1,2,3,4,5,6,7-N,L,R,LL,LR,RL,RR",
-      "expected_output": "2",
-      "fail_node_id": "node_maxdepth_complete_tree"
-    },
-    {
-      "id": "maxdepth_tc_09_zigzag_chain",
-      "input": "1,2,3,4,5-N,L,LR,LRL,LRLR",
-      "expected_output": "4",
-      "fail_node_id": "node_maxdepth_zigzag_structure"
-    }
-  ]
-},
 
-"l3_c2_p2": {
-  "type": "puzzle",
-  "description": "Perform level-order traversal (BFS) on the binary tree using a queue. Use the buttons to dequeue into cur, print cur.item, and enqueue cur's children to match the expected output.",
-  "tests_concepts": [
-    "level_order_traversal_bfs",
-    "queue_fifo",
-    "dequeue_sets_cur",
-    "enqueue_children_left_then_right",
-    "null_child_handling"
-  ],
-  "error_patterns": [
-    "print_before_dequeue_cur_is_null",
-    "enqueue_right_before_left_wrong_order",
-    "forget_enqueue_one_child",
-    "enqueue_null_child_or_no_null_check",
-    "treat_queue_like_stack_lifo",
-    "dequeue_too_many_times_skips_nodes",
-    "dequeue_when_queue_is_empty"
-  ]
-},
-"l3_c2_p3": {
-  "type": "puzzle",
-  "description": "Search for the node with the target value by choosing left or right.",
-  "error_patterns": [
-    "choosing_a_smaller_value_than_target_value",
-    "choosing_a_larger_value_than_target_value"
-  ]
-},
-"l4_c1_p1_q1": {
-  "description": "Given L = [8,4,5] and Relics = [1,2,6,9,4,3], how many item comparisons of the form (Q.item == X) are made by subset(L, Relics)?",
-  "type": "scroll_mcq",
-  "correct_answer": "17",
-  "option_to_concept_node": {
-    "10": "node_q1_counts_only_successful_searches",
-    "6": "node_q1_stops_after_first_found_instead_of_scan",
-    "3": "node_q1_counts_only_elements_in_L"
-  }
-},
-  "l4_c1_p1_q2": {
-  "description": "Let R denote the Relics list. Based on the subset(L, R) and element(X, Q) code, when will the worst case happen?",
-  "type": "scroll_mcq",
-  "correct_answer": "opt3",
-  "option_to_concept_node": {
-    "opt1": "node_q2_wrong_thinks_missing_early_is_worst",
-    "opt2": "node_q2_wrong_ignores_final_failed_search_cost",
-    "opt4": "node_q2_wrong_thinks_all_present_at_end_is_worst"
-  }
-},
-  "l4_c1_p1_q3": {
-  "description": "Let O denote the Observed list and R denote the Relics list. Using the given subset(O, R) and element(X, Q) code, what is the worst-case running time of subset as a function of |O| and |R|?",
-  "type": "scroll_mcq",
-  "correct_answer": "opt4",
-  "option_to_concept_node": {
-    "opt1": "node_q3_wrong_thinks_only_R_matters",
-    "opt2": "node_q3_wrong_thinks_only_O_matters",
-    "opt3": "node_q3_wrong_add_instead_of_multiply"
-  }
-},
-"l4_c1_p4": {
-  "description": "Find the minimal element in a cyclically (rotated) sorted sequence in O(log n). The input may contain duplicates. m and n are the indices of the first and last elements respectively.",
-  "type": "code_function",
-  "test_cases": [
-    {
-      "id": "min_tc_01_sorted_no_rotation",
-      "input": "1,2,3,4,5",
-      "expected_output": "1",
-      "fail_node_id": "node_min_already_sorted_segment"
+    "l3_c2_p2": {
+      "type": "puzzle",
+      "description": "Perform level-order traversal (BFS) on the binary tree using a queue. Use the buttons to dequeue into cur, print cur.item, and enqueue cur's children to match the expected output.",
+      "tests_concepts": [
+        "level_order_traversal_bfs",
+        "queue_fifo",
+        "dequeue_sets_cur",
+        "enqueue_children_left_then_right",
+        "null_child_handling"
+      ],
+      "error_patterns": [
+        "print_before_dequeue_cur_is_null",
+        "enqueue_right_before_left_wrong_order",
+        "forget_enqueue_one_child",
+        "enqueue_null_child_or_no_null_check",
+        "treat_queue_like_stack_lifo",
+        "dequeue_too_many_times_skips_nodes",
+        "dequeue_when_queue_is_empty"
+      ]
     },
-    {
-      "id": "min_tc_02_simple_rotation",
-      "input": "4,5,1,2,3",
-      "expected_output": "1",
-      "fail_node_id": "node_min_rotation_binary_search"
+    "l3_c2_p3": {
+      "type": "puzzle",
+      "description": "Search for the node with the target value by choosing left or right.",
+      "error_patterns": [
+        "choosing_a_smaller_value_than_target_value",
+        "choosing_a_larger_value_than_target_value"
+      ]
     },
-    {
-      "id": "min_tc_03_single_element",
-      "input": "7",
-      "expected_output": "7",
-      "fail_node_id": "node_min_single_element"
+    "l4_c1_p1_q1": {
+      "description": "Given L = [8,4,5] and Relics = [1,2,6,9,4,3], how many item comparisons of the form (Q.item == X) are made by subset(L, Relics)?",
+      "type": "scroll_mcq",
+      "correct_answer": "17",
+      "option_to_concept_node": {
+        "10": "node_q1_counts_only_successful_searches",
+        "6": "node_q1_stops_after_first_found_instead_of_scan",
+        "3": "node_q1_counts_only_elements_in_L"
+      }
     },
-    {
-      "id": "min_tc_04_two_elements_rotated",
-      "input": "2,1",
-      "expected_output": "1",
-      "fail_node_id": "node_min_boundary_two_elements"
+    "l4_c1_p1_q2": {
+      "description": "Let R denote the Relics list. Based on the subset(L, R) and element(X, Q) code, when will the worst case happen?",
+      "type": "scroll_mcq",
+      "correct_answer": "opt3",
+      "option_to_concept_node": {
+        "opt1": "node_q2_wrong_thinks_missing_early_is_worst",
+        "opt2": "node_q2_wrong_ignores_final_failed_search_cost",
+        "opt4": "node_q2_wrong_thinks_all_present_at_end_is_worst"
+      }
     },
-    {
-      "id": "min_tc_05_duplicates_not_rotated",
-      "input": "2,2,2,2",
-      "expected_output": "2",
-      "fail_node_id": "node_min_duplicates_equal_values"
+    "l4_c1_p1_q3": {
+      "description": "Let O denote the Observed list and R denote the Relics list. Using the given subset(O, R) and element(X, Q) code, what is the worst-case running time of subset as a function of |O| and |R|?",
+      "type": "scroll_mcq",
+      "correct_answer": "opt4",
+      "option_to_concept_node": {
+        "opt1": "node_q3_wrong_thinks_only_R_matters",
+        "opt2": "node_q3_wrong_thinks_only_O_matters",
+        "opt3": "node_q3_wrong_add_instead_of_multiply"
+      }
     },
-    {
-      "id": "min_tc_06_duplicates_rotated_tricky",
-      "input": "4,5,2,3,4",
-      "expected_output": "2",
-      "fail_node_id": "node_min_duplicates_break_sorted_check"
+    "l4_c1_p2_q1": {
+      "description": "Documents are sealed according to the function Sealer(N) below. How many times is Seal() called when N = 8?",
+      "type": "scroll_mcq",
+      "correct_answer": "8",
+      "option_to_concept_node": {
+        "6": "node_p2q1_wrong_counts_outer_only_or_off_by_one",
+        "12": "node_p2q1_wrong_multiplies_logs_or_assumes_full_inner_each_time",
+        "15": "node_p2q1_wrong_assumes_quadratic_or_linear_times_linear"
+      }
     },
-    {
-      "id": "min_tc_07_duplicates_with_pivot",
-      "input": "3,3,3,1,2,3",
-      "expected_output": "1",
-      "fail_node_id": "node_min_duplicates_shrink_high"
+    "l4_c1_p4": {
+      "description": "Find the minimal element in a cyclically (rotated) sorted sequence in O(log n). The input may contain duplicates. m and n are the indices of the first and last elements respectively.",
+      "type": "code_function",
+      "test_cases": [
+        {
+          "id": "min_tc_01_sorted_no_rotation",
+          "input": "1,2,3,4,5",
+          "expected_output": "1",
+          "fail_node_id": "node_min_already_sorted_segment"
+        },
+        {
+          "id": "min_tc_02_simple_rotation",
+          "input": "4,5,1,2,3",
+          "expected_output": "1",
+          "fail_node_id": "node_min_rotation_binary_search"
+        },
+        {
+          "id": "min_tc_03_single_element",
+          "input": "7",
+          "expected_output": "7",
+          "fail_node_id": "node_min_single_element"
+        },
+        {
+          "id": "min_tc_04_two_elements_rotated",
+          "input": "2,1",
+          "expected_output": "1",
+          "fail_node_id": "node_min_boundary_two_elements"
+        },
+        {
+          "id": "min_tc_05_duplicates_not_rotated",
+          "input": "2,2,2,2",
+          "expected_output": "2",
+          "fail_node_id": "node_min_duplicates_equal_values"
+        },
+        {
+          "id": "min_tc_06_duplicates_rotated_tricky",
+          "input": "4,5,2,3,4",
+          "expected_output": "2",
+          "fail_node_id": "node_min_duplicates_break_sorted_check"
+        },
+        {
+          "id": "min_tc_07_duplicates_with_pivot",
+          "input": "3,3,3,1,2,3",
+          "expected_output": "1",
+          "fail_node_id": "node_min_duplicates_shrink_high"
+        },
+        {
+          "id": "min_tc_08_negative_values_rotated",
+          "input": "0,1,2,-3,-2,-1",
+          "expected_output": "-3",
+          "fail_node_id": "node_min_handle_negatives"
+        }
+      ]
     },
-    {
-      "id": "min_tc_08_negative_values_rotated",
-      "input": "0,1,2,-3,-2,-1",
-      "expected_output": "-3",
-      "fail_node_id": "node_min_handle_negatives"
+    "l5_c1_p1": {
+      "type": "puzzle",
+      "description": "Return the books to the correct shelves so that each row’s load factor matches its target. A row’s load factor is α = n / m, where n is the total number of books placed in that row and m is the number of shelves in that row.",
+      "tests_concepts": [
+        "load_factor_n_over_m",
+        "m_is_number_of_shelves_fixed",
+        "required_n_equals_target_times_m",
+        "row_underfilled_vs_overfilled",
+        "integer_count_matches_target"
+      ],
+      "error_patterns": [
+        "bookreturn_n_over_m_definition",
+        "bookreturn_m_is_shelves_fixed",
+        "bookreturn_required_n_equals_target_times_m",
+        "bookreturn_row_underfilled",
+        "bookreturn_row_overfilled"
+      ]
+    },
+    "l5_c1_p2": {
+      "type": "puzzle",
+      "description": "Drag and drop books (keys) into the highlighted shelf row to create the required hash table scenario under Open Addressing + Linear Probing. Colors are randomized; only the letter (key) matters. Hover 'Evaluate' to see which row is graded. After arranging correctly, answer 1 MCQ about the average insertion cost at load factor 0.5.",
+      "tests_concepts": [
+        "hash_table_open_addressing",
+        "linear_probing",
+        "collision_vs_no_collision",
+        "best_case_no_probing",
+        "average_case_some_probing",
+        "worst_case_primary_clustering",
+        "hash_output_not_unique"
+      ],
+      "error_patterns": [
+        "l5_hash_unique_key_implies_unique_hash",
+        "l5_hash_visual_spacing_affects_hashing",
+        "l5_hash_best_case_means_spread_out_visually",
+        "l5_hash_confuse_row_highlight",
+        "l5_hash_overfill_or_underfill_solution_row"
+      ]
     }
-  ]
-},
-"l5_c1_p1": {
-    "type": "puzzle",
-    "description": "Return the books to the correct shelves so that each row’s load factor matches its target. A row’s load factor is α = n / m, where n is the total number of books placed in that row and m is the number of shelves in that row.",
-    "tests_concepts": [
-      "load_factor_n_over_m",
-      "m_is_number_of_shelves_fixed",
-      "required_n_equals_target_times_m",
-      "row_underfilled_vs_overfilled",
-      "integer_count_matches_target"
-    ],
-    "error_patterns": [
-      "bookreturn_n_over_m_definition",
-      "bookreturn_m_is_shelves_fixed",
-      "bookreturn_required_n_equals_target_times_m",
-      "bookreturn_row_underfilled",
-      "bookreturn_row_overfilled"
-    ]
-  },
-  "l5_c1_p2": {
-  "type": "puzzle",
-  "description": "Drag and drop books (keys) into the highlighted shelf row to create the required hash table scenario under Open Addressing + Linear Probing. Colors are randomized; only the letter (key) matters. Hover 'Evaluate' to see which row is graded. After arranging correctly, answer 1 MCQ about the average insertion cost at load factor 0.5.",
-  "tests_concepts": [
-    "hash_table_open_addressing",
-    "linear_probing",
-    "collision_vs_no_collision",
-    "best_case_no_probing",
-    "average_case_some_probing",
-    "worst_case_primary_clustering",
-    "hash_output_not_unique"
-  ],
-  "error_patterns": [
-    "l5_hash_unique_key_implies_unique_hash",
-    "l5_hash_visual_spacing_affects_hashing",
-    "l5_hash_best_case_means_spread_out_visually",
-    "l5_hash_confuse_row_highlight",
-    "l5_hash_overfill_or_underfill_solution_row"
-  ]
-}
   },
 
   "graph_nodes": {
@@ -796,185 +806,204 @@
       "related_concept": "Reminder"
     },
     "node_maxdepth_empty_tree": {
-        "hint_text": "Remember that a Binary tree could also be an empty tree!",
-        "related_concept": "Empty Binary Tree"
+      "hint_text": "Remember that a Binary tree could also be an empty tree!",
+      "related_concept": "Empty Binary Tree"
     },
     "node_maxdepth_single_node": {
-        "hint_text": "Remember that a Binary Tree could also consists of a single node!",
-        "related_concept": "Single node Binary Tree"
+      "hint_text": "Remember that a Binary Tree could also consists of a single node!",
+      "related_concept": "Single node Binary Tree"
     },
     "node_maxdepth_basic_height": {
-        "hint_text": "You are close! Check your code again!",
-        "related_concept": "Wrong logic"
+      "hint_text": "You are close! Check your code again!",
+      "related_concept": "Wrong logic"
     },
     "node_maxdepth_skewed_left": {
-        "hint_text": "You are close! Check your code again!",
-        "related_concept": "Wrong logic"
+      "hint_text": "You are close! Check your code again!",
+      "related_concept": "Wrong logic"
     },
     "node_maxdepth_skewed_right": {
-        "hint_text": "You are close! Check your code again!",
-        "related_concept": "Wrong logic"
-    },"node_maxdepth_unbalanced_tree": {
-        "hint_text": "You are close! Check your code again!",
-        "related_concept": "Wrong logic"
-    },"node_maxdepth_null_children_handling": {
-        "hint_text": "You are close! Check your code again!",
-        "related_concept": "Wrong logic"
-    },"node_maxdepth_complete_tree": {
-        "hint_text": "You are close! Check your code again!",
-        "related_concept": "Wrong logic"
-    },"node_maxdepth_zigzag_structure": {
-        "hint_text": "You are close! Check your code again!",
-        "related_concept": "Wrong logic"
-    },"node_maxdepth_ignore_node_values": {
-        "hint_text": "You are close! Check your code again!",
-        "related_concept": "Wrong logic"
+      "hint_text": "You are close! Check your code again!",
+      "related_concept": "Wrong logic"
     },
-  "l3_c2_p2_print_before_dequeue_cur_is_null": {
-    "related_concept": "dequeue_sets_cur",
-    "hint_text": "Cur is still null. You need to dequeue a node from the queue before you can print cur.item."
-  },
-  "l3_c2_p2_enqueue_right_before_left_wrong_order": {
-    "related_concept": "enqueue_children_left_then_right",
-    "hint_text": "In level-order traversal, enqueue the left child before the right child to preserve the correct order within each level."
-  },
-  "l3_c2_p2_forget_enqueue_one_child": {
-    "related_concept": "level_order_traversal_bfs",
-    "hint_text": "If a node has two children, both usually need to be enqueued. Skipping one child will cause missing values in the output."
-  },
-  "l3_c2_p2_enqueue_null_child_or_no_null_check": {
-    "related_concept": "null_child_handling",
-    "hint_text": "Only enqueue children that exist. Enqueuing null nodes leads to invalid steps later when dequeuing."
-  },
-  "l3_c2_p2_treat_queue_like_stack_lifo": {
-    "related_concept": "queue_fifo",
-    "hint_text": "A queue is FIFO, not LIFO. The first node enqueued should be the first node dequeued—don’t treat it like a stack."
-  },
-  "l3_c2_p2_dequeue_too_many_times_skips_nodes": {
-    "related_concept": "level_order_traversal_bfs",
-    "hint_text": "After dequeuing a node, you should process it fully (print it and enqueue its children) before dequeuing again."
-  },
-  "l3_c2_p2_dequeue_when_queue_is_empty": {
-    "related_concept": "empty_queue",
-    "hint_text": "Your enqueue is empty, there is nothing to dequeue!"
-  },
-  "l3_c2_p3_choosing_a_smaller_value_than_target_value": {
-    "related_concept": "Arrangement of nodes in Binary Search Tree",
-    "hint_text": "In a Binary Search Tree, the left child has a value smaller than the parents value."
-  },
-  "l3_c2_p3_choosing_a_larger_value_than_target_value": {
-    "related_concept": "Arrangement of nodes in Binary Search Tree",
-    "hint_text": "In a Binary Search Tree, the right child has a value larger than the parent value."
-  },
-  "node_min_already_sorted_segment": {
-  "hint_text": "If the current search range is already in increasing order, the first element of that range is the minimum. But be careful: with duplicates, equality at the ends can be misleading.",
-  "related_concept": "Binary Search"
-},
-"node_min_rotation_binary_search": {
-  "hint_text": "Use binary search by comparing the middle element with the rightmost element to decide which half contains the minimum.",
-  "related_concept": "Divide and Conquer"
-},
-"node_min_single_element": {
-  "hint_text": "If there is only one element in the range, that element must be the minimum.",
-  "related_concept": "Edge Cases"
-},
-"node_min_boundary_two_elements": {
-  "hint_text": "For two elements, make sure your logic still returns the smaller one even if the array is rotated (e.g., [2,1]).",
-  "related_concept": "Boundary Conditions"
-},
-"node_min_duplicates_equal_values": {
-  "hint_text": "When many values are identical, comparisons may not tell you which side to search. Your method should still return the correct minimum.",
-  "related_concept": "Edge Cases"
-},
-"node_min_duplicates_break_sorted_check": {
-  "hint_text": "If the first and last elements are equal, the segment might NOT be fully sorted (e.g., [4,5,2,3,4]). Avoid using a simple 'already sorted' shortcut in this case.",
-  "related_concept": "Duplicates in Binary Search"
-},
-"node_min_duplicates_shrink_high": {
-  "hint_text": "When array[mid] equals array[high], you can't decide which half is correct—shrink the search range safely (e.g., decrease high by 1) and continue.",
-  "related_concept": "Duplicates in Binary Search"
-},
-"node_min_handle_negatives": {
-  "hint_text": "The same rotated-array logic works with negative numbers too. Don't assume values are non-negative—only rely on comparisons.",
-  "related_concept": "Comparison-Based Algorithms"
-},
-	  "node_q1_counts_only_successful_searches": {
-  "hint_text": "You are undercounting: even when an element is found, element(X, Q) still compares against each earlier node it visited. Count every (Q.item == X) comparison along the path until the match is found (or Q becomes None).",
-  "related_concept": "Linked Lists / Counting Comparisons in Linear Search"
-},
+    "node_maxdepth_unbalanced_tree": {
+      "hint_text": "You are close! Check your code again!",
+      "related_concept": "Wrong logic"
+    },
+    "node_maxdepth_null_children_handling": {
+      "hint_text": "You are close! Check your code again!",
+      "related_concept": "Wrong logic"
+    },
+    "node_maxdepth_complete_tree": {
+      "hint_text": "You are close! Check your code again!",
+      "related_concept": "Wrong logic"
+    },
+    "node_maxdepth_zigzag_structure": {
+      "hint_text": "You are close! Check your code again!",
+      "related_concept": "Wrong logic"
+    },
+    "node_maxdepth_ignore_node_values": {
+      "hint_text": "You are close! Check your code again!",
+      "related_concept": "Wrong logic"
+    },
+    "l3_c2_p2_print_before_dequeue_cur_is_null": {
+      "related_concept": "dequeue_sets_cur",
+      "hint_text": "Cur is still null. You need to dequeue a node from the queue before you can print cur.item."
+    },
+    "l3_c2_p2_enqueue_right_before_left_wrong_order": {
+      "related_concept": "enqueue_children_left_then_right",
+      "hint_text": "In level-order traversal, enqueue the left child before the right child to preserve the correct order within each level."
+    },
+    "l3_c2_p2_forget_enqueue_one_child": {
+      "related_concept": "level_order_traversal_bfs",
+      "hint_text": "If a node has two children, both usually need to be enqueued. Skipping one child will cause missing values in the output."
+    },
+    "l3_c2_p2_enqueue_null_child_or_no_null_check": {
+      "related_concept": "null_child_handling",
+      "hint_text": "Only enqueue children that exist. Enqueuing null nodes leads to invalid steps later when dequeuing."
+    },
+    "l3_c2_p2_treat_queue_like_stack_lifo": {
+      "related_concept": "queue_fifo",
+      "hint_text": "A queue is FIFO, not LIFO. The first node enqueued should be the first node dequeued—don’t treat it like a stack."
+    },
+    "l3_c2_p2_dequeue_too_many_times_skips_nodes": {
+      "related_concept": "level_order_traversal_bfs",
+      "hint_text": "After dequeuing a node, you should process it fully (print it and enqueue its children) before dequeuing again."
+    },
+    "l3_c2_p2_dequeue_when_queue_is_empty": {
+      "related_concept": "empty_queue",
+      "hint_text": "Your enqueue is empty, there is nothing to dequeue!"
+    },
+    "l3_c2_p3_choosing_a_smaller_value_than_target_value": {
+      "related_concept": "Arrangement of nodes in Binary Search Tree",
+      "hint_text": "In a Binary Search Tree, the left child has a value smaller than the parents value."
+    },
+    "l3_c2_p3_choosing_a_larger_value_than_target_value": {
+      "related_concept": "Arrangement of nodes in Binary Search Tree",
+      "hint_text": "In a Binary Search Tree, the right child has a value larger than the parent value."
+    },
+    "node_min_already_sorted_segment": {
+      "hint_text": "If the current search range is already in increasing order, the first element of that range is the minimum. But be careful: with duplicates, equality at the ends can be misleading.",
+      "related_concept": "Binary Search"
+    },
+    "node_min_rotation_binary_search": {
+      "hint_text": "Use binary search by comparing the middle element with the rightmost element to decide which half contains the minimum.",
+      "related_concept": "Divide and Conquer"
+    },
+    "node_min_single_element": {
+      "hint_text": "If there is only one element in the range, that element must be the minimum.",
+      "related_concept": "Edge Cases"
+    },
+    "node_min_boundary_two_elements": {
+      "hint_text": "For two elements, make sure your logic still returns the smaller one even if the array is rotated (e.g., [2,1]).",
+      "related_concept": "Boundary Conditions"
+    },
+    "node_min_duplicates_equal_values": {
+      "hint_text": "When many values are identical, comparisons may not tell you which side to search. Your method should still return the correct minimum.",
+      "related_concept": "Edge Cases"
+    },
+    "node_min_duplicates_break_sorted_check": {
+      "hint_text": "If the first and last elements are equal, the segment might NOT be fully sorted (e.g., [4,5,2,3,4]). Avoid using a simple 'already sorted' shortcut in this case.",
+      "related_concept": "Duplicates in Binary Search"
+    },
+    "node_min_duplicates_shrink_high": {
+      "hint_text": "When array[mid] equals array[high], you can't decide which half is correct—shrink the search range safely (e.g., decrease high by 1) and continue.",
+      "related_concept": "Duplicates in Binary Search"
+    },
+    "node_min_handle_negatives": {
+      "hint_text": "The same rotated-array logic works with negative numbers too. Don't assume values are non-negative—only rely on comparisons.",
+      "related_concept": "Comparison-Based Algorithms"
+    },
+    "node_q1_counts_only_successful_searches": {
+      "hint_text": "You are undercounting: even when an element is found, element(X, Q) still compares against each earlier node it visited. Count every (Q.item == X) comparison along the path until the match is found (or Q becomes None).",
+      "related_concept": "Linked Lists / Counting Comparisons in Linear Search"
+    },
 
-"node_q1_stops_after_first_found_instead_of_scan": {
-  "hint_text": "You seem to assume each element() call only needs 1 comparison when it eventually finds the value. But element() may compare against many Relics nodes before it reaches the matching node. Trace where 4 appears in Relics (it’s not at the start).",
-  "related_concept": "Tracing Execution / Position of Match in a Linked List"
-},
+    "node_q1_stops_after_first_found_instead_of_scan": {
+      "hint_text": "You seem to assume each element() call only needs 1 comparison when it eventually finds the value. But element() may compare against many Relics nodes before it reaches the matching node. Trace where 4 appears in Relics (it’s not at the start).",
+      "related_concept": "Tracing Execution / Position of Match in a Linked List"
+    },
 
-"node_q1_counts_only_elements_in_L": {
-  "hint_text": "You counted only the number of items in L (or only the outer loop). But the real work happens inside element(X, Relics), which scans through Relics and performs one (Q.item == X) comparison per node visited.",
-  "related_concept": "Nested Traversal / Outer Loop vs Inner Scan"
-},
-	  "node_q2_wrong_thinks_missing_early_is_worst": {
-  "hint_text": "If the first element of L is not in R, subset() stops immediately after one element() call. That usually makes it FAST, not worst-case. Worst-case needs you to spend a lot of time searching before you can stop.",
-  "related_concept": "Early Termination / Best vs Worst Case"
-},
+    "node_q1_counts_only_elements_in_L": {
+      "hint_text": "You counted only the number of items in L (or only the outer loop). But the real work happens inside element(X, Relics), which scans through Relics and performs one (Q.item == X) comparison per node visited.",
+      "related_concept": "Nested Traversal / Outer Loop vs Inner Scan"
+    },
+    "node_q2_wrong_thinks_missing_early_is_worst": {
+      "hint_text": "If the first element of L is not in R, subset() stops immediately after one element() call. That usually makes it FAST, not worst-case. Worst-case needs you to spend a lot of time searching before you can stop.",
+      "related_concept": "Early Termination / Best vs Worst Case"
+    },
 
-"node_q2_wrong_ignores_final_failed_search_cost": {
-  "hint_text": "Having the first |L|-1 elements found near the end of R does cause long searches, but worst-case is even worse when you also do a final full scan that FAILS (the last element of L is not in R), because element() must traverse all of R before returning False.",
-  "related_concept": "Worst Case Reasoning / Full Scan on Failure"
-},
+    "node_q2_wrong_ignores_final_failed_search_cost": {
+      "hint_text": "Having the first |L|-1 elements found near the end of R does cause long searches, but worst-case is even worse when you also do a final full scan that FAILS (the last element of L is not in R), because element() must traverse all of R before returning False.",
+      "related_concept": "Worst Case Reasoning / Full Scan on Failure"
+    },
 
-"node_q2_wrong_thinks_all_present_at_end_is_worst": {
-  "hint_text": "If L forms the last |L| elements of R, then every element of L IS in R, so every element() search will eventually succeed. The worst-case for subset-check typically occurs when many searches are long AND the final one fails only after scanning all of R.",
-  "related_concept": "Worst Case Conditions / Success vs Failure Search"
-},
-	  "node_q3_wrong_thinks_only_R_matters": {
-  "hint_text": "Θ(|R|) would only be true if subset() called element() a constant number of times. But subset() loops over O, and each iteration may scan through many nodes of R. So the total work depends on BOTH |O| and |R|.",
-  "related_concept": "Worst-Case Complexity / Nested Traversals"
-},
+    "node_q2_wrong_thinks_all_present_at_end_is_worst": {
+      "hint_text": "If L forms the last |L| elements of R, then every element of L IS in R, so every element() search will eventually succeed. The worst-case for subset-check typically occurs when many searches are long AND the final one fails only after scanning all of R.",
+      "related_concept": "Worst Case Conditions / Success vs Failure Search"
+    },
+    "node_q3_wrong_thinks_only_R_matters": {
+      "hint_text": "Θ(|R|) would only be true if subset() called element() a constant number of times. But subset() loops over O, and each iteration may scan through many nodes of R. So the total work depends on BOTH |O| and |R|.",
+      "related_concept": "Worst-Case Complexity / Nested Traversals"
+    },
 
-"node_q3_wrong_thinks_only_O_matters": {
-  "hint_text": "Θ(|O|) would only make sense if element() were O(1). But element() is a linear scan of R (it may compare against every node if the item is at the end or not present). That inner scan dominates the cost.",
-  "related_concept": "Linear Search in Linked Lists / Inner Loop Cost"
-},
+    "node_q3_wrong_thinks_only_O_matters": {
+      "hint_text": "Θ(|O|) would only make sense if element() were O(1). But element() is a linear scan of R (it may compare against every node if the item is at the end or not present). That inner scan dominates the cost.",
+      "related_concept": "Linear Search in Linked Lists / Inner Loop Cost"
+    },
 
-"node_q3_wrong_add_instead_of_multiply": {
-  "hint_text": "Θ(|O| + |R|) is typical when you traverse two lists once each. Here, you traverse O, and for EACH item in O you may traverse R again via element(). That’s repeated work, so the costs multiply in the worst case.",
-  "related_concept": "Nested Loops / Additive vs Multiplicative Growth"
-},
-  "l5_c1_p1_bookreturn_n_over_m_definition": {
-    "related_concept": "load_factor_n_over_m",
-    "hint_text": "Load factor is α = n / m. Here, n is the total number of books placed in the row, and m is the number of shelves in that row."
-  },
-  "l5_c1_p1_bookreturn_m_is_shelves_fixed": {
-    "related_concept": "m_is_number_of_shelves_fixed",
-    "hint_text": "m is fixed by the row layout: it’s the number of shelves in that row. You can only change α by changing n (how many books are placed)."
-  },
-  "l5_c1_p1_bookreturn_required_n_equals_target_times_m": {
-    "related_concept": "required_n_equals_target_times_m",
-    "hint_text": "Convert the target into a required book count: n = α × m. Multiply the target load factor by the number of shelves in the row to get exactly how many books that row must contain."
-  },
-  "l5_c1_p1_bookreturn_row_underfilled": {
-    "related_concept": "row_underfilled_vs_overfilled",
-    "hint_text": "This row is underfilled: it has too few books for its target. Add more books into this row until n matches the required count."
-  },
-  "l5_c1_p1_bookreturn_row_overfilled": {
-    "related_concept": "row_underfilled_vs_overfilled",
-    "hint_text": "This row is overfilled: it has too many books for its target. Remove or move some books out until n matches the required count."
-  },
-  "l5_c1_p2_row_underfilled": {
-    "related_concept": "hashing",
-	  "hint_text": "All slots have to be filled. You have too little books on the bookshelf."
-  },
-  "l5_c1_p2_best_case_no_probing": {
-	  "related_concept": "hint",
-	  "hint_text": "Best-case for linear probing means: every key lands in its first hashed slot with no collisions, so no probing happens."
-	},
-	"l5_c1_p2_worst_case_primary_clustering": {
-	  "related_concept": "hint",
-	  "hint_text": "Worst-case happens when many keys collide and form one long contiguous cluster. Linear probing then checks many slots before finding an empty one."
-	},
-	"l5_c1_p2_generic_reply": {
-	  "related_concept": "Carelessness",
-	  "hint_text": "Please check your arrangement again."
-	}
+    "node_q3_wrong_add_instead_of_multiply": {
+      "hint_text": "Θ(|O| + |R|) is typical when you traverse two lists once each. Here, you traverse O, and for EACH item in O you may traverse R again via element(). That’s repeated work, so the costs multiply in the worst case.",
+      "related_concept": "Nested Loops / Additive vs Multiplicative Growth"
+    },
+    "node_p2q1_wrong_counts_outer_only_or_off_by_one": {
+      "hint_text": "Don’t count only the outer loop. The number of Seal() calls comes from the inner loop. For each outer-loop round, k starts at 1 and doubles (1, 2, 4, 8, ...), calling Seal() once per value of k while k <= N.",
+      "related_concept": "Tracing Nested Loops / Geometric Progression"
+    },
+
+    "node_p2q1_wrong_multiplies_logs_or_assumes_full_inner_each_time": {
+      "hint_text": "Be careful not to multiply incorrectly. First, list how many times the OUTER loop runs when j multiplies by 3 (j = 1, 3, 9, ...). Then separately count how many Seal() calls happen per outer iteration when k doubles (k = 1, 2, 4, 8, ...).",
+      "related_concept": "Nested Loops / Counting Iterations Precisely"
+    },
+
+    "node_p2q1_wrong_assumes_quadratic_or_linear_times_linear": {
+      "hint_text": "This is not a 'k++' inner loop. Since k doubles each time, the inner loop runs in logarithmic steps, not N steps. Try writing down the exact k sequence for N=8 to avoid overcounting.",
+      "related_concept": "Logarithmic Loops / Doubling Pattern"
+    },
+    "l5_c1_p1_bookreturn_n_over_m_definition": {
+      "related_concept": "load_factor_n_over_m",
+      "hint_text": "Load factor is α = n / m. Here, n is the total number of books placed in the row, and m is the number of shelves in that row."
+    },
+    "l5_c1_p1_bookreturn_m_is_shelves_fixed": {
+      "related_concept": "m_is_number_of_shelves_fixed",
+      "hint_text": "m is fixed by the row layout: it’s the number of shelves in that row. You can only change α by changing n (how many books are placed)."
+    },
+    "l5_c1_p1_bookreturn_required_n_equals_target_times_m": {
+      "related_concept": "required_n_equals_target_times_m",
+      "hint_text": "Convert the target into a required book count: n = α × m. Multiply the target load factor by the number of shelves in the row to get exactly how many books that row must contain."
+    },
+    "l5_c1_p1_bookreturn_row_underfilled": {
+      "related_concept": "row_underfilled_vs_overfilled",
+      "hint_text": "This row is underfilled: it has too few books for its target. Add more books into this row until n matches the required count."
+    },
+    "l5_c1_p1_bookreturn_row_overfilled": {
+      "related_concept": "row_underfilled_vs_overfilled",
+      "hint_text": "This row is overfilled: it has too many books for its target. Remove or move some books out until n matches the required count."
+    },
+    "l5_c1_p2_row_underfilled": {
+      "related_concept": "hashing",
+      "hint_text": "All slots have to be filled. You have too little books on the bookshelf."
+    },
+    "l5_c1_p2_best_case_no_probing": {
+      "related_concept": "hint",
+      "hint_text": "Best-case for linear probing means: every key lands in its first hashed slot with no collisions, so no probing happens."
+    },
+    "l5_c1_p2_worst_case_primary_clustering": {
+      "related_concept": "hint",
+      "hint_text": "Worst-case happens when many keys collide and form one long contiguous cluster. Linear probing then checks many slots before finding an empty one."
+    },
+    "l5_c1_p2_generic_reply": {
+      "related_concept": "Carelessness",
+      "hint_text": "Please check your arrangement again."
+    }
   }
 }
