@@ -401,12 +401,15 @@
   }
 },
   "l4_c1_p1_q2": {
-    "description": "Pick the correct statement about L and Relics.",
-    "type": "scroll_mcq",
-    "concept_targets": [
-      { "id": "early_stop", "concept_node_id": "node_early_termination_in_subset" }
-    ]
-  },
+  "description": "Let R denote the Relics list. Based on the subset(L, R) and element(X, Q) code, when will the worst case happen?",
+  "type": "scroll_mcq",
+  "correct_answer": "opt3",
+  "option_to_concept_node": {
+    "opt1": "node_q2_wrong_thinks_missing_early_is_worst",
+    "opt2": "node_q2_wrong_ignores_final_failed_search_cost",
+    "opt4": "node_q2_wrong_thinks_all_present_at_end_is_worst"
+  }
+},
   "l4_c1_p1_q3": {
     "description": "Pick the correct Big-Theta complexity.",
     "type": "scroll_mcq",
@@ -905,6 +908,20 @@
 "node_q1_counts_only_elements_in_L": {
   "hint_text": "You counted only the number of items in L (or only the outer loop). But the real work happens inside element(X, Relics), which scans through Relics and performs one (Q.item == X) comparison per node visited.",
   "related_concept": "Nested Traversal / Outer Loop vs Inner Scan"
+},
+	  "node_q2_wrong_thinks_missing_early_is_worst": {
+  "hint_text": "If the first element of L is not in R, subset() stops immediately after one element() call. That usually makes it FAST, not worst-case. Worst-case needs you to spend a lot of time searching before you can stop.",
+  "related_concept": "Early Termination / Best vs Worst Case"
+},
+
+"node_q2_wrong_ignores_final_failed_search_cost": {
+  "hint_text": "Having the first |L|-1 elements found near the end of R does cause long searches, but worst-case is even worse when you also do a final full scan that FAILS (the last element of L is not in R), because element() must traverse all of R before returning False.",
+  "related_concept": "Worst Case Reasoning / Full Scan on Failure"
+},
+
+"node_q2_wrong_thinks_all_present_at_end_is_worst": {
+  "hint_text": "If L forms the last |L| elements of R, then every element of L IS in R, so every element() search will eventually succeed. The worst-case for subset-check typically occurs when many searches are long AND the final one fails only after scanning all of R.",
+  "related_concept": "Worst Case Conditions / Success vs Failure Search"
 },
   "l5_c1_p1_bookreturn_n_over_m_definition": {
     "related_concept": "load_factor_n_over_m",
