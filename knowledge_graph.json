@@ -430,6 +430,66 @@
         "15": "node_p2q1_wrong_assumes_quadratic_or_linear_times_linear"
       }
     },
+    "l4_c1_p2_q2": {
+      "description": "In the function Sealer(N), how many iterations does the inner loop (controlled by k) run in terms of N? (log₂ means log base 2.)",
+      "type": "scroll_mcq",
+      "correct_answer": "opt1",
+      "option_to_concept_node": {
+        "opt2": "node_p2q2_wrong_missing_plus_one",
+        "opt3": "node_p2q2_wrong_logN_base_confusion",
+        "opt4": "node_p2q2_wrong_forgets_initial_iteration"
+      }
+    },
+    "l4_c1_p2_q3": {
+      "description": "In the function Sealer(N), how many iterations does the outer loop (controlled by j) run in terms of N? (log₃ means log base 3.)",
+      "type": "scroll_mcq",
+      "correct_answer": "opt4",
+      "option_to_concept_node": {
+        "opt1": "node_p2q3_wrong_base_confusion_log2",
+        "opt2": "node_p2q3_wrong_unspecified_log_base",
+        "opt3": "node_p2q3_wrong_missing_plus_one"
+      }
+    },
+    "l4_c1_p2_q4": {
+      "description": "For Sealer(N), find the time complexity in Big-O notation in terms of N. (Hint: inner loop has log₂(N) iterations and outer loop has log₃(N) iterations.)",
+      "type": "scroll_mcq",
+      "correct_answer": "opt3",
+      "option_to_concept_node": {
+        "opt1": "node_p2q4_wrong_thinks_linear_N",
+        "opt2": "node_p2q4_wrong_collapses_logs_to_single_log",
+        "opt4": "node_p2q4_wrong_uses_log_of_N_squared_instead_of_product"
+      }
+    },
+    "l4_c2_p3_q1": {
+      "description": "Given the recursive function Book(N), how many times is Read() executed when starting with N = 3?",
+      "type": "scroll_mcq",
+      "correct_answer": "11",
+      "option_to_concept_node": {
+        "7": "node_l4c2p3q1_wrong_counts_only_top_level",
+        "13": "node_l4c2p3q1_wrong_double_counts_levels",
+        "14": "node_l4c2p3q1_wrong_assumes_full_binary_without_linear_term"
+      }
+    },
+    "l4_c2_p3_q2": {
+      "description": "Let W(N) denote the number of Read() calls in Book(N). Which recurrence correctly represents W(N)?",
+      "type": "scroll_mcq",
+      "correct_answer": "opt4",
+      "option_to_concept_node": {
+        "opt1": "node_l4c2p3q2_wrong_single_recursive_call",
+        "opt2": "node_l4c2p3q2_wrong_fibonacci_assumption",
+        "opt3": "node_l4c2p3q2_wrong_missing_linear_term"
+      }
+    },
+    "l4_c2_p3_q3": {
+      "description": "For the recursive function Book(N), what is the time complexity in Big-O notation?",
+      "type": "scroll_mcq",
+      "correct_answer": "opt1",
+      "option_to_concept_node": {
+        "opt2": "node_l4c2p3q3_wrong_thinks_quadratic",
+        "opt3": "node_l4c2p3q3_wrong_thinks_linear",
+        "opt4": "node_l4c2p3q3_wrong_thinks_factorial"
+      }
+    },
     "l4_c1_p4": {
       "description": "Find the minimal element in a cyclically (rotated) sorted sequence in O(log n). The input may contain duplicates. m and n are the indices of the first and last elements respectively.",
       "type": "code_function",
@@ -968,6 +1028,90 @@
     "node_p2q1_wrong_assumes_quadratic_or_linear_times_linear": {
       "hint_text": "This is not a 'k++' inner loop. Since k doubles each time, the inner loop runs in logarithmic steps, not N steps. Try writing down the exact k sequence for N=8 to avoid overcounting.",
       "related_concept": "Logarithmic Loops / Doubling Pattern"
+    },
+    "node_p2q2_wrong_missing_plus_one": {
+      "hint_text": "The loop starts with k = 1 and continues while k <= N. Since k doubles each time (1, 2, 4, 8, ...), you must count the initial value k = 1 as an iteration. That’s why it is not just log₂(N), but floor(log₂(N)) + 1.",
+      "related_concept": "Logarithmic Loops / Off-by-One Counting"
+    },
+
+    "node_p2q2_wrong_logN_base_confusion": {
+      "hint_text": "Be careful with notation. The loop doubles k each time (k *= 2), so the growth is base 2. The number of times you can double 1 before exceeding N is related to log₂(N), not log(N) with an unspecified base.",
+      "related_concept": "Logarithms / Base Interpretation"
+    },
+
+    "node_p2q2_wrong_forgets_initial_iteration": {
+      "hint_text": "List the actual values of k for a small N (e.g., N = 8): 1, 2, 4, 8. Notice there are 4 iterations. Since log₂(8) = 3, you need one extra count for the starting value k = 1.",
+      "related_concept": "Tracing Geometric Progression / Boundary Conditions"
+    },
+    "node_p2q3_wrong_base_confusion_log2": {
+      "hint_text": "The outer loop multiplies j by 3 each time (j *= 3), not by 2. So the number of times j can grow from 1 to exceed N is determined by powers of 3, which relates to log₃(N), not log₂(N).",
+      "related_concept": "Logarithms / Matching Base to Growth Factor"
+    },
+
+    "node_p2q3_wrong_unspecified_log_base": {
+      "hint_text": "Be precise about the base. Since j grows as 1, 3, 9, 27, ... (powers of 3), the correct logarithm must be base 3. Using logN without specifying base can hide this key detail.",
+      "related_concept": "Logarithms / Base Interpretation"
+    },
+
+    "node_p2q3_wrong_missing_plus_one": {
+      "hint_text": "List the actual values of j for a small N (e.g., N = 9): 1, 3, 9. That’s 3 iterations. Since log₃(9) = 2, you need to add 1 to count the initial value j = 1. That’s why it’s floor(log₃(N)) + 1.",
+      "related_concept": "Geometric Progression / Off-by-One Counting"
+    },
+    "node_p2q4_wrong_thinks_linear_N": {
+      "hint_text": "Neither loop increases by +1. The inner loop doubles k (k *= 2) and the outer loop triples j (j *= 3), so both loops run logarithmically, not linearly. The total cannot be O(N).",
+      "related_concept": "Logarithmic Loops / Growth Factors"
+    },
+
+    "node_p2q4_wrong_collapses_logs_to_single_log": {
+      "hint_text": "The loops are nested, so you multiply their iteration counts: (log₂(N)) * (log₃(N)). You should not simplify this into just O(log N) because both logs contribute multiplicatively.",
+      "related_concept": "Nested Loops / Multiplying Costs"
+    },
+
+    "node_p2q4_wrong_uses_log_of_N_squared_instead_of_product": {
+      "hint_text": "Be careful with log identities: log(N^2) means 2·log(N), which is still O(log N). Here you have (log₂(N))·(log₃(N)), which grows like (log N)^2 up to constant factors (change of base).",
+      "related_concept": "Logarithm Rules / (log N)^2 vs log(N^2)"
+    },
+    "node_l4c2p3q1_wrong_counts_only_top_level": {
+      "hint_text": "You may be counting only the first call’s for-loop (Read() done N times). But after that, Book(N) calls Book(N-1) twice, and each of those calls also performs its own reads and recursive calls.",
+      "related_concept": "Recursion Tree / Expanding Recursive Calls"
+    },
+
+    "node_l4c2p3q1_wrong_double_counts_levels": {
+      "hint_text": "Be careful not to overcount. Each Book(N) call contributes exactly N Read() calls, then spawns two Book(N-1) calls. Try expanding from N=3 → two calls at N=2 → four calls at N=1, and sum the reads per level.",
+      "related_concept": "Tracing Recursion / Summing Per-Level Work"
+    },
+
+    "node_l4c2p3q1_wrong_assumes_full_binary_without_linear_term": {
+      "hint_text": "This recursion is not only about the number of nodes in a binary tree. Every node also does a for-loop with N reads at that level. Include both the branching (two calls) and the linear work done at each call.",
+      "related_concept": "Recurrence Relations / Combining Linear and Recursive Work"
+    },
+    "node_l4c2p3q2_wrong_single_recursive_call": {
+      "hint_text": "Book(N) makes TWO recursive calls to Book(N-1), not one. So W(N) must include 2·W(N-1), not just W(N-1). Also remember to include the N reads from the for-loop.",
+      "related_concept": "Recurrence Relations / Counting Recursive Calls"
+    },
+
+    "node_l4c2p3q2_wrong_fibonacci_assumption": {
+      "hint_text": "This is not a Fibonacci-style recursion. Both recursive calls are Book(N-1), not Book(N-1) and Book(N-2). Carefully match the recurrence to the actual recursive structure.",
+      "related_concept": "Recursion Structure / Matching Code to Recurrence"
+    },
+
+    "node_l4c2p3q2_wrong_missing_linear_term": {
+      "hint_text": "Each call to Book(N) performs N Read() operations before making the recursive calls. So besides the 2·W(N-1) part, you must also add the linear term N.",
+      "related_concept": "Recurrence Relations / Combining Recursive and Linear Work"
+    },
+    "node_l4c2p3q3_wrong_thinks_quadratic": {
+      "hint_text": "The function makes two recursive calls at each level: Book(N-1) and Book(N-1). That branching causes exponential growth in the number of calls. A quadratic time complexity (O(N^2)) grows much slower than this recursion tree.",
+      "related_concept": "Recursion Tree / Exponential Growth"
+    },
+
+    "node_l4c2p3q3_wrong_thinks_linear": {
+      "hint_text": "Although each call performs N Read() operations, the key factor is the two recursive calls to Book(N-1). This creates a binary recursion tree, which grows exponentially, not linearly.",
+      "related_concept": "Recurrence Relations / Dominant Term"
+    },
+
+    "node_l4c2p3q3_wrong_thinks_factorial": {
+      "hint_text": "Factorial time usually appears when each level branches into N, N-1, N-2, ... calls. Here, each level makes exactly two recursive calls. That leads to exponential growth like 2^N, not N!.",
+      "related_concept": "Recursion Patterns / Comparing Growth Rates"
     },
     "l5_c1_p1_bookreturn_n_over_m_definition": {
       "related_concept": "load_factor_n_over_m",
