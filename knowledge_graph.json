@@ -905,7 +905,7 @@
 "node_q1_counts_only_elements_in_L": {
   "hint_text": "You counted only the number of items in L (or only the outer loop). But the real work happens inside element(X, Relics), which scans through Relics and performs one (Q.item == X) comparison per node visited.",
   "related_concept": "Nested Traversal / Outer Loop vs Inner Scan"
-}
+},
   "l5_c1_p1_bookreturn_n_over_m_definition": {
     "related_concept": "load_factor_n_over_m",
     "hint_text": "Load factor is α = n / m. Here, n is the total number of books placed in the row, and m is the number of shelves in that row."
