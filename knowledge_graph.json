@@ -391,12 +391,15 @@
   ]
 },
 "l4_c1_p1_q1": {
-    "description": "Count item comparisons made.",
-    "type": "scroll_mcq",
-    "concept_targets": [
-      { "id": "comparisons_count", "concept_node_id": "node_count_item_comparisons" }
-    ]
-  },
+  "description": "Given L = [8,4,5] and Relics = [1,2,6,9,4,3], how many item comparisons of the form (Q.item == X) are made by subset(L, Relics)?",
+  "type": "scroll_mcq",
+  "correct_answer": "17",
+  "option_to_concept_node": {
+    "10": "node_q1_counts_only_successful_searches",
+    "6": "node_q1_stops_after_first_found_instead_of_scan",
+    "3": "node_q1_counts_only_elements_in_L"
+  }
+},
   "l4_c1_p1_q2": {
     "description": "Pick the correct statement about L and Relics.",
     "type": "scroll_mcq",
@@ -889,6 +892,20 @@
   "hint_text": "The same rotated-array logic works with negative numbers too. Don't assume values are non-negative—only rely on comparisons.",
   "related_concept": "Comparison-Based Algorithms"
 },
+	  "node_q1_counts_only_successful_searches": {
+  "hint_text": "You are undercounting: even when an element is found, element(X, Q) still compares against each earlier node it visited. Count every (Q.item == X) comparison along the path until the match is found (or Q becomes None).",
+  "related_concept": "Linked Lists / Counting Comparisons in Linear Search"
+},
+
+"node_q1_stops_after_first_found_instead_of_scan": {
+  "hint_text": "You seem to assume each element() call only needs 1 comparison when it eventually finds the value. But element() may compare against many Relics nodes before it reaches the matching node. Trace where 4 appears in Relics (it’s not at the start).",
+  "related_concept": "Tracing Execution / Position of Match in a Linked List"
+},
+
+"node_q1_counts_only_elements_in_L": {
+  "hint_text": "You counted only the number of items in L (or only the outer loop). But the real work happens inside element(X, Relics), which scans through Relics and performs one (Q.item == X) comparison per node visited.",
+  "related_concept": "Nested Traversal / Outer Loop vs Inner Scan"
+}
   "l5_c1_p1_bookreturn_n_over_m_definition": {
     "related_concept": "load_factor_n_over_m",
     "hint_text": "Load factor is α = n / m. Here, n is the total number of books placed in the row, and m is the number of shelves in that row."
