@@ -411,12 +411,15 @@
   }
 },
   "l4_c1_p1_q3": {
-    "description": "Pick the correct Big-Theta complexity.",
-    "type": "scroll_mcq",
-    "concept_targets": [
-      { "id": "theta", "concept_node_id": "node_theta_L_times_R_subset" }
-    ]
-  },
+  "description": "Let O denote the Observed list and R denote the Relics list. Using the given subset(O, R) and element(X, Q) code, what is the worst-case running time of subset as a function of |O| and |R|?",
+  "type": "scroll_mcq",
+  "correct_answer": "opt4",
+  "option_to_concept_node": {
+    "opt1": "node_q3_wrong_thinks_only_R_matters",
+    "opt2": "node_q3_wrong_thinks_only_O_matters",
+    "opt3": "node_q3_wrong_add_instead_of_multiply"
+  }
+},
 "l4_c1_p4": {
   "description": "Find the minimal element in a cyclically (rotated) sorted sequence in O(log n). The input may contain duplicates. m and n are the indices of the first and last elements respectively.",
   "type": "code_function",
@@ -922,6 +925,20 @@
 "node_q2_wrong_thinks_all_present_at_end_is_worst": {
   "hint_text": "If L forms the last |L| elements of R, then every element of L IS in R, so every element() search will eventually succeed. The worst-case for subset-check typically occurs when many searches are long AND the final one fails only after scanning all of R.",
   "related_concept": "Worst Case Conditions / Success vs Failure Search"
+},
+	  "node_q3_wrong_thinks_only_R_matters": {
+  "hint_text": "Θ(|R|) would only be true if subset() called element() a constant number of times. But subset() loops over O, and each iteration may scan through many nodes of R. So the total work depends on BOTH |O| and |R|.",
+  "related_concept": "Worst-Case Complexity / Nested Traversals"
+},
+
+"node_q3_wrong_thinks_only_O_matters": {
+  "hint_text": "Θ(|O|) would only make sense if element() were O(1). But element() is a linear scan of R (it may compare against every node if the item is at the end or not present). That inner scan dominates the cost.",
+  "related_concept": "Linear Search in Linked Lists / Inner Loop Cost"
+},
+
+"node_q3_wrong_add_instead_of_multiply": {
+  "hint_text": "Θ(|O| + |R|) is typical when you traverse two lists once each. Here, you traverse O, and for EACH item in O you may traverse R again via element(). That’s repeated work, so the costs multiply in the worst case.",
+  "related_concept": "Nested Loops / Additive vs Multiplicative Growth"
 },
   "l5_c1_p1_bookreturn_n_over_m_definition": {
     "related_concept": "load_factor_n_over_m",
