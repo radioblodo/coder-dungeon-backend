@@ -390,6 +390,27 @@
     "choosing_a_larger_value_than_target_value"
   ]
 },
+"l4_c1_p1_q1": {
+    "description": "Count item comparisons made.",
+    "type": "scroll_mcq",
+    "concept_targets": [
+      { "id": "comparisons_count", "concept_node_id": "node_count_item_comparisons" }
+    ]
+  },
+  "l4_c1_p1_q2": {
+    "description": "Pick the correct statement about L and Relics.",
+    "type": "scroll_mcq",
+    "concept_targets": [
+      { "id": "early_stop", "concept_node_id": "node_early_termination_in_subset" }
+    ]
+  },
+  "l4_c1_p1_q3": {
+    "description": "Pick the correct Big-Theta complexity.",
+    "type": "scroll_mcq",
+    "concept_targets": [
+      { "id": "theta", "concept_node_id": "node_theta_L_times_R_subset" }
+    ]
+  },
 "l4_c1_p4": {
   "description": "Find the minimal element in a cyclically (rotated) sorted sequence in O(log n). The input may contain duplicates. m and n are the indices of the first and last elements respectively.",
   "type": "code_function",
