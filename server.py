@@ -310,6 +310,9 @@ def request_hint():
         "l3_c1_p3",
         "l3_c2_p2",
         "l3_c2_p3",
+        "l4_c1_p1_q1",
+        "l4_c1_p1_q2",
+        "l4_c1_p1_q3",
         "l5_c1_p1",
         "l5_c1_p2"
     ):
