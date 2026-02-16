@@ -581,6 +581,19 @@
         "l5_hash_confuse_row_highlight",
         "l5_hash_overfill_or_underfill_solution_row"
       ]
+    },
+    "l6_c1_p1": {
+      "description": "Read the trie and input the words that exist in it by dragging and dropping the correct words onto the device.",
+      "type": "puzzle",
+      "concepts": ["trie", "prefix_tree", "tree_traversal", "string_matching"],
+      "error_patterns": [
+        "l6_c1_p1_trie_prefix_only_not_word",
+        "l6_c1_p1_trie_wrong_branch_choice",
+        "l6_c1_p1_trie_missing_character_step",
+        "l6_c1_p1_trie_extra_character_step",
+        "l6_c1_p1_trie_confuse_similar_words",
+        "l6_c1_p1_trie_visual_guessing"
+      ]
     }
   },
 
@@ -1149,5 +1162,29 @@
       "related_concept": "Carelessness",
       "hint_text": "Please check your arrangement again."
     }
+  },
+  "l6_c1_p1_trie_prefix_only_not_word": {
+    "hint_text": "A path in a trie is not automatically a valid word. The word only counts if the path ends exactly at a terminal (end-of-word) node. If you stop too early, it’s only a prefix.",
+    "related_concept": "Prefix vs Complete Word"
+  },
+  "l6_c1_p1_trie_wrong_branch_choice": {
+    "hint_text": "After choosing the first letter, you must follow the correct child branch for the next character. If the next character is not available as a child node, that word cannot be formed.",
+    "related_concept": "Branching in Tries"
+  },
+  "l6_c1_p1_trie_missing_character_step": {
+    "hint_text": "You skipped a character. In a trie, each step down the tree represents exactly one next letter in the word—no letters can be jumped over.",
+    "related_concept": "Character-by-Character Traversal"
+  },
+  "l6_c1_p1_trie_extra_character_step": {
+    "hint_text": "You added an extra letter beyond what the trie supports. Even if a shorter word exists, a longer word is only valid if the trie continues with matching child nodes and ends at a terminal node.",
+    "related_concept": "Exact Path Matching"
+  },
+  "l6_c1_p1_trie_confuse_similar_words": {
+    "hint_text": "Be careful with similar-looking options (e.g., 'rat' vs 'rap' vs 'rapt'). Check the trie path letter by letter, and confirm the terminal node at the exact final letter.",
+    "related_concept": "Disambiguating Similar Prefixes"
+  },
+  "l6_c1_p1_trie_visual_guessing": {
+    "hint_text": "Don’t choose words based on what 'looks' likely. Trace the trie properly: start at the root, follow each letter down, and only accept the word if you land on a terminal node at the end.",
+    "related_concept": "Systematic Tracing Strategy"
   }
 }
