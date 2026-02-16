@@ -321,7 +321,9 @@ def request_hint():
         "l4_c1_p3_q2",
         "l4_c1_p3_q3",
         "l5_c1_p1",
-        "l5_c1_p2"
+        "l5_c1_p2",
+        "l6_c1_p1",
+        "l6_c1_p2"
     ):
         print(f"Providing hints for problem {problem_id}...")
         cid = ids[0]  # we expect exactly one
