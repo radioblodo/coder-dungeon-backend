@@ -216,7 +216,9 @@ def submit_code():
                 timeout=5,
             )
 
-            actual_output = (result.stdout or "").strip()
+            raw = (result.stdout or "")
+            lines = [ln.strip() for ln in raw.splitlines() if ln.strip() != ""]
+            actual_output = lines[-1] if lines else ""
             stderr_output = (result.stderr or "").strip()
 
             outputs_log += f"In: {input_val} | Out: {actual_output}\n"
