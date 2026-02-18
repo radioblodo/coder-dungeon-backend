@@ -1223,24 +1223,25 @@
       "related_concept": "Systematic Tracing Strategy"
     },
     "node_trie_prefix_core": {
-      "hint_text": "First traverse the trie to reach the node representing the last character of the prefix. Only after reaching that node should you begin collecting words.",
-      "related_concept": "Trie Traversal"
-    },
-    "node_trie_prefix_alphabetical": {
-      "hint_text": "Children in this trie are stored as siblings in a linked list. You must sort the child nodes alphabetically before performing DFS to ensure correct output order.",
-      "related_concept": "Tree Traversal Order"
-    },
-    "node_trie_prefix_not_found": {
-      "hint_text": "If at any point during prefix traversal a character does not exist, the prefix is not in the trie. In that case, return an empty result immediately.",
-      "related_concept": "Edge Cases"
-    },
-    "node_trie_prefix_word_vs_prefix": {
-      "hint_text": "If the prefix itself is a valid word, include it in the result before exploring deeper children. Check the is_end_of_word flag.",
-      "related_concept": "Prefix vs Complete Word"
-    },
-    "node_trie_prefix_sibling_traversal": {
-      "hint_text": "Do not stop after checking only the first child. You must traverse all siblings and explore every branch below the prefix node.",
-      "related_concept": "First-Child / Next-Sibling Representation"
-    }
+  "hint_text": "First follow the prefix down from trie.root using _find_child for each character. Only once you reach the node for the last prefix character should you start collecting words below it.",
+  "related_concept": "Trie Traversal"
+},
+"node_trie_prefix_alphabetical": {
+  "hint_text": "This trie stores children using first_child + next_sibling (linked list). To output words in alphabetical order, collect all children of the current node, sort by child.char, then DFS in that sorted order.",
+  "related_concept": "Traversal Order"
+},
+"node_trie_prefix_not_found": {
+  "hint_text": "If any prefix character is missing during the walk-down, there are no matches. Return an empty list [] so the driver prints \"empty!\".",
+  "related_concept": "Edge Cases"
+},
+"node_trie_prefix_word_vs_prefix": {
+  "hint_text": "After reaching the prefix node, if node.is_end_of_word is True, include the prefix itself as a result before exploring deeper children (e.g., prefix=\"app\" matches \"app\").",
+  "related_concept": "Prefix vs Complete Word"
+},
+"node_trie_prefix_sibling_traversal": {
+  "hint_text": "When exploring a node's children, don't just follow first_child. You must iterate through every next_sibling and explore each branch to collect all valid words.",
+  "related_concept": "First-Child / Next-Sibling Representation"
+}
+
   }
 }
