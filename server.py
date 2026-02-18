@@ -216,10 +216,15 @@ def submit_code():
                 timeout=5,
             )
 
-            raw = (result.stdout or "")
-            lines = [ln.strip() for ln in raw.splitlines() if ln.strip() != ""]
+            raw_out = (result.stdout or "")
+            raw_err = (result.stderr or "")
+            
+            lines = [ln.strip() for ln in raw_out.splitlines() if ln.strip() != ""]
             actual_output = lines[-1] if lines else ""
-            stderr_output = (result.stderr or "").strip()
+            stderr_output = raw_err.strip()
+            
+            expected_val = str(case.get("expected_output", "")).strip()
+
 
             outputs_log += f"In: {input_val} | Out: {actual_output}\n"
 
