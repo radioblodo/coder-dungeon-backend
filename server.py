@@ -21,28 +21,22 @@ CORS(
 STORE_FILE_PATH = "./store/"
 GRAPH_FILE_PATH = "knowledge_graph.json"
 
-# Ensure store directory exists
 os.makedirs(STORE_FILE_PATH, exist_ok=True)
-
 
 # -------- Helpers --------
 def load_graph():
     with open(GRAPH_FILE_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
-
 def normalize_line(s: str) -> str:
     """Normalize stdout/expected strings to avoid invisible mismatch."""
     if s is None:
         return ""
-    # normalize newlines and trim
     s = s.replace("\r\n", "\n").replace("\r", "\n").strip()
-    # remove common invisible characters
     s = s.replace("\ufeff", "")   # BOM
     s = s.replace("\u200b", "")   # zero-width space
     s = s.replace("\x00", "")     # null
     return s
-
 
 def parse_answer_from_stdout(stdout: str) -> str:
     """Take the last non-empty, normalized line as the answer."""
@@ -54,26 +48,30 @@ def parse_answer_from_stdout(stdout: str) -> str:
             lines.append(nl)
     return lines[-1] if lines else ""
 
+def is_known_buggy_driver_crash(stderr: str) -> bool:
+    """
+    Whitelist the known template-driver bug:
+    When words == [], driver prints 'empty!' then crashes at print(words[i]).
+    """
+    if not stderr:
+        return False
+    return ("IndexError: list index out of range" in stderr) and ("print(words[i])" in stderr)
 
 # -------- Load knowledge graph --------
 knowledge_graph = load_graph()
-
 
 @app.route("/")
 def health_check():
     return "Knowledge Graph Server is Online!"
 
-
 USERS = {
     "testAccount1": "password@123"
 }
-
 
 @app.before_request
 def handle_preflight():
     if request.method == "OPTIONS":
         return ("", 204)
-
 
 @app.after_request
 def add_cors_headers(resp):
@@ -91,7 +89,6 @@ def add_cors_headers(resp):
         resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     return resp
 
-
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json(force=True) or {}
@@ -101,7 +98,6 @@ def login():
     if USERS.get(username) == password:
         return jsonify({"ok": True, "username": username})
     return jsonify({"ok": False, "message": "Invalid username or password"}), 401
-
 
 # --- Senior compatibility endpoints ---
 @app.route("/token", methods=["POST", "OPTIONS"])
@@ -134,7 +130,6 @@ def token():
         "username": username
     })
 
-
 @app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])
 def playerdata(player_id):
     if request.method == "OPTIONS":
@@ -154,9 +149,7 @@ def playerdata(player_id):
 
     return jsonify({"ok": True, "player_id": player_id})
 
-
 # 2. THE GENERIC SUBMISSION ENGINE
-# Unity sends: file, problem_id (e.g., "l1_c1_p1")
 @app.route("/submit-code", methods=["POST", "OPTIONS"])
 def submit_code():
     if request.method == "OPTIONS":
@@ -217,7 +210,6 @@ def submit_code():
 
     print(f"Evaluating submission for: {problem_id}")
 
-    # Validate problem_id
     if problem_id not in knowledge_graph.get("problems", {}):
         return jsonify({"status": "error", "message": f"Invalid Problem ID: {problem_id}"}), 400
 
@@ -246,8 +238,13 @@ def submit_code():
             actual_output = parse_answer_from_stdout(raw_out)
             outputs_log += f"In: {input_val} | Out: {actual_output}\n"
 
-            # If program crashed, fail (runtime error)
+            # --- Runtime error handling ---
             if result.returncode != 0:
+                # Special-case: known buggy driver crash AFTER printing correct expected output
+                if actual_output == expected_val and is_known_buggy_driver_crash(raw_err):
+                    # treat this test case as passed
+                    continue
+
                 fail_node_id = case.get("fail_node_id")
                 node_data = knowledge_graph.get("graph_nodes", {}).get(fail_node_id, {}) if fail_node_id else {}
                 return jsonify({
@@ -262,7 +259,7 @@ def submit_code():
                     "debug_raw_stderr": repr(raw_err),
                 })
 
-            # Wrong answer
+            # --- Wrong answer handling ---
             if actual_output != expected_val:
                 fail_node_id = case.get("fail_node_id")
                 node_data = knowledge_graph.get("graph_nodes", {}).get(fail_node_id, {}) if fail_node_id else {}
@@ -273,7 +270,7 @@ def submit_code():
                     "student_output": actual_output,
                     "expected_output": expected_val,
                     "concept_gap": node_data.get("related_concept", "General"),
-                    "stderr": raw_err.strip(),  # keep for debugging, but not used to auto-fail
+                    "stderr": raw_err.strip(),
                     "debug_raw_stdout": repr(raw_out),
                 })
 
@@ -355,7 +352,7 @@ def request_hint():
         "l5_c1_p2",
         "l6_c1_p1",
         "l6_c1_p2",
-        "l6_c3_p1",  # <-- added
+        "l6_c3_p1",
     ):
         print(f"Providing hints for problem {problem_id}...")
         cid = ids[0]
@@ -368,7 +365,6 @@ def request_hint():
     else:
         print(f"Hint request for unknown problem {problem_id}")
         return jsonify({"status": "error", "message": f"No hint logic configured for {problem_id}"})
-
 
     return jsonify({
         "status": "success",
