@@ -130,24 +130,51 @@ def token():
         "username": username
     })
 
-@app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])
-def playerdata(player_id):
-    if request.method == "OPTIONS":
-        return ("", 204)
-
-    path = os.path.join(STORE_FILE_PATH, f"playerdata_{player_id}.json")
-
-    if request.method == "GET":
-        if os.path.exists(path):
-            with open(path, "r", encoding="utf-8") as f:
-                return jsonify(json.load(f))
-        return jsonify({})
-
-    data = request.get_json(silent=True) or {}
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f)
-
-    return jsonify({"ok": True, "player_id": player_id})
+@app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])                                                           
+  def playerdata(player_id):                                                                                                               
+      if request.method == "OPTIONS":                                                                                                      
+          return ("", 204)                                                                                                                 
+                                                                                                                                           
+      path = os.path.join(STORE_FILE_PATH, f"playerdata_{player_id}.json")                                                                 
+                                                                                                                                           
+      if request.method == "GET":                                                                                                          
+          if os.path.exists(path):                                                                                                         
+              with open(path, "r", encoding="utf-8") as f:                                                                                 
+                  return jsonify(json.load(f))                                                                                             
+          return jsonify({})                                                                                                               
+                                                                                                                                           
+      data = request.get_json(silent=True) or {}                                                                                           
+                                                                                                                                           
+      # Load existing store (dict of puzzle entries)                                                                                       
+      store = {}                                                                                                                           
+      if os.path.exists(path):                                                                                                             
+          with open(path, "r", encoding="utf-8") as f:                                                                                     
+              try:                                                                                                                         
+                  store = json.load(f) or {}                                                                                               
+              except Exception:                                                                                                            
+                  store = {}                                                                                                               
+                                                                                                                                           
+      # Normalize PATCH payload into PuzzleData shape                                                                                      
+      # Unity sends: { "name": "...", "time": ..., "attempts": ..., "solved": ... }                                                        
+      if "name" in data:                                                                                                                   
+          entry = {                                                                                                                        
+              "puzzle_name": data.get("name", ""),                                                                                         
+              "time": data.get("time", 0),                                                                                                 
+              "attempts": data.get("attempts", 0),                                                                                         
+              "solved": int(bool(data.get("solved", False))),                                                                              
+          }                                                                                                                                
+          key = entry["puzzle_name"] or str(len(store))                                                                                    
+          store[key] = entry                                                                                                               
+      elif isinstance(data, dict):                                                                                                         
+          # If client sends full dict already, merge it                                                                                    
+          for k, v in data.items():                                                                                                        
+              if isinstance(v, dict):                                                                                                      
+                  store[k] = v                                                                                                             
+                                                                                                                                           
+      with open(path, "w", encoding="utf-8") as f:                                                                                         
+          json.dump(store, f)                                                                                                              
+                                                                                                                                           
+      return jsonify({"ok": True, "player_id": player_id}) 
 
 # 2. THE GENERIC SUBMISSION ENGINE
 @app.route("/submit-code", methods=["POST", "OPTIONS"])
