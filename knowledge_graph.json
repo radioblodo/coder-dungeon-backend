@@ -1231,7 +1231,7 @@
   "related_concept": "Traversal Order"
 },
 "node_trie_prefix_not_found": {
-  "hint_text": "If any prefix character is missing during the walk-down, there are no matches. Return an empty list [] so the driver prints \"empty!\".",
+  "hint_text": "If any prefix character is missing during the walk-down, there are no matches. Return [\"empty!\"] (a list with one string) so the program prints empty! and does not crash.",
   "related_concept": "Edge Cases"
 },
 "node_trie_prefix_word_vs_prefix": {
