@@ -774,7 +774,7 @@
     },
     "l2_c1_p1_assignment_wrong_position": {
       "related_concept": "infix_to_postfix",
-      "hint_text": "In postfix, '=' usually comes after the entire right-hand side expression."
+      "hint_text": "In postfix, the assignment operator '=' is treated like an operator with the lowest precedence. First convert a + b * c % d >> e completely into postfix form. Only after the entire right-hand side is formed should '=' appear."
     },
     "l2_c1_p1_random_walk": {
       "related_concept": "general",
