@@ -161,7 +161,6 @@
         "l2_c1_p2_ignore_precedence_add_vs_shift",
         "l2_c1_p2_ignore_precedence_shift_vs_and",
         "l2_c1_p2_assignment_wrong_position",
-        "l2_c1_p2_stack_not_used",
         "l2_c1_p2_missing_and_operator",
         "l2_c1_p2_random_walk"
       ]
@@ -778,37 +777,30 @@
     },
     "l2_c1_p1_random_walk": {
       "related_concept": "general",
-      "hint_text": "Try breaking the expression into smaller parts and converting them one by one."
-    },
-    "l2_c1_p2_stack_not_used": {
-      "related_concept": "stack_usage",
-      "hint_text": "If you output operators as soon as you see them, <<, >> or && may appear too early. Use a stack so that higher-precedence parts are delayed until it is their turn."
+      "hint_text": "Think about which part of the expression is evaluated first. In postfix, each operation appears after its two operands. Identify the smallest high-precedence subexpression first."
     },
 
     "l2_c1_p2_ignore_precedence_add_vs_shift": {
       "related_concept": "operator_precedence",
       "hint_text": "Remember that + has higher precedence than << and >>. The sum d + e should be formed first, then used in the right-shift with c."
     },
-
     "l2_c1_p2_ignore_precedence_shift_vs_and": {
       "related_concept": "operator_precedence",
       "hint_text": "Shifts (<<, >>) have higher precedence than logical &&. Treat a << b and c >> (d + e) as two complete pieces before applying && between them."
     },
-
     "l2_c1_p2_assignment_wrong_position": {
-      "related_concept": "infix_to_postfix",
-      "hint_text": "In postfix, '=' comes after the entire right-hand side expression. Build the full result of 'a << b && c >> d + e' before placing '='."
+      "related_concept": "prefix_structure",
+      "hint_text": "In prefix, '=' is the outermost operator here. That means it combines y with the entire expression that follows. First reconstruct the full right-hand side before attaching it to y."
     },
-
     "l2_c1_p2_missing_and_operator": {
       "related_concept": "logical_and",
       "hint_text": "Your path never uses &&. The final expression should combine the left shift and the right shift with a logical AND in between."
     },
-
     "l2_c1_p2_random_walk": {
       "related_concept": "general",
       "hint_text": "Try to see the expression as two big parts: a << b and c >> (d + e). Convert each part carefully, then join them with && and finally '='."
     },
+
     "l2_c1_p3_stack_not_used": {
       "related_concept": "stack_usage",
       "hint_text": "If you simply read the postfix expression left-to-right or just reverse it, operators will attach to the wrong operands. For postfix to prefix, use a stack: scan symbols, push operands, and when you see an operator, pop the right number of operands and build a sub-expression."
