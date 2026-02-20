@@ -1,8 +1,11 @@
 import os
 import json
 import subprocess
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
+import csv
+import io
+import glob
 
 app = Flask(__name__)
 
@@ -400,6 +403,98 @@ def request_hint():
         "related_concept": chosen_node.get("related_concept", "General"),
     })
 
+def _iter_playerdata_files():
+    """Yield (player_id:int, filepath:str) for all playerdata_*.json files."""
+    pattern = os.path.join(STORE_FILE_PATH, "playerdata_*.json")
+    for path in sorted(glob.glob(pattern)):
+        base = os.path.basename(path)  # e.g. playerdata_12.json
+        try:
+            player_id = int(base.replace("playerdata_", "").replace(".json", ""))
+            yield player_id, path
+        except ValueError:
+            continue
+
+
+@app.route("/playerdata/export.csv", methods=["GET", "OPTIONS"])
+def export_playerdata_csv():
+    if request.method == "OPTIONS":
+        return ("", 204)
+
+    # Optional query params:
+    #   ?player_id=12        -> export only one player
+    #   ?solved_only=1       -> export only solved attempts
+    player_id_filter = request.args.get("player_id")
+    solved_only = request.args.get("solved_only") in ("1", "true", "True", "yes", "YES")
+
+    # CSV output in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    # Header row
+    writer.writerow(["player_id", "puzzle_name", "time", "attempts", "solved"])
+
+    def write_rows_for_player(pid: int, store: dict):
+        # Your store is a dict of entries: { key: {puzzle_name,time,attempts,solved}, ... }
+        for _, entry in (store or {}).items():
+            if not isinstance(entry, dict):
+                continue
+            puzzle_name = entry.get("puzzle_name", "")
+            t = entry.get("time", 0)
+            attempts = entry.get("attempts", 0)
+            solved = int(entry.get("solved", 0))
+
+            if solved_only and solved != 1:
+                continue
+
+            writer.writerow([pid, puzzle_name, t, attempts, solved])
+
+    # Export a single player
+    if player_id_filter:
+        try:
+            pid = int(player_id_filter)
+        except ValueError:
+            return jsonify({"ok": False, "message": "player_id must be an integer"}), 400
+
+        path = os.path.join(STORE_FILE_PATH, f"playerdata_{pid}.json")
+        if not os.path.exists(path):
+            # return empty CSV with header
+            csv_text = output.getvalue()
+            return Response(
+                csv_text,
+                mimetype="text/csv",
+                headers={"Content-Disposition": f'attachment; filename="playerdata_{pid}.csv"'}
+            )
+
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                store = json.load(f) or {}
+            except Exception:
+                store = {}
+
+        write_rows_for_player(pid, store)
+
+        csv_text = output.getvalue()
+        return Response(
+            csv_text,
+            mimetype="text/csv",
+            headers={"Content-Disposition": f'attachment; filename="playerdata_{pid}.csv"'}
+        )
+
+    # Export all players
+    for pid, path in _iter_playerdata_files():
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                store = json.load(f) or {}
+            except Exception:
+                store = {}
+        write_rows_for_player(pid, store)
+
+    csv_text = output.getvalue()
+    return Response(
+        csv_text,
+        mimetype="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="playerdata_all.csv"'}
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
