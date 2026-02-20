@@ -127,10 +127,10 @@
         "must_match_order": false
       },
       "error_mapping": {
-        "ERR_SAME": "node_circle_same",
-        "ERR_ADJACENT": "node_circle_adjacent",
-        "ERR_WRONG_DISTANCE": "node_circle_wrong_distance",
-        "ERR_WRONG_ORDER": "node_circle_swapped"
+        "ERR_ADJACENT": "l1_c4_p1_node_circle_adjacent",
+        "ERR_WRONG_DISTANCE": "l1_c4_p1_node_circle_wrong_distance",
+        "ERR_WRONG_ORDER": "l1_c4_p1_node_circle_swapped",
+        "ERR_OPPOSITE_WRONG_PAIR": "l1_c4_p1_node_circle_opposite_wrong_pair"
       }
     },
     "l2_c1_p1": {
@@ -748,22 +748,21 @@
       "hint_text": "Think about how this code will be run in the grading environment. Do you actually need a 'if __name__ == \"__main__\"' block here, or should the judge call your functions directly?",
       "related_concept": "Program Structure / Execution Environment"
     },
-
-    "node_circle_same": {
-      "hint_text": "Aptr and Bptr must be two different nodes. Choose two distinct points on the circle.",
-      "related_concept": "Pointers"
-    },
-    "node_circle_adjacent": {
+    "l1_c4_p1_node_circle_adjacent": {
       "hint_text": "Aptr and Bptr are too close. Look for nodes that are opposite each other on the ring, not neighbours.",
       "related_concept": "Circular Linked Lists"
     },
-    "node_circle_wrong_distance": {
+    "l1_c4_p1_node_circle_wrong_distance": {
       "hint_text": "Try counting how many nodes you move when you walk from Aptr to Bptr. It should be half of the total nodes in the circle.",
       "related_concept": "Circular Linked Lists"
     },
-    "node_circle_swapped": {
+    "l1_c4_p1_node_circle_swapped": {
       "hint_text": "Your distance looks right, but the roles of Aptr and Bptr might be swapped. Try switching which node is Aptr and which is Bptr.",
       "related_concept": "Function Parameters"
+    },
+    "l1_c4_p1_node_circle_opposite_wrong_pair": {
+      "hint_text": "You picked nodes that are opposite (5 steps apart), which is close — but not every opposite pair will work. Remember that half_unlock(s, q) reassigns the node before q. The split must happen at the correct cut points of the circle.",
+      "related_concept": "Circular Linked Lists / Pointer Rewiring"
     },
     "l2_c1_p1_stack_not_used": {
       "related_concept": "stack_usage",
