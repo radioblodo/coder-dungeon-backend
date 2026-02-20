@@ -632,7 +632,46 @@
       ]
     }
   },
-
+  "runtime_rules": [
+    {
+      "id": "attr_none_deref",
+      "match": { "exception": "AttributeError", "contains": ["NoneType"] },
+      "fail_node_id": "node_runtime_attr_none"
+    },
+    {
+      "id": "index_oob",
+      "match": {
+        "exception": "IndexError",
+        "contains": ["list index out of range"]
+      },
+      "fail_node_id": "node_runtime_index_oob"
+    },
+    {
+      "id": "syntax_error",
+      "match": { "exception": "SyntaxError" },
+      "fail_node_id": "node_runtime_syntax"
+    },
+    {
+      "id": "indent_error",
+      "match": { "exception": "IndentationError" },
+      "fail_node_id": "node_runtime_indentation"
+    },
+    {
+      "id": "recursion_depth",
+      "match": { "exception": "RecursionError" },
+      "fail_node_id": "node_runtime_recursion"
+    },
+    {
+      "id": "type_error",
+      "match": { "exception": "TypeError" },
+      "fail_node_id": "node_runtime_type"
+    },
+    {
+      "id": "value_error",
+      "match": { "exception": "ValueError" },
+      "fail_node_id": "node_runtime_value"
+    }
+  ],
   "graph_nodes": {
     "node_evens_core": {
       "hint_text": "Your odds and evens are not ending up in the right halves. First keep all odd numbers in their original order, then all even numbers in their original order.",
@@ -1223,25 +1262,56 @@
       "related_concept": "Systematic Tracing Strategy"
     },
     "node_trie_prefix_core": {
-  "hint_text": "First follow the prefix down from trie.root using _find_child for each character. Only once you reach the node for the last prefix character should you start collecting words below it.",
-  "related_concept": "Trie Traversal"
-},
-"node_trie_prefix_alphabetical": {
-  "hint_text": "This trie stores children using first_child + next_sibling (linked list). To output words in alphabetical order, collect all children of the current node, sort by child.char, then DFS in that sorted order.",
-  "related_concept": "Traversal Order"
-},
-"node_trie_prefix_not_found": {
-  "hint_text": "If any prefix character is missing during the walk-down, there are no matches. Return [\"empty!\"] (a list with one string) so the program prints empty! and does not crash.",
-  "related_concept": "Edge Cases"
-},
-"node_trie_prefix_word_vs_prefix": {
-  "hint_text": "After reaching the prefix node, if node.is_end_of_word is True, include the prefix itself as a result before exploring deeper children (e.g., prefix=\"app\" matches \"app\").",
-  "related_concept": "Prefix vs Complete Word"
-},
-"node_trie_prefix_sibling_traversal": {
-  "hint_text": "When exploring a node's children, don't just follow first_child. You must iterate through every next_sibling and explore each branch to collect all valid words.",
-  "related_concept": "First-Child / Next-Sibling Representation"
-}
-
+      "hint_text": "First follow the prefix down from trie.root using _find_child for each character. Only once you reach the node for the last prefix character should you start collecting words below it.",
+      "related_concept": "Trie Traversal"
+    },
+    "node_trie_prefix_alphabetical": {
+      "hint_text": "This trie stores children using first_child + next_sibling (linked list). To output words in alphabetical order, collect all children of the current node, sort by child.char, then DFS in that sorted order.",
+      "related_concept": "Traversal Order"
+    },
+    "node_trie_prefix_not_found": {
+      "hint_text": "If any prefix character is missing during the walk-down, there are no matches. Return [\"empty!\"] (a list with one string) so the program prints empty! and does not crash.",
+      "related_concept": "Edge Cases"
+    },
+    "node_trie_prefix_word_vs_prefix": {
+      "hint_text": "After reaching the prefix node, if node.is_end_of_word is True, include the prefix itself as a result before exploring deeper children (e.g., prefix=\"app\" matches \"app\").",
+      "related_concept": "Prefix vs Complete Word"
+    },
+    "node_trie_prefix_sibling_traversal": {
+      "hint_text": "When exploring a node's children, don't just follow first_child. You must iterate through every next_sibling and explore each branch to collect all valid words.",
+      "related_concept": "First-Child / Next-Sibling Representation"
+    },
+    "node_runtime_attr_none": {
+      "hint_text": "You tried to access an attribute on None (null). In linked lists, this often means you used cur.next.item when cur.next was None at the tail. Add a guard like: while cur and cur.next.",
+      "related_concept": "Null Checks / Pointer Safety"
+    },
+    "node_runtime_index_oob": {
+      "hint_text": "You accessed an index that doesn't exist (index out of range). Check loops over arrays/lists and make sure indices stay within 0..len-1.",
+      "related_concept": "Bounds Checking"
+    },
+    "node_runtime_syntax": {
+      "hint_text": "Your code has a syntax error (Python couldn't parse it). Check missing colons, mismatched brackets/quotes, and invalid indentation blocks.",
+      "related_concept": "Syntax"
+    },
+    "node_runtime_indentation": {
+      "hint_text": "Your code has an indentation error. In Python, blocks must be consistently indented (spaces recommended). Make sure the function body and if/while blocks align correctly.",
+      "related_concept": "Indentation"
+    },
+    "node_runtime_recursion": {
+      "hint_text": "Your recursion never stops (max recursion depth exceeded). Check your base case and make sure each recursive call moves toward it.",
+      "related_concept": "Recursion / Base Case"
+    },
+    "node_runtime_type": {
+      "hint_text": "A TypeError happened: an operation was applied to the wrong type (e.g., adding int to str, calling a non-function, etc.). Print/debug variable types near the failing line.",
+      "related_concept": "Types"
+    },
+    "node_runtime_value": {
+      "hint_text": "A ValueError happened: a conversion or operation got an invalid value (e.g., int('abc')). Check parsing and assumptions about input format.",
+      "related_concept": "Input Parsing"
+    },
+    "node_runtime_generic": {
+      "hint_text": "Your program crashed before producing an answer. Read the error message (stderr) and check the line where it failed to see what was None / out of range / wrong type.",
+      "related_concept": "Runtime Error"
+    }
   }
 }

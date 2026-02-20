@@ -6,6 +6,9 @@ from flask_cors import CORS
 import csv
 import io
 import glob
+import re
+
+EXC_LINE_RE = re.compile(r"^(\w+Error|Exception):\s*(.*)$")
 
 app = Flask(__name__)
 
@@ -180,6 +183,68 @@ def playerdata(player_id):
   return jsonify({"ok": True, "player_id": player_id}) 
 
 # 2. THE GENERIC SUBMISSION ENGINE
+
+# Helper function to evaluate code against test cases
+def extract_exception(stderr: str):
+    """
+    Return (exc_name, exc_msg) from stderr, or (None, None).
+    Tries to read the last 'XxxError: message' line.
+    """
+    if not stderr:
+        return None, None
+    lines = [ln.strip() for ln in stderr.splitlines() if ln.strip()]
+    for ln in reversed(lines):
+        m = EXC_LINE_RE.match(ln)
+        if m:
+            return m.group(1), m.group(2)
+    return None, None
+
+def rule_matches(rule_match: dict, exc_name: str, exc_msg: str, stderr: str) -> bool:
+    """
+    rule_match can include:
+      - exception: "AttributeError"
+      - contains: ["NoneType", "item"]
+      - regex: "pattern"
+    """
+    if not rule_match:
+        return False
+
+    if "exception" in rule_match and exc_name != rule_match["exception"]:
+        return False
+
+    haystack = (stderr or "") + "\n" + (exc_msg or "")
+
+    contains = rule_match.get("contains")
+    if contains:
+        for token in contains:
+            if token not in haystack:
+                return False
+
+    pattern = rule_match.get("regex")
+    if pattern and not re.search(pattern, haystack):
+        return False
+
+    return True
+
+def classify_runtime_fail_node(kg: dict, problem_data: dict, stderr: str) -> str:
+    """
+    Return a fail_node_id for this runtime error.
+    Order: problem runtime_rules -> global runtime_rules -> generic runtime node.
+    """
+    exc_name, exc_msg = extract_exception(stderr)
+
+    # 1) per-problem
+    for rule in problem_data.get("runtime_rules", []):
+        if rule_matches(rule.get("match", {}), exc_name, exc_msg, stderr):
+            return rule.get("fail_node_id", "node_runtime_generic")
+
+    # 2) global
+    for rule in kg.get("runtime_rules", []):
+        if rule_matches(rule.get("match", {}), exc_name, exc_msg, stderr):
+            return rule.get("fail_node_id", "node_runtime_generic")
+
+    return "node_runtime_generic"
+
 @app.route("/submit-code", methods=["POST", "OPTIONS"])
 def submit_code():
     if request.method == "OPTIONS":
@@ -275,7 +340,8 @@ def submit_code():
                     # treat this test case as passed
                     continue
 
-                fail_node_id = case.get("fail_node_id")
+                # fail_node_id = case.get("fail_node_id")
+                fail_node_id = classify_runtime_fail_node(knowledge_graph, problem_data, raw_err)
                 node_data = knowledge_graph.get("graph_nodes", {}).get(fail_node_id, {}) if fail_node_id else {}
                 return jsonify({
                     "status": "failed",
