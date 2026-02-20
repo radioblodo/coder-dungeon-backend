@@ -358,6 +358,7 @@ def request_hint():
 
     # New style (single node id)
     elif problem_id in (
+        "l1_c4_p1",
         "l2_c1_p1",
         "l2_c1_p2",
         "l2_c1_p3",
