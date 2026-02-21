@@ -620,31 +620,31 @@
           "id": "trie_prefix_tc_01",
           "input": "kit,kitten,kin,keep-ki",
           "expected_output": "kin,kit,kitten",
-          "fail_node_id": "node_trie_prefix_core"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_core"
         },
         {
           "id": "trie_prefix_tc_02",
           "input": "cat,car,carbon,dog-ca",
           "expected_output": "car,carbon,cat",
-          "fail_node_id": "node_trie_prefix_alphabetical"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_alphabetical"
         },
         {
           "id": "trie_prefix_tc_03",
           "input": "apple,banana,cherry-do",
           "expected_output": "empty!",
-          "fail_node_id": "node_trie_prefix_not_found"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_not_found"
         },
         {
           "id": "trie_prefix_tc_04",
           "input": "a,app,apple,apply-app",
           "expected_output": "app,apple,apply",
-          "fail_node_id": "node_trie_prefix_word_vs_prefix"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_word_vs_prefix"
         },
         {
           "id": "trie_prefix_tc_05",
           "input": "bat,ball,bark-ba",
           "expected_output": "ball,bark,bat",
-          "fail_node_id": "node_trie_prefix_sibling_traversal"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_sibling_traversal"
         }
       ]
     }
@@ -1276,23 +1276,23 @@
       "hint_text": "Don’t choose words based on what 'looks' likely. Trace the trie properly: start at the root, follow each letter down, and only accept the word if you land on a terminal node at the end.",
       "related_concept": "Systematic Tracing Strategy"
     },
-    "node_trie_prefix_core": {
+    "l6_c3_p1_node_trie_prefix_core": {
       "hint_text": "First follow the prefix down from trie.root using _find_child for each character. Only once you reach the node for the last prefix character should you start collecting words below it.",
       "related_concept": "Trie Traversal"
     },
-    "node_trie_prefix_alphabetical": {
+    "l6_c3_p1_node_trie_prefix_alphabetical": {
       "hint_text": "This trie stores children using first_child + next_sibling (linked list). To output words in alphabetical order, collect all children of the current node, sort by child.char, then DFS in that sorted order.",
       "related_concept": "Traversal Order"
     },
-    "node_trie_prefix_not_found": {
+    "l6_c3_p1_node_trie_prefix_not_found": {
       "hint_text": "If any prefix character is missing during the walk-down, there are no matches. Return [\"empty!\"] (a list with one string) so the program prints empty! and does not crash.",
       "related_concept": "Edge Cases"
     },
-    "node_trie_prefix_word_vs_prefix": {
+    "l6_c3_p1_node_trie_prefix_word_vs_prefix": {
       "hint_text": "After reaching the prefix node, if node.is_end_of_word is True, include the prefix itself as a result before exploring deeper children (e.g., prefix=\"app\" matches \"app\").",
       "related_concept": "Prefix vs Complete Word"
     },
-    "node_trie_prefix_sibling_traversal": {
+    "l6_c3_p1_node_trie_prefix_sibling_traversal": {
       "hint_text": "When exploring a node's children, don't just follow first_child. You must iterate through every next_sibling and explore each branch to collect all valid words.",
       "related_concept": "First-Child / Next-Sibling Representation"
     },
