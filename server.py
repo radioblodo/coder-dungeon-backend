@@ -435,6 +435,30 @@ def classify_wrong_answer_l3_c2_p1(failures: list) -> str:
     COMPLETE = "maxdepth_tc_08_complete_three_levels"
     ZIGZAG = "maxdepth_tc_09_zigzag_chain"
 
+    # ---------- NEW RULE 0: missing +1 / not accumulating depth ----------
+    # If two-level expects 1 but student outputs 0, it's almost certainly "forgot +1".
+    two_fail = next((f for f in failures if f.get("case_id") == TWO), None)
+    if two_fail:
+        a = _to_int(two_fail.get("actual"))
+        e = _to_int(two_fail.get("expected"))
+        if a == 0 and e == 1:
+            return "l3_c2_p1_node_maxdepth_basic_height"
+
+    # More general: many deeper cases output 0 while expected > 0
+    deep_cases = 0
+    deep_zero = 0
+    for f in failures:
+        a = _to_int(f.get("actual"))
+        e = _to_int(f.get("expected"))
+        if a is None or e is None:
+            continue
+        if e >= 2:              # deeper than 2 levels
+            deep_cases += 1
+            if a == 0:
+                deep_zero += 1
+    if deep_cases >= 2 and deep_zero == deep_cases:
+        return "l3_c2_p1_node_maxdepth_basic_height"
+    
     # NEW: detect "ignores left subtree" even if other tests also fail
     left_fail = next((f for f in failures if f["case_id"] == LEFT), None)
     if left_fail:
