@@ -556,24 +556,24 @@ def classify_wrong_answer_l4_c1_p4(failures: list) -> str:
 
     # Strong edge cases first
     if failed == {SINGLE}:
-        return "node_min_single_element"
+        return "l4_c1_p4_node_min_single_element"
     if TWO in failed:
-        return "node_min_boundary_two_elements"
+        return "l4_c1_p4_node_min_boundary_two_elements"
     if NEG in failed:
-        return "node_min_handle_negatives"
+        return "l4_c1_p4_node_min_handle_negatives"
 
     # Duplicate-related diagnostics
     # If all-equal duplicates fail, likely special-case needed
     if failed == {DUP_EQ}:
-        return "node_min_duplicates_equal_values"
+        return "l4_c1_p4_node_min_duplicates_equal_values"
 
     # Pivot duplicates is most specific
     if DUP_PIVOT in failed:
-        return "node_min_duplicates_shrink_high"
+        return "l4_c1_p4_node_min_duplicates_shrink_high"
 
     # Tricky duplicates rotated (breaks sorted check)
     if DUP_TRICKY in failed:
-        return "node_min_duplicates_break_sorted_check"
+        return "l4_c1_p4_node_min_duplicates_break_sorted_check"
 
     # The student compares array[mid] with array[low] instead of array[high], causing wrong direction on certain rotations
     if CMP_WRONG_BOUNDARY in failed:
@@ -581,25 +581,25 @@ def classify_wrong_answer_l4_c1_p4(failures: list) -> str:
     
     # Rotation logic: passes sorted but fails rotation
     if ROT in failed and SORTED not in failed:
-        return "node_min_rotation_binary_search"
+        return "l4_c1_p4_node_min_rotation_binary_search"
     if ROT in failed and SORTED in failed:
         # both failing usually means core binary-search logic is off
-        return "node_min_rotation_binary_search"
+        return "l4_c1_p4_node_min_binary_search_logic"
 
     # If only sorted-no-rotation fails, likely wrong “already sorted segment” short-circuit
     if failed == {SORTED}:
-        return "node_min_already_sorted_segment"
+        return "l4_c1_p4_node_min_already_sorted_segment"
 
     # Otherwise choose most diagnostic by priority
     priority = [
-        (TWO, "node_min_boundary_two_elements"),
-        (SINGLE, "node_min_single_element"),
-        (NEG, "node_min_handle_negatives"),
-        (DUP_PIVOT, "node_min_duplicates_shrink_high"),
-        (DUP_TRICKY, "node_min_duplicates_break_sorted_check"),
-        (DUP_EQ, "node_min_duplicates_equal_values"),
-        (ROT, "node_min_rotation_binary_search"),
-        (SORTED, "node_min_already_sorted_segment"),
+        (TWO, "l4_c1_p4_node_min_boundary_two_elements"),
+        (SINGLE, "l4_c1_p4_node_min_single_element"),
+        (NEG, "l4_c1_p4_node_min_handle_negatives"),
+        (DUP_PIVOT, "l4_c1_p4_node_min_duplicates_shrink_high"),
+        (DUP_TRICKY, "l4_c1_p4_node_min_duplicates_break_sorted_check"),
+        (DUP_EQ, "l4_c1_p4_node_min_duplicates_equal_values"),
+        (ROT, "l4_c1_p4_node_min_rotation_binary_search"),
+        (SORTED, "l4_c1_p4_node_min_already_sorted_segment"),
     ]
     for cid, node in priority:
         if cid in failed:
