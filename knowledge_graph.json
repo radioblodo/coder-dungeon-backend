@@ -496,43 +496,43 @@
           "id": "min_tc_02_simple_rotation",
           "input": "4,5,1,2,3",
           "expected_output": "1",
-          "fail_node_id": "node_min_rotation_binary_search"
+          "fail_node_id": "l4_c1_p4_node_min_rotation_binary_search"
         },
         {
           "id": "min_tc_03_single_element",
           "input": "7",
           "expected_output": "7",
-          "fail_node_id": "node_min_single_element"
+          "fail_node_id": "l4_c1_p4_node_min_single_element"
         },
         {
           "id": "min_tc_04_two_elements_rotated",
           "input": "2,1",
           "expected_output": "1",
-          "fail_node_id": "node_min_boundary_two_elements"
+          "fail_node_id": "l4_c1_p4_node_min_boundary_two_elements"
         },
         {
           "id": "min_tc_05_duplicates_not_rotated",
           "input": "2,2,2,2",
           "expected_output": "2",
-          "fail_node_id": "node_min_duplicates_equal_values"
+          "fail_node_id": "l4_c1_p4_node_min_duplicates_equal_values"
         },
         {
           "id": "min_tc_06_duplicates_rotated_tricky",
           "input": "4,5,2,3,4",
           "expected_output": "2",
-          "fail_node_id": "node_min_duplicates_break_sorted_check"
+          "fail_node_id": "l4_c1_p4_node_min_duplicates_break_sorted_check"
         },
         {
           "id": "min_tc_07_duplicates_with_pivot",
           "input": "3,3,3,1,2,3",
           "expected_output": "1",
-          "fail_node_id": "node_min_duplicates_shrink_high"
+          "fail_node_id": "l4_c1_p4_node_min_duplicates_shrink_high"
         },
         {
           "id": "min_tc_08_negative_values_rotated",
           "input": "0,1,2,-3,-2,-1",
           "expected_output": "-3",
-          "fail_node_id": "node_min_handle_negatives"
+          "fail_node_id": "l4_c1_p4_node_min_handle_negatives"
         },
         {
           "id": "min_tc_09_rotation_compare_low_failure",
