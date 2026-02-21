@@ -1188,21 +1188,18 @@
     },
 
     "l5_c1_p2_row_underfilled": {
-      "related_concept": "hashing",
+      "related_concept": "Hashing",
       "hint_text": "All slots have to be filled. You have too little books on the bookshelf."
     },
-    "l5_c1_p2_best_case_no_probing": {
-      "related_concept": "hint",
+    "l5_c1_p2_best_general_hint": {
+      "related_concept": "Best-Case Linear Probing",
       "hint_text": "Best-case for linear probing means: every key lands in its first hashed slot with no collisions, so no probing happens."
     },
-    "l5_c1_p2_worst_case_primary_clustering": {
-      "related_concept": "hint",
+    "l5_c1_p2_worst_general_hint": {
+      "related_concept": "Worst-Case Linear Probing",
       "hint_text": "Worst-case happens when many keys collide and form one long contiguous cluster. Linear probing then checks many slots before finding an empty one."
     },
-    "l5_c1_p2_generic_reply": {
-      "related_concept": "Carelessness",
-      "hint_text": "Please check your arrangement again."
-    },
+
     "l5_c3_p1_node_hint_01_generic": {
       "hint_text": "Treat 1779 as a base-8 number with 4 digits: a·8^3 + b·8^2 + c·8 + d.",
       "related_concept": "Hashing / Base Representation"
