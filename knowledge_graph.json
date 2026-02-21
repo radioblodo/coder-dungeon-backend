@@ -489,8 +489,9 @@
           "id": "min_tc_01_sorted_no_rotation",
           "input": "1,2,3,4,5",
           "expected_output": "1",
-          "fail_node_id": "node_min_already_sorted_segment"
+          "fail_node_id": "l4_c1_p4_node_min_already_sorted_segment"
         },
+
         {
           "id": "min_tc_02_simple_rotation",
           "input": "4,5,1,2,3",
@@ -532,6 +533,12 @@
           "input": "0,1,2,-3,-2,-1",
           "expected_output": "-3",
           "fail_node_id": "node_min_handle_negatives"
+        },
+        {
+          "id": "min_tc_09_rotation_compare_low_failure",
+          "input": "3,4,5,1,2",
+          "expected_output": "1",
+          "fail_node_id": "l4_c1_p4_node_min_compare_wrong_boundary"
         }
       ]
     },
@@ -992,38 +999,44 @@
       "related_concept": "Arrangement of nodes in Binary Search Tree",
       "hint_text": "In a Binary Search Tree, the right child has a value larger than the parent value."
     },
-    "node_min_already_sorted_segment": {
+    "l4_c1_p4_node_min_already_sorted_segment": {
       "hint_text": "If the current search range is already in increasing order, the first element of that range is the minimum. But be careful: with duplicates, equality at the ends can be misleading.",
       "related_concept": "Binary Search"
     },
-    "node_min_rotation_binary_search": {
+
+    "l4_c1_p4_node_min_compare_wrong_boundary": {
+      "hint_text": "Comparing array[mid] with the left boundary does not always correctly determine which half contains the minimum. Consider comparing with the right boundary instead.",
+      "related_concept": "Binary Search Boundary Conditions"
+    },
+    "l4_c1_p4_node_min_rotation_binary_search": {
       "hint_text": "Use binary search by comparing the middle element with the rightmost element to decide which half contains the minimum.",
       "related_concept": "Divide and Conquer"
     },
-    "node_min_single_element": {
+    "l4_c1_p4_node_min_single_element": {
       "hint_text": "If there is only one element in the range, that element must be the minimum.",
       "related_concept": "Edge Cases"
     },
-    "node_min_boundary_two_elements": {
+    "l4_c1_p4_node_min_boundary_two_elements": {
       "hint_text": "For two elements, make sure your logic still returns the smaller one even if the array is rotated (e.g., [2,1]).",
       "related_concept": "Boundary Conditions"
     },
-    "node_min_duplicates_equal_values": {
+    "l4_c1_p4_node_min_duplicates_equal_values": {
       "hint_text": "When many values are identical, comparisons may not tell you which side to search. Your method should still return the correct minimum.",
       "related_concept": "Edge Cases"
     },
-    "node_min_duplicates_break_sorted_check": {
+    "l4_c1_p4_node_min_duplicates_break_sorted_check": {
       "hint_text": "If the first and last elements are equal, the segment might NOT be fully sorted (e.g., [4,5,2,3,4]). Avoid using a simple 'already sorted' shortcut in this case.",
       "related_concept": "Duplicates in Binary Search"
     },
-    "node_min_duplicates_shrink_high": {
+    "l4_c1_p4_node_min_duplicates_shrink_high": {
       "hint_text": "When array[mid] equals array[high], you can't decide which half is correct—shrink the search range safely (e.g., decrease high by 1) and continue.",
       "related_concept": "Duplicates in Binary Search"
     },
-    "node_min_handle_negatives": {
+    "l4_c1_p4_node_min_handle_negatives": {
       "hint_text": "The same rotated-array logic works with negative numbers too. Don't assume values are non-negative—only rely on comparisons.",
       "related_concept": "Comparison-Based Algorithms"
     },
+
     "node_q1_counts_only_successful_searches": {
       "hint_text": "You are undercounting: even when an element is found, element(X, Q) still compares against each earlier node it visited. Count every (Q.item == X) comparison along the path until the match is found (or Q becomes None).",
       "related_concept": "Linked Lists / Counting Comparisons in Linear Search"

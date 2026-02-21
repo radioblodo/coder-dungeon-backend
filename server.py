@@ -552,6 +552,7 @@ def classify_wrong_answer_l4_c1_p4(failures: list) -> str:
     DUP_TRICKY = "min_tc_06_duplicates_rotated_tricky"
     DUP_PIVOT = "min_tc_07_duplicates_with_pivot"
     NEG = "min_tc_08_negative_values_rotated"
+    CMP_WRONG_BOUNDARY = "min_tc_09_rotation_compare_low_failure"
 
     # Strong edge cases first
     if failed == {SINGLE}:
@@ -574,6 +575,10 @@ def classify_wrong_answer_l4_c1_p4(failures: list) -> str:
     if DUP_TRICKY in failed:
         return "node_min_duplicates_break_sorted_check"
 
+    # The student compares array[mid] with array[low] instead of array[high], causing wrong direction on certain rotations
+    if CMP_WRONG_BOUNDARY in failed:
+        return "l4_c1_p4_node_min_compare_wrong_boundary"
+    
     # Rotation logic: passes sorted but fails rotation
     if ROT in failed and SORTED not in failed:
         return "node_min_rotation_binary_search"
