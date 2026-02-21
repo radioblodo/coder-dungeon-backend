@@ -29,8 +29,14 @@ CORS(
     allow_headers=["Content-Type", "Authorization"],
 )
 
-# OpenAI client (classifier only)
-_openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+# ============================================================
+# OpenAI client (lazy init, won't crash boot)
+# ============================================================
+def get_openai_client():
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        return None
+    return OpenAI(api_key=api_key)
 
 # ============================================================
 # Load Knowledge Graph
@@ -68,8 +74,9 @@ def allowed_fail_nodes_for_problem(problem_data: dict) -> list[str]:
     # de-dup preserve order
     seen = set()
     out = []
+    graph_nodes = knowledge_graph.get("graph_nodes", {})
     for x in ids:
-        if x not in seen and x in knowledge_graph.get("graph_nodes", {}):
+        if x not in seen and x in graph_nodes:
             seen.add(x)
             out.append(x)
     return out
@@ -82,7 +89,8 @@ def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, pr
     Uses LLM to pick ONE concept_id from allowed list.
     Returns None if no API key / error / invalid output.
     """
-    if not os.environ.get("OPENAI_API_KEY"):
+    client = get_openai_client()
+    if not client:
         return None
 
     allowed = allowed_fail_nodes_for_problem(problem_data)
@@ -115,7 +123,7 @@ def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, pr
     )
 
     try:
-        resp = _openai_client.responses.create(
+        resp = client.responses.create(
             model=OPENAI_MODEL,
             temperature=0,
             input=[
@@ -123,12 +131,16 @@ def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, pr
                 {"role": "user", "content": json.dumps(payload)},
             ],
         )
+
         text = (resp.output_text or "").strip()
         obj = json.loads(text)
         cid = obj.get("concept_id")
+
         if cid in allowed:
             return cid
+
         return None
+
     except Exception as e:
         print("AI classify error:", e)
         return None
@@ -186,7 +198,7 @@ def submit_code():
                 "concept_gap": "Complexity",
             })
 
-        # Runtime crash => generic runtime hint (you can make this KG-driven later)
+        # Runtime crash => generic runtime hint
         if result.returncode != 0:
             return jsonify({
                 "status": "failed",
@@ -224,7 +236,7 @@ def submit_code():
 
     node_data = knowledge_graph.get("graph_nodes", {}).get(chosen_node_id, {}) if chosen_node_id else {}
 
-    # Show the testcase matching the chosen node, if present (less confusing)
+    # Show the testcase matching the chosen node, if present
     shown = next((f for f in failures if f.get("fail_node_id") == chosen_node_id), failures[0])
 
     return jsonify({
@@ -234,7 +246,7 @@ def submit_code():
         "student_output": shown.get("actual", ""),
         "expected_output": shown.get("expected", ""),
         "concept_gap": node_data.get("related_concept", "General"),
-        # remove these in production if you want
+        # keep during dev; remove later
         "debug_chosen_node_id": chosen_node_id,
         "debug_failures": failures,
     })
@@ -250,7 +262,6 @@ def request_hint():
       }
 
     We return the first concept_id that exists in graph_nodes.
-    (Deterministic and consistent across students.)
     """
     if request.method == "OPTIONS":
         return ("", 204)
@@ -265,15 +276,16 @@ def request_hint():
         return jsonify({"status": "error", "message": "No concept/error ids provided"}), 400
 
     chosen_id = None
+    graph_nodes = knowledge_graph.get("graph_nodes", {})
     for cid in ids:
-        if cid in knowledge_graph.get("graph_nodes", {}):
+        if cid in graph_nodes:
             chosen_id = cid
             break
 
     if not chosen_id:
         return jsonify({"status": "error", "message": "No matching graph_nodes for given concept ids"}), 400
 
-    node = knowledge_graph["graph_nodes"][chosen_id]
+    node = graph_nodes[chosen_id]
     return jsonify({
         "status": "success",
         "concept_id": chosen_id,
