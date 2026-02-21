@@ -919,7 +919,7 @@
     },
 
     "l3_c2_p1_node_maxdepth_single_node": {
-      "hint_text": "Think about the definition of depth used in this problem. A single-node tree has depth 0 because depth counts the number of edges, not the number of nodes.",
+      "hint_text": "Depth counts edges. A leaf node has depth 0 from itself (and a single-node tree also has depth 0). Check your base case for leaf/None.",
       "related_concept": "Edge-Based Depth Definition"
     },
     "l3_c2_p1_node_maxdepth_basic_height": {

@@ -460,6 +460,10 @@ def classify_wrong_answer_l3_c2_p1(failures: list) -> str:
         if a is not None and e is not None and e > 0:
             deep_pairs.append((cid, a, e))
 
+    # RULE: using min instead of max often fails unbalanced case
+    if "maxdepth_tc_06_unbalanced_deeper_left" in failed:
+        return "l3_c2_p1_node_maxdepth_unbalanced_tree"
+
     # If at least 3 deep cases exist and ALL are 0, it's almost surely missing +1 / early stop
     if len(deep_pairs) >= 3 and all(a == 0 for _, a, _ in deep_pairs):
         return "l3_c2_p1_node_maxdepth_basic_height"
@@ -472,25 +476,28 @@ def classify_wrong_answer_l3_c2_p1(failures: list) -> str:
             return "l3_c2_p1_node_maxdepth_basic_height"
     # (If TWO alone is 0 but others are not, don't immediately call it missing+1.)
 
+
     # ------------------------------------------------------------
     # Precise directional detection (requires asymmetry)
     # ------------------------------------------------------------
-
-    # ignores LEFT: left-skewed tiny but right-skewed not tiny
     aL, eL = ai(LEFT), ei(LEFT)
     aR, eR = ai(RIGHT), ei(RIGHT)
 
-    left_tiny = (aL is not None and eL is not None and eL >= 2 and aL <= 1)
-    right_not_tiny = (aR is not None and eR is not None and aR >= 2)
+    def tiny(a, e):
+        # "tiny" means: expected deep but output is very small (0 or 1)
+        return (a is not None and e is not None and e >= 2 and a <= 1)
 
-    if left_tiny and right_not_tiny:
+    def not_tiny(a, e):
+        # "not tiny" means: they achieved at least some meaningful depth.
+        # Use relative threshold so it works even for shorter cases.
+        return (a is not None and e is not None and a >= min(2, e))
+
+    # ignores LEFT: left-skewed tiny but right-skewed not tiny
+    if tiny(aL, eL) and not_tiny(aR, eR):
         return "l3_c2_p1_node_maxdepth_skewed_left"
 
     # ignores RIGHT: right-skewed tiny but left-skewed not tiny
-    right_tiny = (aR is not None and eR is not None and eR >= 2 and aR <= 1)
-    left_not_tiny = (aL is not None and eL is not None and aL >= 2)
-
-    if right_tiny and left_not_tiny:
+    if tiny(aR, eR) and not_tiny(aL, eL):
         return "l3_c2_p1_node_maxdepth_skewed_right"
 
     # ------------------------------------------------------------
@@ -499,6 +506,17 @@ def classify_wrong_answer_l3_c2_p1(failures: list) -> str:
     if ZIGZAG in failed and LEFT not in failed and RIGHT not in failed:
         return "l3_c2_p1_node_maxdepth_zigzag_structure"
 
+    # RULE: stops early (constant small output like 1) across deep cases
+    vals = []
+    for f in failures:
+        a = _to_int(f.get("actual"))
+        e = _to_int(f.get("expected"))
+        if a is not None and e is not None and e >= 2:
+            vals.append(a)
+
+    if len(vals) >= 2 and len(set(vals)) == 1 and vals[0] in (0, 1):
+        return "l3_c2_p1_node_node_maxdepth_complete_tree"
+    
     if SPARSE in failed and COMPLETE not in failed:
         return "l3_c2_p1_node_maxdepth_null_children_handling"
 
