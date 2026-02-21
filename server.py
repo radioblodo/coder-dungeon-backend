@@ -435,83 +435,87 @@ def classify_wrong_answer_l3_c2_p1(failures: list) -> str:
     COMPLETE = "maxdepth_tc_08_complete_three_levels"
     ZIGZAG = "maxdepth_tc_09_zigzag_chain"
 
-    # ---------- NEW RULE 0: missing +1 / not accumulating depth ----------
-    # If two-level expects 1 but student outputs 0, it's almost certainly "forgot +1".
-    two_fail = next((f for f in failures if f.get("case_id") == TWO), None)
-    if two_fail:
-        a = _to_int(two_fail.get("actual"))
-        e = _to_int(two_fail.get("expected"))
-        if a == 0 and e == 1:
-            return "l3_c2_p1_node_maxdepth_basic_height"
+    # Convenience lookup by case_id
+    by_id = {f.get("case_id"): f for f in failures if f.get("case_id")}
 
-    # More general: many deeper cases output 0 while expected > 0
-    deep_cases = 0
-    deep_zero = 0
-    for f in failures:
-        a = _to_int(f.get("actual"))
-        e = _to_int(f.get("expected"))
-        if a is None or e is None:
-            continue
-        if e >= 2:              # deeper than 2 levels
-            deep_cases += 1
-            if a == 0:
-                deep_zero += 1
-    if deep_cases >= 2 and deep_zero == deep_cases:
+    def ai(case_id):
+        f = by_id.get(case_id)
+        return _to_int(f.get("actual")) if f else None
+
+    def ei(case_id):
+        f = by_id.get(case_id)
+        return _to_int(f.get("expected")) if f else None
+
+    # ------------------------------------------------------------
+    # Rule 0 (tightened): missing +1 / not accumulating depth
+    #
+    # Require "too small (often 0)" across MULTIPLE deep cases,
+    # not just the two-level test.
+    # ------------------------------------------------------------
+    deep_case_ids = [TWO, LEFT, RIGHT, UNBAL, SPARSE, COMPLETE, ZIGZAG]
+    deep_pairs = []
+    for cid in deep_case_ids:
+        a = ai(cid)
+        e = ei(cid)
+        if a is not None and e is not None and e > 0:
+            deep_pairs.append((cid, a, e))
+
+    # If at least 3 deep cases exist and ALL are 0, it's almost surely missing +1 / early stop
+    if len(deep_pairs) >= 3 and all(a == 0 for _, a, _ in deep_pairs):
         return "l3_c2_p1_node_maxdepth_basic_height"
-    
-    # NEW: detect "ignores left subtree" (more precise)
-    left_fail = next((f for f in failures if f.get("case_id") == LEFT), None)
-    right_fail = next((f for f in failures if f.get("case_id") == RIGHT), None)
 
-    if left_fail:
-        aL = _to_int(left_fail.get("actual"))
-        eL = _to_int(left_fail.get("expected"))
+    # If TWO exists and is 0, and at least one other deep test is also 0 -> missing +1 more likely
+    two_a, two_e = ai(TWO), ei(TWO)
+    if two_a == 0 and two_e == 1:
+        other_zero = any((cid != TWO and a == 0) for cid, a, _ in deep_pairs)
+        if other_zero:
+            return "l3_c2_p1_node_maxdepth_basic_height"
+    # (If TWO alone is 0 but others are not, don't immediately call it missing+1.)
 
-        aR = _to_int(right_fail.get("actual")) if right_fail else None
-        eR = _to_int(right_fail.get("expected")) if right_fail else None
+    # ------------------------------------------------------------
+    # Precise directional detection (requires asymmetry)
+    # ------------------------------------------------------------
 
-        # left expected deep but output tiny
-        left_tiny = (aL is not None and eL is not None and eL >= 2 and aL <= 1)
+    # ignores LEFT: left-skewed tiny but right-skewed not tiny
+    aL, eL = ai(LEFT), ei(LEFT)
+    aR, eR = ai(RIGHT), ei(RIGHT)
 
-        # right is "not tiny" (meaning: they *are* able to traverse some depth on right)
-        right_not_tiny = (aR is not None and eR is not None and aR >= 2)
+    left_tiny = (aL is not None and eL is not None and eL >= 2 and aL <= 1)
+    right_not_tiny = (aR is not None and eR is not None and aR >= 2)
 
-        if left_tiny and right_not_tiny:
-            return "l3_c2_p1_node_maxdepth_skewed_left"
-            
-    # Directional diagnosis (prevents "single node" from stealing the hint)
-    if LEFT in failed and RIGHT not in failed:
+    if left_tiny and right_not_tiny:
         return "l3_c2_p1_node_maxdepth_skewed_left"
-    if RIGHT in failed and LEFT not in failed:
+
+    # ignores RIGHT: right-skewed tiny but left-skewed not tiny
+    right_tiny = (aR is not None and eR is not None and eR >= 2 and aR <= 1)
+    left_not_tiny = (aL is not None and eL is not None and aL >= 2)
+
+    if right_tiny and left_not_tiny:
         return "l3_c2_p1_node_maxdepth_skewed_right"
 
-    # Zigzag special
+    # ------------------------------------------------------------
+    # Other structural cases
+    # ------------------------------------------------------------
     if ZIGZAG in failed and LEFT not in failed and RIGHT not in failed:
         return "l3_c2_p1_node_maxdepth_zigzag_structure"
 
-    # Sparse vs complete
     if SPARSE in failed and COMPLETE not in failed:
         return "l3_c2_p1_node_maxdepth_null_children_handling"
 
-    # Unbalanced deeper-left
     if UNBAL in failed and TWO not in failed:
         return "l3_c2_p1_node_maxdepth_unbalanced_tree"
 
-    # Off-by-one definition mismatch: actual = expected + 1 across failures
-    # (Common “node-count height” instead of “edge depth”.)
+    # Off-by-one: +1 everywhere (node-count height) — keep late
     if _all_deltas_equal(failures, 1):
-        # Your closest node right now is single_node, but ideally create a dedicated node later.
         return "l3_c2_p1_node_maxdepth_single_node"
 
-    # Forgotten +1 typically shows up in two-level failure
+    # If two-level fails and nothing else gave a better diagnosis
     if TWO in failed:
         return "l3_c2_p1_node_maxdepth_basic_height"
 
-    # Fallback: if they only fail SINGLE, return SINGLE node
     if failed == {SINGLE}:
         return "l3_c2_p1_node_maxdepth_single_node"
 
-    # Else first mapped node
     return failures[0].get("fail_node_id")
 
 
