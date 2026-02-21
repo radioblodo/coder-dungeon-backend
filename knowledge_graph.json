@@ -588,6 +588,17 @@
         "l5_c3_p1_node_hint_03_mapping_check"
       ]
     },
+    "l5_c3_p2": {
+      "description": "Given the strings 'ABC', 'CAB', and 'BAC', compute their hash values using base r = 2^p (p=3) and h(k) = k mod (2^p - 1).",
+      "type": "puzzle",
+      "hint_sequence": [
+        "l5_c3_p2_node_hint_01_letter_conversion",
+        "l5_c3_p2_node_hint_02_build_base8_number",
+        "l5_c3_p2_node_hint_03_apply_modulus",
+        "l5_c3_p2_node_hint_04_notice_permutation"
+      ]
+    },
+
     "l6_c1_p1": {
       "description": "Read the trie and input the words that exist in it by dragging and dropping the correct words onto the device.",
       "type": "puzzle",
@@ -1220,6 +1231,27 @@
       "hint_text": "After you get (a,b,c,d), convert each number using A=1, B=2, ..., H=8 to form the final 4-letter code.",
       "related_concept": "Symbol Mapping"
     },
+
+    "l5_c3_p2_node_hint_01_letter_conversion": {
+      "related_concept": "Letter Mapping",
+      "hint_text": "Replace the letters with numbers: A=1, B=2, C=3. Start by writing the numbers for each string."
+    },
+
+    "l5_c3_p2_node_hint_02_build_base8_number": {
+      "related_concept": "Base 8 Place Values",
+      "hint_text": "Use this formula for 3 letters: first letter × 64, second letter × 8, last letter × 1. Add them together."
+    },
+
+    "l5_c3_p2_node_hint_03_apply_modulus": {
+      "related_concept": "Modulo Operation",
+      "hint_text": "After you get the number, divide it by 7 and take the remainder. That remainder is the hash value."
+    },
+
+    "l5_c3_p2_node_hint_04_notice_permutation": {
+      "related_concept": "Hash Collisions",
+      "hint_text": "All three strings contain the same letters in different order. Think about whether their final values might end up the same."
+    },
+
     "l6_c1_p1_trie_prefix_only_not_word": {
       "hint_text": "A path in a trie is not automatically a valid word. The word only counts if the path ends exactly at a terminal (end-of-word) node. If you stop too early, it’s only a prefix.",
       "related_concept": "Prefix vs Complete Word"
