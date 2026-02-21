@@ -546,19 +546,10 @@
       "type": "puzzle",
       "description": "Return the books to the correct shelves so that each row’s load factor matches its target. A row’s load factor is α = n / m, where n is the total number of books placed in that row and m is the number of shelves in that row.",
       "tests_concepts": [
-        "load_factor_n_over_m",
-        "m_is_number_of_shelves_fixed",
         "required_n_equals_target_times_m",
-        "row_underfilled_vs_overfilled",
-        "integer_count_matches_target"
+        "row_underfilled_vs_overfilled"
       ],
-      "error_patterns": [
-        "bookreturn_n_over_m_definition",
-        "bookreturn_m_is_shelves_fixed",
-        "bookreturn_required_n_equals_target_times_m",
-        "bookreturn_row_underfilled",
-        "bookreturn_row_overfilled"
-      ]
+      "error_patterns": ["general_hint", "bookreturn_row_overfilled"]
     },
     "l5_c1_p2": {
       "type": "puzzle",
@@ -578,6 +569,15 @@
         "l5_hash_best_case_means_spread_out_visually",
         "l5_hash_confuse_row_highlight",
         "l5_hash_overfill_or_underfill_solution_row"
+      ]
+    },
+    "l5_c3_p1": {
+      "description": "Find the 4-character string that maps to 1779 in base 8 using A=1..H=8.",
+      "type": "puzzle",
+      "hint_sequence": [
+        "l5_c3_p1_node_hint_01_generic",
+        "l5_c3_p1_node_hint_02_place_values",
+        "l5_c3_p1_node_hint_03_mapping_check"
       ]
     },
     "l6_c1_p1": {
@@ -1177,26 +1177,16 @@
       "hint_text": "Factorial time usually appears when each level branches into N, N-1, N-2, ... calls. Here, each level makes exactly two recursive calls. That leads to exponential growth like 2^N, not N!.",
       "related_concept": "Recursion Patterns / Comparing Growth Rates"
     },
-    "l5_c1_p1_bookreturn_n_over_m_definition": {
-      "related_concept": "load_factor_n_over_m",
-      "hint_text": "Load factor is α = n / m. Here, n is the total number of books placed in the row, and m is the number of shelves in that row."
-    },
-    "l5_c1_p1_bookreturn_m_is_shelves_fixed": {
-      "related_concept": "m_is_number_of_shelves_fixed",
-      "hint_text": "m is fixed by the row layout: it’s the number of shelves in that row. You can only change α by changing n (how many books are placed)."
-    },
-    "l5_c1_p1_bookreturn_required_n_equals_target_times_m": {
+
+    "l5_c1_p1_general_hint": {
       "related_concept": "required_n_equals_target_times_m",
       "hint_text": "Convert the target into a required book count: n = α × m. Multiply the target load factor by the number of shelves in the row to get exactly how many books that row must contain."
-    },
-    "l5_c1_p1_bookreturn_row_underfilled": {
-      "related_concept": "row_underfilled_vs_overfilled",
-      "hint_text": "This row is underfilled: it has too few books for its target. Add more books into this row until n matches the required count."
     },
     "l5_c1_p1_bookreturn_row_overfilled": {
       "related_concept": "row_underfilled_vs_overfilled",
       "hint_text": "This row is overfilled: it has too many books for its target. Remove or move some books out until n matches the required count."
     },
+
     "l5_c1_p2_row_underfilled": {
       "related_concept": "hashing",
       "hint_text": "All slots have to be filled. You have too little books on the bookshelf."
@@ -1212,6 +1202,18 @@
     "l5_c1_p2_generic_reply": {
       "related_concept": "Carelessness",
       "hint_text": "Please check your arrangement again."
+    },
+    "l5_c3_p1_node_hint_01_generic": {
+      "hint_text": "Treat 1779 as a base-8 number with 4 digits: a·8^3 + b·8^2 + c·8 + d.",
+      "related_concept": "Hashing / Base Representation"
+    },
+    "l5_c3_p1_node_hint_02_place_values": {
+      "hint_text": "Compute 8^3=512, 8^2=64, 8^1=8. Divide step-by-step: first by 512 to get a, then use the remainder for b, c, d.",
+      "related_concept": "Positional Notation"
+    },
+    "l5_c3_p1_node_hint_03_mapping_check": {
+      "hint_text": "After you get (a,b,c,d), convert each number using A=1, B=2, ..., H=8 to form the final 4-letter code.",
+      "related_concept": "Symbol Mapping"
     },
     "l6_c1_p1_trie_prefix_only_not_word": {
       "hint_text": "A path in a trie is not automatically a valid word. The word only counts if the path ends exactly at a terminal (end-of-word) node. If you stop too early, it’s only a prefix.",
