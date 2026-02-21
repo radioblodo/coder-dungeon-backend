@@ -459,15 +459,26 @@ def classify_wrong_answer_l3_c2_p1(failures: list) -> str:
     if deep_cases >= 2 and deep_zero == deep_cases:
         return "l3_c2_p1_node_maxdepth_basic_height"
     
-    # NEW: detect "ignores left subtree" even if other tests also fail
-    left_fail = next((f for f in failures if f["case_id"] == LEFT), None)
+    # NEW: detect "ignores left subtree" (more precise)
+    left_fail = next((f for f in failures if f.get("case_id") == LEFT), None)
+    right_fail = next((f for f in failures if f.get("case_id") == RIGHT), None)
+
     if left_fail:
-        a = _to_int(left_fail.get("actual"))
-        e = _to_int(left_fail.get("expected"))
-        # If expected is deep (>=2) but they output ~1, they likely ignored left.
-        if a is not None and e is not None and e >= 2 and a <= 1:
+        aL = _to_int(left_fail.get("actual"))
+        eL = _to_int(left_fail.get("expected"))
+
+        aR = _to_int(right_fail.get("actual")) if right_fail else None
+        eR = _to_int(right_fail.get("expected")) if right_fail else None
+
+        # left expected deep but output tiny
+        left_tiny = (aL is not None and eL is not None and eL >= 2 and aL <= 1)
+
+        # right is "not tiny" (meaning: they *are* able to traverse some depth on right)
+        right_not_tiny = (aR is not None and eR is not None and aR >= 2)
+
+        if left_tiny and right_not_tiny:
             return "l3_c2_p1_node_maxdepth_skewed_left"
-        
+            
     # Directional diagnosis (prevents "single node" from stealing the hint)
     if LEFT in failed and RIGHT not in failed:
         return "l3_c2_p1_node_maxdepth_skewed_left"
