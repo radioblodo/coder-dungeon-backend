@@ -435,6 +435,15 @@ def classify_wrong_answer_l3_c2_p1(failures: list) -> str:
     COMPLETE = "maxdepth_tc_08_complete_three_levels"
     ZIGZAG = "maxdepth_tc_09_zigzag_chain"
 
+    # NEW: detect "ignores left subtree" even if other tests also fail
+    left_fail = next((f for f in failures if f["case_id"] == LEFT), None)
+    if left_fail:
+        a = _to_int(left_fail.get("actual"))
+        e = _to_int(left_fail.get("expected"))
+        # If expected is deep (>=2) but they output ~1, they likely ignored left.
+        if a is not None and e is not None and e >= 2 and a <= 1:
+            return "l3_c2_p1_node_maxdepth_skewed_left"
+        
     # Directional diagnosis (prevents "single node" from stealing the hint)
     if LEFT in failed and RIGHT not in failed:
         return "l3_c2_p1_node_maxdepth_skewed_left"
