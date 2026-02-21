@@ -580,10 +580,10 @@
     },
 
     "l5_c3_p1": {
-      "description": "Find the 4-character string that maps to 1779 in base 8 using A=1..H=8.",
+      "description": "Find the 4-character string that maps to 1779 in base 8.",
       "type": "puzzle",
       "hint_sequence": [
-        "l5_c3_p1_node_hint_01_generic",
+        "l5_c3_p1_node_hint_01_general_hint",
         "l5_c3_p1_node_hint_02_place_values",
         "l5_c3_p1_node_hint_03_mapping_check"
       ]
@@ -1208,7 +1208,7 @@
       "hint_text": "Worst-case happens when many keys collide and form one long contiguous cluster. Linear probing then checks many slots before finding an empty one."
     },
 
-    "l5_c3_p1_node_hint_01_generic": {
+    "l5_c3_p1_node_hint_01_general_hint": {
       "hint_text": "Treat 1779 as a base-8 number with 4 digits: a·8^3 + b·8^2 + c·8 + d.",
       "related_concept": "Hashing / Base Representation"
     },
