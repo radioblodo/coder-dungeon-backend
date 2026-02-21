@@ -1,7 +1,10 @@
 import os
 import json
+import csv
+import io
+import glob
 import subprocess
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from openai import OpenAI
 
@@ -18,6 +21,10 @@ ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
+# If you want to control logging without editing code, set on Railway:
+# AI_LOG=1
+AI_LOG = os.environ.get("AI_LOG", "1") in ("1", "true", "True", "yes", "YES")
+
 os.makedirs(STORE_FILE_PATH, exist_ok=True)
 
 app = Flask(__name__)
@@ -30,7 +37,7 @@ CORS(
 )
 
 # ============================================================
-# OpenAI client (lazy init, won't crash boot)
+# OpenAI client (lazy init so server doesn't crash at boot)
 # ============================================================
 def get_openai_client():
     api_key = os.environ.get("OPENAI_API_KEY")
@@ -71,7 +78,6 @@ def allowed_fail_nodes_for_problem(problem_data: dict) -> list[str]:
         if fid:
             ids.append(fid)
 
-    # de-dup preserve order
     seen = set()
     out = []
     graph_nodes = knowledge_graph.get("graph_nodes", {})
@@ -84,20 +90,19 @@ def allowed_fail_nodes_for_problem(problem_data: dict) -> list[str]:
 # ============================================================
 # AI Classifier (label-only)
 # ============================================================
-def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, problem_data: dict) -> str | None:
+def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, problem_data: dict) -> tuple[str | None, float | None]:
     """
     Uses LLM to pick ONE concept_id from allowed list.
-    Returns None if no API key / error / invalid output.
+    Returns (concept_id, confidence). If unavailable/invalid -> (None, None)
     """
     client = get_openai_client()
     if not client:
-        return None
+        return None, None
 
     allowed = allowed_fail_nodes_for_problem(problem_data)
     if not allowed:
-        return None
+        return None, None
 
-    # Compact failures (keep tokens low)
     compact_failures = []
     for f in failures:
         compact_failures.append({
@@ -134,24 +139,38 @@ def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, pr
 
         text = (resp.output_text or "").strip()
         obj = json.loads(text)
+
         cid = obj.get("concept_id")
+        conf = obj.get("confidence", None)
+
+        try:
+            conf = float(conf) if conf is not None else None
+        except Exception:
+            conf = None
 
         if cid in allowed:
-            return cid
+            if AI_LOG:
+                print(f"[AI] problem={problem_id} picked={cid} confidence={conf}")
+            return cid, conf
 
-        return None
+        if AI_LOG:
+            print(f"[AI] INVALID concept_id returned: {cid} (allowed count={len(allowed)})")
+        return None, conf
 
     except Exception as e:
-        print("AI classify error:", e)
-        return None
+        print("[AI] classify error:", e)
+        return None, None
 
 # ============================================================
-# Routes
+# Health
 # ============================================================
 @app.route("/")
 def health():
     return "Knowledge Graph Server is Online!"
 
+# ============================================================
+# /submit-code  (coding puzzles)
+# ============================================================
 @app.route("/submit-code", methods=["POST", "OPTIONS"])
 def submit_code():
     if request.method == "OPTIONS":
@@ -171,7 +190,6 @@ def submit_code():
     if not test_cases:
         return jsonify({"status": "error", "message": f"No test cases configured for {problem_id}"}), 500
 
-    # Save submission
     safe_name = "".join(c for c in problem_id if c.isalnum() or c in ("_", "-"))
     file_path = os.path.join(STORE_FILE_PATH, f"{safe_name}_submission.py")
     with open(file_path, "w", encoding="utf-8") as f:
@@ -198,7 +216,6 @@ def submit_code():
                 "concept_gap": "Complexity",
             })
 
-        # Runtime crash => generic runtime hint
         if result.returncode != 0:
             return jsonify({
                 "status": "failed",
@@ -228,7 +245,7 @@ def submit_code():
         })
 
     # 1) AI picks best concept node from allowed list
-    chosen_node_id = ai_classify_fail_node(problem_id, code, failures, problem_data)
+    chosen_node_id, confidence = ai_classify_fail_node(problem_id, code, failures, problem_data)
 
     # 2) fallback: first failed testcase node
     if not chosen_node_id:
@@ -236,7 +253,7 @@ def submit_code():
 
     node_data = knowledge_graph.get("graph_nodes", {}).get(chosen_node_id, {}) if chosen_node_id else {}
 
-    # Show the testcase matching the chosen node, if present
+    # Show testcase matching the chosen node (less confusing)
     shown = next((f for f in failures if f.get("fail_node_id") == chosen_node_id), failures[0])
 
     return jsonify({
@@ -246,22 +263,25 @@ def submit_code():
         "student_output": shown.get("actual", ""),
         "expected_output": shown.get("expected", ""),
         "concept_gap": node_data.get("related_concept", "General"),
-        # keep during dev; remove later
+        # Keep during dev; remove later
         "debug_chosen_node_id": chosen_node_id,
+        "debug_ai_confidence": confidence,
         "debug_failures": failures,
     })
 
+# ============================================================
+# /request-hint  (visual/interactive puzzles)
+# ============================================================
 @app.route("/request-hint", methods=["POST", "OPTIONS"])
 def request_hint():
     """
-    For interactive visual puzzles / MCQ puzzles:
     Client sends:
       {
         "problem_id": "...",
         "remaining_concept_ids": ["nodeA","nodeB",...]
       }
 
-    We return the first concept_id that exists in graph_nodes.
+    Deterministic: return first concept_id that exists in graph_nodes.
     """
     if request.method == "OPTIONS":
         return ("", 204)
@@ -275,12 +295,8 @@ def request_hint():
     if not isinstance(ids, list) or not ids:
         return jsonify({"status": "error", "message": "No concept/error ids provided"}), 400
 
-    chosen_id = None
     graph_nodes = knowledge_graph.get("graph_nodes", {})
-    for cid in ids:
-        if cid in graph_nodes:
-            chosen_id = cid
-            break
+    chosen_id = next((cid for cid in ids if cid in graph_nodes), None)
 
     if not chosen_id:
         return jsonify({"status": "error", "message": "No matching graph_nodes for given concept ids"}), 400
@@ -292,6 +308,136 @@ def request_hint():
         "hint": node.get("hint_text", "Think about this part again."),
         "related_concept": node.get("related_concept", "General"),
     })
+
+# ============================================================
+# Playerdata storage (GET/PATCH)
+# ============================================================
+@app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])
+def playerdata(player_id):
+    if request.method == "OPTIONS":
+        return ("", 204)
+
+    path = os.path.join(STORE_FILE_PATH, f"playerdata_{player_id}.json")
+
+    if request.method == "GET":
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                try:
+                    return jsonify(json.load(f) or {})
+                except Exception:
+                    return jsonify({})
+        return jsonify({})
+
+    # PATCH
+    data = request.get_json(silent=True) or {}
+
+    store = {}
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                store = json.load(f) or {}
+            except Exception:
+                store = {}
+
+    # Unity sends: { "name": "...", "time": ..., "attempts": ..., "solved": ... }
+    if "name" in data:
+        entry = {
+            "puzzle_name": data.get("name", ""),
+            "time": data.get("time", 0),
+            "attempts": data.get("attempts", 0),
+            "solved": int(bool(data.get("solved", False))),
+        }
+        key = entry["puzzle_name"] or str(len(store))
+        store[key] = entry
+    elif isinstance(data, dict):
+        # If client sends a dict of entries, merge them
+        for k, v in data.items():
+            if isinstance(v, dict):
+                store[k] = v
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(store, f)
+
+    return jsonify({"ok": True, "player_id": player_id})
+
+# ============================================================
+# CSV Export
+# ============================================================
+def _iter_playerdata_files():
+    """Yield (player_id:int, filepath:str) for all playerdata_*.json files."""
+    pattern = os.path.join(STORE_FILE_PATH, "playerdata_*.json")
+    for path in sorted(glob.glob(pattern)):
+        base = os.path.basename(path)  # e.g. playerdata_12.json
+        try:
+            player_id = int(base.replace("playerdata_", "").replace(".json", ""))
+            yield player_id, path
+        except ValueError:
+            continue
+
+@app.route("/playerdata/export.csv", methods=["GET", "OPTIONS"])
+def export_playerdata_csv():
+    if request.method == "OPTIONS":
+        return ("", 204)
+
+    player_id_filter = request.args.get("player_id")
+    solved_only = request.args.get("solved_only") in ("1", "true", "True", "yes", "YES")
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["player_id", "puzzle_name", "time", "attempts", "solved"])
+
+    def write_rows_for_player(pid: int, store: dict):
+        for _, entry in (store or {}).items():
+            if not isinstance(entry, dict):
+                continue
+            puzzle_name = entry.get("puzzle_name", "")
+            t = entry.get("time", 0)
+            attempts = entry.get("attempts", 0)
+            solved = int(entry.get("solved", 0))
+
+            if solved_only and solved != 1:
+                continue
+
+            writer.writerow([pid, puzzle_name, t, attempts, solved])
+
+    # Export single player
+    if player_id_filter:
+        try:
+            pid = int(player_id_filter)
+        except ValueError:
+            return jsonify({"ok": False, "message": "player_id must be an integer"}), 400
+
+        path = os.path.join(STORE_FILE_PATH, f"playerdata_{pid}.json")
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                try:
+                    store = json.load(f) or {}
+                except Exception:
+                    store = {}
+            write_rows_for_player(pid, store)
+
+        csv_text = output.getvalue()
+        return Response(
+            csv_text,
+            mimetype="text/csv",
+            headers={"Content-Disposition": f'attachment; filename="playerdata_{pid}.csv"'}
+        )
+
+    # Export all players
+    for pid, path in _iter_playerdata_files():
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                store = json.load(f) or {}
+            except Exception:
+                store = {}
+        write_rows_for_player(pid, store)
+
+    csv_text = output.getvalue()
+    return Response(
+        csv_text,
+        mimetype="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="playerdata_all.csv"'}
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
