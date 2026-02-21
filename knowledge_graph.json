@@ -225,31 +225,31 @@
           "id": "sortstack_tc_01_basic",
           "input": "3,1,4,2",
           "expected_output": "1,2,3,4",
-          "fail_node_id": "node_sortstack_core"
+          "fail_node_id": "l2_c2_p3_node_sortstack_core"
         },
         {
           "id": "sortstack_tc_02_already_sorted",
           "input": "1,2,3,4",
           "expected_output": "1,2,3,4",
-          "fail_node_id": "node_sortstack_already_sorted"
+          "fail_node_id": "l2_c2_p3_node_sortstack_already_sorted"
         },
         {
           "id": "sortstack_tc_03_reverse_sorted",
           "input": "4,3,2,1",
           "expected_output": "1,2,3,4",
-          "fail_node_id": "node_sortstack_reverse_sorted"
+          "fail_node_id": "l2_c2_p3_node_sortstack_reverse_sorted"
         },
         {
           "id": "sortstack_tc_04_with_duplicates",
           "input": "3,1,2,1,3",
           "expected_output": "1,1,2,3,3",
-          "fail_node_id": "node_sortstack_duplicates"
+          "fail_node_id": "l2_c2_p3_node_sortstack_duplicates"
         },
         {
           "id": "sortstack_tc_05_single",
           "input": "7",
           "expected_output": "7",
-          "fail_node_id": "node_sortstack_single"
+          "fail_node_id": "l2_c2_p3_node_sortstack_single"
         }
       ]
     },
@@ -265,12 +265,11 @@
       "error_patterns": [
         "l3_c1_p1_bt_inorder_root_first",
         "l3_c1_p1_bt_inorder_left_not_finished",
-        "l3_c1_p1_bt_inorder_skipped_right_subtree",
         "l3_c1_p1_bt_inorder_visual_guessing",
-        "l3_c1_p1_bt_inorder_bst_sorted_assumption",
-        "l3_c1_p1_bt_inorder_random_walk"
+        "l3_c1_p1_bt_inorder_general_hint"
       ]
     },
+
     "l3_c1_p2": {
       "description": "Click the binary tree nodes in the correct Pre-order traversal sequence. A wrong click resets the puzzle.",
       "type": "puzzle",
@@ -282,13 +281,12 @@
       ],
       "error_patterns": [
         "l3_c1_p2_bt_preorder_not_root_first",
-        "l3_c1_p2_bt_preorder_left_skipped",
         "l3_c1_p2_bt_preorder_right_before_left",
         "l3_c1_p2_bt_preorder_visual_guessing",
-        "l3_c1_p2_bt_preorder_subtree_not_finished",
-        "l3_c1_p2_bt_preorder_random_walk"
+        "l3_c1_p2_bt_preorder_general_hint"
       ]
     },
+
     "l3_c1_p3": {
       "description": "Place the nodes in the tree using information from the previous 2 puzzles.",
       "type": "puzzle",
@@ -296,67 +294,61 @@
       "error_patterns": [
         "l3_c1_p3_wrong_node_for_root",
         "l3_c1_p3_wrong_side_of_binary_tree",
-        "l3_c1_p3_generic_mistake",
-        "l3_c1_p3_generic_reply"
+        "l3_c1_p3_general_hint"
       ]
     },
+
     "l3_c2_p1": {
       "description": "Find the max depth of a Binary Tree and return it.",
       "type": "code_function",
       "test_cases": [
         {
-          "id": "maxdepth_tc_01_empty",
-          "input": "1-N",
-          "expected_output": "0",
-          "fail_node_id": "node_maxdepth_empty_tree"
-        },
-        {
           "id": "maxdepth_tc_02_single",
           "input": "1-N",
           "expected_output": "0",
-          "fail_node_id": "node_maxdepth_single_node"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_single_node"
         },
         {
           "id": "maxdepth_tc_03_two_levels",
           "input": "1,2,3-N,L,R",
           "expected_output": "1",
-          "fail_node_id": "node_maxdepth_basic_height"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_basic_height"
         },
         {
           "id": "maxdepth_tc_04_left_skewed",
           "input": "1,2,3,4-N,L,LL,LLL",
           "expected_output": "3",
-          "fail_node_id": "node_maxdepth_skewed_left"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_skewed_left"
         },
         {
           "id": "maxdepth_tc_05_right_skewed",
           "input": "1,2,3,4-N,R,RR,RRR",
           "expected_output": "3",
-          "fail_node_id": "node_maxdepth_skewed_right"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_skewed_right"
         },
         {
           "id": "maxdepth_tc_06_unbalanced_deeper_left",
           "input": "1,2,3,4,5-N,L,R,LL,LLL",
           "expected_output": "3",
-          "fail_node_id": "node_maxdepth_unbalanced_tree"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_unbalanced_tree"
         },
         {
           "id": "maxdepth_tc_07_sparse_with_nulls",
           "input": "1,2,3,4,5-N,L,R,LR,RL",
           "expected_output": "2",
-          "fail_node_id": "node_maxdepth_null_children_handling"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_null_children_handling"
         },
         {
           "id": "maxdepth_tc_08_complete_three_levels",
           "input": "1,2,3,4,5,6,7-N,L,R,LL,LR,RL,RR",
           "expected_output": "2",
-          "fail_node_id": "node_maxdepth_complete_tree"
+          "fail_node_id": "l3_c2_p1_node_node_maxdepth_complete_tree"
         },
         {
           "id": "maxdepth_tc_09_zigzag_chain",
           "input": "1,2,3,4,5-N,L,LR,LRL,LRLR",
           "expected_output": "4",
-          "fail_node_id": "node_maxdepth_zigzag_structure"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_zigzag_structure"
         }
       ]
     },
@@ -820,6 +812,7 @@
       "related_concept": "general",
       "hint_text": "Try simulating the postfix-to-prefix algorithm step by step on paper: start with an empty stack, scan each symbol from left to right, push operands, and when you see an operator, pop operands, build a small prefix fragment, and push it back."
     },
+
     "l2_c2_p1_never_used_queue": {
       "related_concept": "queue_usage",
       "hint_text": "A stack alone cannot reverse itself. You must transfer items into the queue to reverse their order, then move them back into the stack."
@@ -836,6 +829,7 @@
       "related_concept": "algorithm_steps",
       "hint_text": "Try following this structure: 1) Pop every item from the stack and enqueue it. 2) Dequeue items back into the stack. This sequence fully reverses the stack."
     },
+
     "l2_c2_p2_missing_stack": {
       "related_concept": "stack_usage",
       "hint_text": "A queue alone cannot reverse the first k logs. Try moving the first k logs into the stack and then back to the queue so that their order is flipped."
@@ -856,30 +850,27 @@
       "hint_text": "Think in stages: first move the first k logs from the queue into the stack, then pop them back into the queue, and only after that rotate the queue so the reversed segment moves to the front."
     },
 
-    "l2_c2_p2_random_walk": {
-      "related_concept": "general",
-      "hint_text": "Break the problem into smaller steps. Use the stack to reverse the first k logs, then use queue operations to rotate the queue until the reversed part is at the front and the rest is unchanged."
-    },
-    "node_sortstack_core": {
+    "l2_c2_p3_node_sortstack_core": {
       "hint_text": "Use one temporary stack. Pop from the original stack and insert into the temp stack in sorted position by moving larger items back to the original stack, then push them back.",
       "related_concept": "Stacks"
     },
-    "node_sortstack_already_sorted": {
+    "l2_c2_p3_node_sortstack_already_sorted": {
       "hint_text": "If the stack is already in ascending order, your algorithm should not disturb it. Double-check your comparison condition inside the while-loop.",
       "related_concept": "Correctness"
     },
-    "node_sortstack_reverse_sorted": {
+    "l2_c2_p3_node_sortstack_reverse_sorted": {
       "hint_text": "A reverse-sorted stack forces the most moves. Make sure you repeatedly move items between the two stacks until the temp stack remains sorted after each insertion.",
       "related_concept": "Algorithmic Thinking"
     },
-    "node_sortstack_duplicates": {
+    "l2_c2_p3_node_sortstack_duplicates": {
       "hint_text": "Handle equal values carefully. Decide whether your inner loop should move values only when tempTop > current (strict) or >= current (non-strict) so duplicates end up correct.",
       "related_concept": "Edge Cases"
     },
-    "node_sortstack_single": {
+    "l2_c2_p3_node_sortstack_single": {
       "hint_text": "With one element, no operations are needed. If this fails, your function may be popping/pushing incorrectly when the stack becomes empty.",
       "related_concept": "Edge Cases"
     },
+
     "l3_c1_p1_bt_inorder_root_first": {
       "hint_text": "In-order traversal does not start by clicking the root. You must finish the entire left subtree first, then visit the node, then the right subtree (Left -> Node -> Right).",
       "related_concept": "Traversal Types"
@@ -888,46 +879,32 @@
       "hint_text": "You clicked a node before completing everything in its left subtree. In-order is recursive: completely traverse the left subtree before clicking the parent node.",
       "related_concept": "Recursion / Subtrees"
     },
-    "l3_c1_p1_bt_inorder_skipped_right_subtree": {
-      "hint_text": "After you visit a node, you must traverse its right subtree before moving back up. In-order always follows Left -> Node -> Right.",
-      "related_concept": "In-order Rule"
-    },
     "l3_c1_p1_bt_inorder_visual_guessing": {
-      "hint_text": "Don't click based on screen position. Traversal order depends on the tree structure: left subtree first, then node, then right subtree.",
-      "related_concept": "Abstract Data Structures"
+      "hint_text": "Traversal order depends on the tree structure: left subtree first, then node, then right subtree.",
+      "related_concept": "In-order traversal"
     },
-    "l3_c1_p1_bt_inorder_bst_sorted_assumption": {
-      "hint_text": "In-order traversal is not \"sorted order\" unless it's a BST with values. Focus on the structural rule: Left -> Node -> Right.",
-      "related_concept": "Binary Tree vs BST"
-    },
-    "l3_c1_p1_bt_inorder_random_walk": {
+    "l3_c1_p1_bt_inorder_general_hint": {
       "hint_text": "Try a consistent method: start from the leftmost node, then work upward applying Left -> Node -> Right at every subtree. Don't guess, instead, trace the next node logically.",
       "related_concept": "Tracing / Strategy"
     },
+
     "l3_c1_p2_bt_preorder_not_root_first": {
-      "hint_text": "Pre-order traversal ALWAYS starts at the root node. The rule is Node -> Left -> Right, so the root must be clicked first.",
+      "hint_text": "Pre-order traversal always starts at the root node. The rule is Root Node -> Left -> Right, so the root must be clicked first.",
       "related_concept": "Traversal Types"
     },
-    "l3_c1_p2_bt_preorder_left_skipped": {
-      "hint_text": "After visiting a node in pre-order, you must immediately traverse its left subtree before going right.",
-      "related_concept": "Pre-order Rule"
-    },
     "l3_c1_p2_bt_preorder_right_before_left": {
-      "hint_text": "You moved to the right subtree too early. Pre-order traversal always explores the LEFT subtree before the RIGHT subtree.",
+      "hint_text": "You moved to the right subtree too early. Pre-order traversal always explores the left subtree before the right subtree.",
       "related_concept": "Left vs Right Subtrees"
     },
     "l3_c1_p2_bt_preorder_visual_guessing": {
-      "hint_text": "Don't rely on visual layout. Pre-order traversal depends on tree structure, not screen position: Node -> Left -> Right.",
+      "hint_text": "Don't rely on visual layout. Pre-order traversal depends on tree structure, follow this sequence: Root Node -> Left -> Right.",
       "related_concept": "Abstract Data Structures"
     },
-    "l3_c1_p2_bt_preorder_subtree_not_finished": {
-      "hint_text": "Once you enter a subtree in pre-order, fully traverse it before moving back up. Each subtree follows Node -> Left -> Right recursively.",
-      "related_concept": "Recursion / Subtrees"
-    },
-    "l3_c1_p2_bt_preorder_random_walk": {
-      "hint_text": "Use a systematic approach: start at the root, then repeatedly apply Node -> Left -> Right at every subtree. Avoid guessing.",
+    "l3_c1_p2_bt_preorder_general_hint": {
+      "hint_text": "Use a systematic approach: start at the root, then repeatedly apply Root Node -> Left -> Right at every subtree. Avoid guessing.",
       "related_concept": "Tracing / Strategy"
     },
+
     "l3_c1_p3_wrong_node_for_root": {
       "hint_text": "Please check the root node again. The Pre-order traversal always starts with the root node.",
       "related_concept": "Pre-order traversal"
@@ -936,47 +913,39 @@
       "hint_text": "Are you sure that node is on the right side of the tree? Check the traversal order again!",
       "related_concept": "Tracing"
     },
-    "l3_c1_p3_generic_mistake": {
-      "hint_text": "Please check the placement of the nodes again.",
-      "related_concept": "Carelessness"
-    },
-    "l3_c1_p3_generic_reply": {
+    "l3_c1_p3_general_hint": {
       "hint_text": "Please ensure that all nodes have been placed in the tree.",
       "related_concept": "Reminder"
     },
-    "node_maxdepth_empty_tree": {
-      "hint_text": "Remember that a Binary tree could also be an empty tree!",
-      "related_concept": "Empty Binary Tree"
-    },
-    "node_maxdepth_single_node": {
+    "l3_c2_p1_node_maxdepth_single_node": {
       "hint_text": "Remember that a Binary Tree could also consists of a single node!",
       "related_concept": "Single node Binary Tree"
     },
-    "node_maxdepth_basic_height": {
+    "l3_c2_p1_node_maxdepth_basic_height": {
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
     },
-    "node_maxdepth_skewed_left": {
+    "l3_c2_p1_node_maxdepth_skewed_left": {
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
     },
-    "node_maxdepth_skewed_right": {
+    "l3_c2_p1_node_maxdepth_skewed_right": {
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
     },
-    "node_maxdepth_unbalanced_tree": {
+    "l3_c2_p1_node_maxdepth_unbalanced_tree": {
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
     },
-    "node_maxdepth_null_children_handling": {
+    "l3_c2_p1_node_maxdepth_null_children_handling": {
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
     },
-    "node_maxdepth_complete_tree": {
+    "l3_c2_p1_node_node_maxdepth_complete_tree": {
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
     },
-    "node_maxdepth_zigzag_structure": {
+    "l3_c2_p1_node_maxdepth_zigzag_structure": {
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
     },
@@ -984,6 +953,7 @@
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
     },
+
     "l3_c2_p2_print_before_dequeue_cur_is_null": {
       "related_concept": "dequeue_sets_cur",
       "hint_text": "Cur is still null. You need to dequeue a node from the queue before you can print cur.item."
