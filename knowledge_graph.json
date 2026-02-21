@@ -919,37 +919,38 @@
     },
 
     "l3_c2_p1_node_maxdepth_single_node": {
-      "hint_text": "Remember that a Binary Tree could also consists of a single node and a single node tree has a depth of 0.",
-      "related_concept": "Single node Binary Tree"
+      "hint_text": "Think about the definition of depth used in this problem. A single-node tree has depth 0 because depth counts the number of edges, not the number of nodes.",
+      "related_concept": "Edge-Based Depth Definition"
     },
     "l3_c2_p1_node_maxdepth_basic_height": {
-      "hint_text": "Your recursive calls compute the depth of the subtrees correctly, but are you adding 1 to include the current level?",
+      "hint_text": "You correctly compute the depth of the left and right subtrees. However, does your return statement include the current edge level (i.e., are you adding 1 after taking the maximum)?",
       "related_concept": "Recursive Depth Accumulation"
     },
     "l3_c2_p1_node_maxdepth_skewed_left": {
-      "hint_text": "You are close! Check your code again!",
-      "related_concept": "Wrong logic"
+      "hint_text": "Consider a tree where all nodes are connected through left children only. Does your solution explore the left subtree when computing depth?",
+      "related_concept": "Recursive Exploration of Left Subtree"
     },
     "l3_c2_p1_node_maxdepth_skewed_right": {
-      "hint_text": "You are close! Check your code again!",
-      "related_concept": "Wrong logic"
+      "hint_text": "Consider a tree where all nodes are connected through right children only. Does your solution explore the right subtree when computing depth?",
+      "related_concept": "Recursive Exploration of Right Subtree"
     },
     "l3_c2_p1_node_maxdepth_unbalanced_tree": {
-      "hint_text": "You are close! Check your code again!",
-      "related_concept": "Wrong logic"
+      "hint_text": "In an unbalanced tree, one subtree may be deeper than the other. Are you correctly selecting the maximum depth between the left and right subtrees?",
+      "related_concept": "Choosing Maximum Subtree Depth"
     },
     "l3_c2_p1_node_maxdepth_null_children_handling": {
-      "hint_text": "You are close! Check your code again!",
-      "related_concept": "Wrong logic"
+      "hint_text": "Think about what your function should return when a child node is None? Ensure your base case correctly handles missing (null) children so depth is computed accurately.",
+      "related_concept": "Base Case for Null Nodes"
     },
     "l3_c2_p1_node_node_maxdepth_complete_tree": {
-      "hint_text": "You are close! Check your code again!",
-      "related_concept": "Wrong logic"
+      "hint_text": "In a complete tree with multiple levels, depth should reflect the longest root-to-leaf path. Does your recursive logic continue exploring until it reaches the deepest level?",
+      "related_concept": "Full Recursive Traversal"
     },
     "l3_c2_p1_node_maxdepth_zigzag_structure": {
-      "hint_text": "You are close! Check your code again!",
-      "related_concept": "Wrong logic"
+      "hint_text": "The longest path in a tree may alternate between left and right children. Does your solution correctly consider both subtrees at every node?",
+      "related_concept": "Recursive Traversal of Both Subtrees"
     },
+
     "node_maxdepth_ignore_node_values": {
       "hint_text": "You are close! Check your code again!",
       "related_concept": "Wrong logic"
