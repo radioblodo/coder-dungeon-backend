@@ -917,13 +917,14 @@
       "hint_text": "Please ensure that all nodes have been placed in the tree.",
       "related_concept": "Reminder"
     },
+
     "l3_c2_p1_node_maxdepth_single_node": {
-      "hint_text": "Remember that a Binary Tree could also consists of a single node!",
+      "hint_text": "Remember that a Binary Tree could also consists of a single node and a single node tree has a depth of 0.",
       "related_concept": "Single node Binary Tree"
     },
     "l3_c2_p1_node_maxdepth_basic_height": {
-      "hint_text": "You are close! Check your code again!",
-      "related_concept": "Wrong logic"
+      "hint_text": "Your recursive calls compute the depth of the subtrees correctly, but are you adding 1 to include the current level?",
+      "related_concept": "Recursive Depth Accumulation"
     },
     "l3_c2_p1_node_maxdepth_skewed_left": {
       "hint_text": "You are close! Check your code again!",
