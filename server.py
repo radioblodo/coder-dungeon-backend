@@ -310,6 +310,25 @@ def request_hint():
     })
 
 # ============================================================
+# /api/login  (simple test login)
+# ============================================================
+@app.route("/api/login", methods=["POST", "OPTIONS"])
+def api_login():
+    if request.method == "OPTIONS":
+        return ("", 204)
+
+    data = request.get_json(force=True) or {}
+    username = data.get("username", "")
+    password = data.get("password", "")
+
+    is_test_account = isinstance(username, str) and username.startswith("testAccount")
+    is_test_account = is_test_account and username[len("testAccount"):].isdigit()
+    if is_test_account and password == "password@123":
+        return jsonify({"status": "success", "user": username})
+
+    return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+
+# ============================================================
 # Playerdata storage (GET/PATCH)
 # ============================================================
 @app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])
