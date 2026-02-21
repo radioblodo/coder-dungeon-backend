@@ -551,26 +551,34 @@
       ],
       "error_patterns": ["general_hint", "bookreturn_row_overfilled"]
     },
-    "l5_c1_p2": {
+    "l5_c1_p2_best": {
+      "type": "puzzle",
+      "description": "...",
+      "concepts_taught": [
+        "hash_table_open_addressing",
+        "linear_probing",
+        "best_case_no_probing"
+      ],
+      "hint_nodes": {
+        "underfilled": "l5_c1_p2_row_underfilled",
+        "general_after_3": "l5_c1_p2_best_general_hint"
+      }
+    },
+    "l5_c1_p2_worst": {
       "type": "puzzle",
       "description": "Drag and drop books (keys) into the highlighted shelf row to create the required hash table scenario under Open Addressing + Linear Probing. Colors are randomized; only the letter (key) matters. Hover 'Evaluate' to see which row is graded. After arranging correctly, answer 1 MCQ about the average insertion cost at load factor 0.5.",
-      "tests_concepts": [
+      "concepts_taught": [
         "hash_table_open_addressing",
         "linear_probing",
         "collision_vs_no_collision",
-        "best_case_no_probing",
-        "average_case_some_probing",
-        "worst_case_primary_clustering",
-        "hash_output_not_unique"
+        "worst_case_primary_clustering"
       ],
-      "error_patterns": [
-        "l5_hash_unique_key_implies_unique_hash",
-        "l5_hash_visual_spacing_affects_hashing",
-        "l5_hash_best_case_means_spread_out_visually",
-        "l5_hash_confuse_row_highlight",
-        "l5_hash_overfill_or_underfill_solution_row"
-      ]
+      "hint_nodes": {
+        "underfilled": "l5_c1_p2_row_underfilled",
+        "general_after_3": "l5_c1_p2_worst_general_hint"
+      }
     },
+
     "l5_c3_p1": {
       "description": "Find the 4-character string that maps to 1779 in base 8 using A=1..H=8.",
       "type": "puzzle",
