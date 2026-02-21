@@ -559,7 +559,10 @@ def classify_wrong_answer_l4_c1_p4(failures: list) -> str:
         return "l4_c1_p4_node_min_single_element"
     if TWO in failed:
         return "l4_c1_p4_node_min_boundary_two_elements"
-    if NEG in failed:
+    # The student compares array[mid] with array[low] instead of array[high], causing wrong direction on certain rotations
+    if CMP_WRONG_BOUNDARY in failed:
+        return "l4_c1_p4_node_min_compare_wrong_boundary"
+    if failed == {NEG}:
         return "l4_c1_p4_node_min_handle_negatives"
 
     # Duplicate-related diagnostics
@@ -575,9 +578,7 @@ def classify_wrong_answer_l4_c1_p4(failures: list) -> str:
     if DUP_TRICKY in failed:
         return "l4_c1_p4_node_min_duplicates_break_sorted_check"
 
-    # The student compares array[mid] with array[low] instead of array[high], causing wrong direction on certain rotations
-    if CMP_WRONG_BOUNDARY in failed:
-        return "l4_c1_p4_node_min_compare_wrong_boundary"
+    
     
     # Rotation logic: passes sorted but fails rotation
     if ROT in failed and SORTED not in failed:
