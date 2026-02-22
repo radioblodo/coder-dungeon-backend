@@ -8,25 +8,49 @@
           "id": "evens_tc_01",
           "input": "1,2,3,4,5",
           "expected_output": "1,3,5,2,4",
-          "fail_node_id": "node_evens_core"
+          "fail_node_id": "l1_c1_p1_node_evens_core"
         },
         {
           "id": "evens_tc_02",
           "input": "2,4,6",
           "expected_output": "2,4,6",
-          "fail_node_id": "node_evens_all_even"
+          "fail_node_id": "l1_c1_p1_node_evens_all_even"
         },
         {
           "id": "evens_tc_03",
           "input": "1,3,5",
           "expected_output": "1,3,5",
-          "fail_node_id": "node_evens_all_odd"
+          "fail_node_id": "l1_c1_p1_node_evens_all_odd"
         },
         {
           "id": "evens_tc_04",
           "input": "2,1,4,3,6,5",
           "expected_output": "1,3,5,2,4,6",
-          "fail_node_id": "node_evens_stability"
+          "fail_node_id": "l1_c1_p1_node_evens_stability"
+        },
+        {
+          "id": "evens_tc_05_even_head",
+          "input": "2,1,3,5",
+          "expected_output": "1,3,5,2",
+          "fail_node_id": "l1_c1_p1_node_evens_head_update"
+        },
+        {
+          "id": "evens_tc_06_even_tail",
+          "input": "1,3,5,2",
+          "expected_output": "1,3,5,2",
+          "fail_node_id": "l1_c1_p1_node_evens_tail_handling"
+        },
+        {
+          "id": "evens_tc_08_single_even",
+          "input": "2",
+          "expected_output": "2",
+          "fail_node_id": "l1_c1_p1_node_evens_single_element"
+        },
+        {
+          "id": "evens_tc_09_empty_list",
+          "input": "",
+          "expected_output": "",
+          "fail_node_id": "l1_c1_p1_node_evens_empty_list"
         }
       ]
     },
@@ -649,6 +673,73 @@
       ]
     }
   },
+  "concepts": {
+    "concept_ll": {
+      "label": "Linked Lists",
+      "parent_id": null,
+      "generic_hint": null
+    },
+
+    "concept_ll_reordering": {
+      "label": "Linked List Reordering",
+      "parent_id": "concept_ll",
+      "generic_hint": "When rearranging a linked list, you should relink existing nodes without losing any nodes, creating cycles, or breaking the chain."
+    },
+
+    "concept_ll_stable_partition": {
+      "label": "Stable Partition (Odds then Evens)",
+      "parent_id": "concept_ll_reordering",
+      "generic_hint": "A stable partition keeps the relative order within each group. Here: keep odds in original order, then evens in original order."
+    },
+
+    "concept_ll_pointer_manipulation": {
+      "label": "Pointer Manipulation",
+      "parent_id": "concept_ll",
+      "generic_hint": "Whenever you change links, update next pointers carefully so you never lose access to the remaining nodes."
+    },
+
+    "concept_ll_head_pointer_update": {
+      "label": "Head Pointer Update",
+      "parent_id": "concept_ll_pointer_manipulation",
+      "generic_hint": "If the first node of the list changes (e.g., original head is moved away), you must update ll.head to point to the new first node."
+    },
+
+    "concept_ll_tail_pointer_handling": {
+      "label": "Tail Pointer Handling",
+      "parent_id": "concept_ll_pointer_manipulation",
+      "generic_hint": "After reordering, ensure the last node’s next is None and the tail is correctly linked so no nodes are dropped or cycles formed."
+    },
+
+    "concept_ll_edge_cases": {
+      "label": "Edge Cases",
+      "parent_id": "concept_ll",
+      "generic_hint": null
+    },
+
+    "concept_ll_all_even_noop": {
+      "label": "All Even Case (No Change)",
+      "parent_id": "concept_ll_edge_cases",
+      "generic_hint": null
+    },
+
+    "concept_ll_all_odd_noop": {
+      "label": "All Odd Case (No Change)",
+      "parent_id": "concept_ll_edge_cases",
+      "generic_hint": null
+    },
+
+    "concept_ll_single_node_handling": {
+      "label": "Single Node Handling",
+      "parent_id": "concept_ll_edge_cases",
+      "generic_hint": null
+    },
+
+    "concept_ll_empty_list_handling": {
+      "label": "Empty List Handling",
+      "parent_id": "concept_ll_edge_cases",
+      "generic_hint": "If ll.head is None, your function should immediately return/do nothing (avoid accessing head.next)."
+    }
+  },
   "runtime_rules": [
     {
       "id": "attr_none_deref",
@@ -690,23 +781,45 @@
     }
   ],
   "graph_nodes": {
-    "node_evens_core": {
+    "l1_c1_p1_node_evens_core": {
       "hint_text": "Your odds and evens are not ending up in the right halves. First keep all odd numbers in their original order, then all even numbers in their original order.",
-      "related_concept": "Linked Lists"
-    },
-    "node_evens_all_even": {
-      "hint_text": "When every value is even, moving them to the back should not change the list at all.",
-      "related_concept": "Edge Cases"
-    },
-    "node_evens_all_odd": {
-      "hint_text": "If there are no even numbers, the list should remain exactly the same after your function.",
-      "related_concept": "Edge Cases"
-    },
-    "node_evens_stability": {
-      "hint_text": "Be careful not to shuffle the order of odds among themselves or evens among themselves when you move nodes around.",
-      "related_concept": "Pointer Manipulation"
+      "concept_id": "concept_ll_stable_partition"
     },
 
+    "l1_c1_p1_node_evens_all_even": {
+      "hint_text": "When every value is even, moving them to the back should not change the list at all.",
+      "concept_id": "concept_ll_all_even_noop"
+    },
+
+    "l1_c1_p1_node_evens_all_odd": {
+      "hint_text": "If there are no even numbers, the list should remain exactly the same after your function.",
+      "concept_id": "concept_ll_all_odd_noop"
+    },
+
+    "l1_c1_p1_node_evens_stability": {
+      "hint_text": "Be careful not to shuffle the order of odds among themselves or evens among themselves when you move nodes around.",
+      "concept_id": "concept_ll_stable_partition"
+    },
+
+    "l1_c1_p1_node_evens_head_update": {
+      "hint_text": "If the first element is even, are you correctly updating the head pointer? Make sure odd numbers become the new front of the list.",
+      "concept_id": "concept_ll_head_pointer_update"
+    },
+
+    "l1_c1_p1_node_evens_tail_handling": {
+      "hint_text": "If the last element is even, ensure it remains properly linked at the end. Be careful not to lose the tail when rearranging nodes.",
+      "concept_id": "concept_ll_tail_pointer_handling"
+    },
+
+    "l1_c1_p1_node_evens_single_element": {
+      "hint_text": "Have you considered the case where the list contains only one node? Make sure you handle this edge case correctly.",
+      "concept_id": "concept_ll_single_node_handling"
+    },
+
+    "l1_c1_p1_node_evens_empty_list": {
+      "hint_text": "What happens if the linked list is empty? Before accessing head or head.next, make sure the list is not empty.",
+      "concept_id": "concept_ll_empty_list_handling"
+    },
     "node_max_not_front": {
       "hint_text": "After your function runs, the largest value in the list should be the very first node.",
       "related_concept": "Linked Lists"

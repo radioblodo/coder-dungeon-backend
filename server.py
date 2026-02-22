@@ -4,6 +4,8 @@ import csv
 import io
 import glob
 import subprocess
+from collections import Counter
+from datetime import datetime, timezone
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from openai import OpenAI
@@ -279,6 +281,22 @@ def submit_code():
     data = request.get_json(force=True) or {}
     problem_id = data.get("problem_id")
     code = data.get("code", "")
+    player_id = data.get("player_id")
+    attempt_no = data.get("attempt_no")
+
+    if player_id is None:
+        return jsonify({"status": "error", "message": "Missing player_id"}), 400
+    try:
+        player_id = int(player_id)
+    except Exception:
+        return jsonify({"status": "error", "message": "player_id must be an integer"}), 400
+
+    if attempt_no is None:
+        attempt_no = 1
+    try:
+        attempt_no = int(attempt_no)
+    except Exception:
+        attempt_no = 1
 
     if not problem_id or problem_id not in knowledge_graph.get("problems", {}):
         return jsonify({"status": "error", "message": "Invalid or missing problem_id"}), 400
@@ -338,11 +356,39 @@ def submit_code():
             })
 
     if not failures:
+        attempt_entry = {
+            "player_id": player_id,
+            "puzzle_name": problem_id,          # keep naming consistent with your CSV
+            "attempt_no": attempt_no,
+            "timestamp": now_iso_sg(),
+            "solved": 1,
+            "failed_node_ids": [],
+            "concept_counts": {},
+        }
+        append_attempt_log(player_id, attempt_entry)
+
         return jsonify({
             "status": "success",
             "message": "All test cases passed!",
             "stdout": "\n".join(outputs_log),
         })
+
+    failed_node_ids = [f.get("fail_node_id") for f in failures if f.get("fail_node_id")]
+    concept_counts = concept_counts_from_failures(failures)
+
+    attempt_entry = {
+        "player_id": player_id,
+        "puzzle_name": problem_id,
+        "attempt_no": attempt_no,
+        "timestamp": now_iso_sg(),
+        "solved": 0,
+        "failed_node_ids": failed_node_ids,
+        "concept_counts": concept_counts,  # dict
+        # Optional debug fields if you want:
+        "ai_chosen_node_id": fallback_node_id,
+        "ai_confidence": confidence,
+    }
+    append_attempt_log(player_id, attempt_entry)
 
     # 1) AI picks best concept node from allowed list
     # chosen_node_id, confidence = ai_classify_fail_node(problem_id, code, failures, problem_data)
@@ -461,6 +507,27 @@ def api_login():
 # ============================================================
 # Playerdata storage (GET/PATCH)
 # ============================================================
+def now_iso_sg() -> str:
+    # If you don't care about timezone, you can just use datetime.now().isoformat()
+    # But you said Asia/Singapore; simplest without pytz:
+    return datetime.now().isoformat()
+
+def concept_counts_from_failures(failures: list[dict]) -> dict:
+    """
+    Map fail_node_id -> graph_nodes[fail_node_id].concept_id and count.
+    Returns dict like {"concept_ll_stable_partition": 2, ...}
+    """
+    graph_nodes = knowledge_graph.get("graph_nodes", {})
+    c = Counter()
+
+    for f in failures:
+        fid = f.get("fail_node_id")
+        node = graph_nodes.get(fid, {})
+        concept_id = node.get("concept_id")  # NEW FIELD you’re adding
+        if concept_id:
+            c[concept_id] += 1
+
+    return dict(c)
 @app.route("/playerdata/<int:player_id>", methods=["GET", "PATCH", "OPTIONS"])
 def playerdata(player_id):
     if request.method == "OPTIONS":
@@ -509,6 +576,27 @@ def playerdata(player_id):
 
     return jsonify({"ok": True, "player_id": player_id})
 
+def append_attempt_log(player_id: int, entry: dict) -> None:
+    """
+    Append a single attempt entry to store/attemptlog_<player_id>.json
+    File format: a JSON list of entries.
+    """
+    path = os.path.join(STORE_FILE_PATH, f"attemptlog_{player_id}.json")
+
+    logs = []
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                logs = json.load(f) or []
+            if not isinstance(logs, list):
+                logs = []
+        except Exception:
+            logs = []
+
+    logs.append(entry)
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(logs, f)
 # ============================================================
 # CSV Export
 # ============================================================
@@ -519,6 +607,16 @@ def _iter_playerdata_files():
         base = os.path.basename(path)  # e.g. playerdata_12.json
         try:
             player_id = int(base.replace("playerdata_", "").replace(".json", ""))
+            yield player_id, path
+        except ValueError:
+            continue
+
+def _iter_attemptlog_files():
+    pattern = os.path.join(STORE_FILE_PATH, "attemptlog_*.json")
+    for path in sorted(glob.glob(pattern)):
+        base = os.path.basename(path)  # attemptlog_12.json
+        try:
+            player_id = int(base.replace("attemptlog_", "").replace(".json", ""))
             yield player_id, path
         except ValueError:
             continue
@@ -586,6 +684,77 @@ def export_playerdata_csv():
         csv_text,
         mimetype="text/csv",
         headers={"Content-Disposition": 'attachment; filename="playerdata_all.csv"'}
+    )
+
+@app.route("/attemptlog/export.csv", methods=["GET", "OPTIONS"])
+def export_attemptlog_csv():
+    if request.method == "OPTIONS":
+        return ("", 204)
+
+    player_id_filter = request.args.get("player_id")
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow([
+        "player_id",
+        "puzzle_name",
+        "attempt_no",
+        "timestamp",
+        "solved",
+        "failed_node_ids_json",
+        "concept_counts_json"
+    ])
+
+    def write_rows(pid: int, logs: list):
+        for e in logs or []:
+            if not isinstance(e, dict):
+                continue
+            writer.writerow([
+                pid,
+                e.get("puzzle_name", ""),
+                e.get("attempt_no", ""),
+                e.get("timestamp", ""),
+                int(e.get("solved", 0)),
+                json.dumps(e.get("failed_node_ids", []), ensure_ascii=False),
+                json.dumps(e.get("concept_counts", {}), ensure_ascii=False),
+            ])
+
+    # Single player
+    if player_id_filter:
+        try:
+            pid = int(player_id_filter)
+        except ValueError:
+            return jsonify({"ok": False, "message": "player_id must be an integer"}), 400
+
+        path = os.path.join(STORE_FILE_PATH, f"attemptlog_{pid}.json")
+        logs = []
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                try:
+                    logs = json.load(f) or []
+                except Exception:
+                    logs = []
+        write_rows(pid, logs)
+
+        return Response(
+            output.getvalue(),
+            mimetype="text/csv",
+            headers={"Content-Disposition": f'attachment; filename="attemptlog_{pid}.csv"'}
+        )
+
+    # All players
+    for pid, path in _iter_attemptlog_files():
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                logs = json.load(f) or []
+            except Exception:
+                logs = []
+        write_rows(pid, logs)
+
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="attemptlog_all.csv"'}
     )
 
 if __name__ == "__main__":
