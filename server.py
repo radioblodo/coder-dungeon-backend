@@ -528,9 +528,10 @@ def api_login():
     password = data.get("password", "")
 
     is_test_account = isinstance(username, str) and username.startswith("testAccount")
-    is_test_account = is_test_account and username[len("testAccount"):].isdigit()
+    suffix = username[len("testAccount"):] if is_test_account else ""
+    is_test_account = is_test_account and suffix.isdigit()
     if is_test_account and password == "password@123":
-        return jsonify({"status": "success", "user": username})
+        return jsonify({"status": "success", "user": username, "id": int(suffix)})
 
     return jsonify({"status": "error", "message": "Invalid credentials"}), 401
 
