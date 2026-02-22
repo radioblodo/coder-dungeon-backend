@@ -5,7 +5,7 @@ import io
 import glob
 import subprocess
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from openai import OpenAI
@@ -466,7 +466,15 @@ def request_hint():
 
     data = request.get_json(force=True) or {}
     problem_id = data.get("problem_id")
+    player_id = data.get("player_id")
     ids = data.get("remaining_concept_ids", [])
+
+    if player_id is None:
+        return jsonify({"status": "error", "message": "Missing player_id"}), 400
+    try:
+        player_id = int(player_id)
+    except Exception:
+        return jsonify({"status": "error", "message": "player_id must be an integer"}), 400
 
     if not problem_id or problem_id not in knowledge_graph.get("problems", {}):
         return jsonify({"status": "error", "message": f"Invalid problem_id: {problem_id}"}), 400
@@ -480,11 +488,31 @@ def request_hint():
         return jsonify({"status": "error", "message": "No matching graph_nodes for given concept ids"}), 400
 
     node = graph_nodes[chosen_id]
+    concept_id = node.get("concept_id")
+    concepts = knowledge_graph.get("concepts", {})
+    concept = concepts.get(concept_id, {}) if concept_id else {}
+    concept_label = concept.get("label") or concept_id or "General"
+    generic_hint = concept.get("generic_hint")
+    specific_hint = node.get("hint_text", "Think about this part again.")
+    if generic_hint:
+        hint_text = f"{concept_label}: {generic_hint}\n\nTip: {specific_hint}"
+    else:
+        hint_text = specific_hint
+    attempt_entry = {
+        "player_id": player_id,
+        "puzzle_name": problem_id,
+        "attempt_no": next_attempt_no_for_player(player_id, problem_id),
+        "timestamp": now_iso_sg(),
+        "solved": 0,
+        "failed_node_ids": [chosen_id],
+        "concept_counts": {concept_id or "General": 1},
+    }
+    append_attempt_log(player_id, attempt_entry)
     return jsonify({
         "status": "success",
         "concept_id": chosen_id,
-        "hint": node.get("hint_text", "Think about this part again."),
-        "related_concept": node.get("related_concept", "General"),
+        "hint": hint_text,
+        "related_concept": concept_id or "General",
     })
 
 # ============================================================
@@ -510,9 +538,8 @@ def api_login():
 # Playerdata storage (GET/PATCH)
 # ============================================================
 def now_iso_sg() -> str:
-    # If you don't care about timezone, you can just use datetime.now().isoformat()
-    # But you said Asia/Singapore; simplest without pytz:
-    return datetime.now().isoformat()
+    # Singapore is UTC+08:00 with no DST.
+    return datetime.now(timezone(timedelta(hours=8))).isoformat()
 
 def concept_counts_from_failures(failures: list[dict]) -> dict:
     """
@@ -599,6 +626,39 @@ def append_attempt_log(player_id: int, entry: dict) -> None:
 
     with open(path, "w", encoding="utf-8") as f:
         json.dump(logs, f)
+
+def _load_attempt_logs(player_id: int) -> list:
+    path = os.path.join(STORE_FILE_PATH, f"attemptlog_{player_id}.json")
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                logs = json.load(f) or []
+            if isinstance(logs, list):
+                return logs
+        except Exception:
+            return []
+    return []
+
+def next_attempt_no_for_player(player_id: int, puzzle_name: str) -> int:
+    logs = _load_attempt_logs(player_id)
+    max_no = 0
+    solved_seen = False
+    for e in logs:
+        if e.get("puzzle_name") != puzzle_name:
+            continue
+        try:
+            no = int(e.get("attempt_no") or 0)
+        except Exception:
+            no = 0
+        if no > max_no:
+            max_no = no
+        if int(e.get("solved", 0)) == 1:
+            solved_seen = True
+    if max_no == 0:
+        return 1
+    if solved_seen:
+        return max_no
+    return max_no + 1
 # ============================================================
 # CSV Export
 # ============================================================

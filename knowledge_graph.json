@@ -56,25 +56,25 @@
           "id": "max_tc_01",
           "input": "1,2,3,4,5",
           "expected_output": "5,1,2,3,4",
-          "fail_node_id": "node_max_not_front"
+          "fail_node_id": "l1_c1_p2_node_max_not_front"
         },
         {
           "id": "max_tc_02",
           "input": "5,4,3,2,1",
           "expected_output": "5,4,3,2,1",
-          "fail_node_id": "node_max_already_front"
+          "fail_node_id": "l1_c1_p2_node_max_already_front"
         },
         {
           "id": "max_tc_03",
           "input": "2,2,2,2",
           "expected_output": "2,2,2,2",
-          "fail_node_id": "node_max_all_equal"
+          "fail_node_id": "l1_c1_p2_node_max_all_equal"
         },
         {
           "id": "max_tc_04",
           "input": "1,5,3,5,4",
           "expected_output": "5,1,3,5,4",
-          "fail_node_id": "node_max_multiple"
+          "fail_node_id": "l1_c1_p2_node_max_multiple"
         }
       ]
     },
@@ -86,25 +86,25 @@
           "id": "dup_tc_01",
           "input": "1,1,2,3,3,3",
           "expected_output": "1,2,3",
-          "fail_node_id": "node_dups_core"
+          "fail_node_id": "l1_c2_p1_node_dups_core"
         },
         {
           "id": "dup_tc_02",
           "input": "1,2,3,4",
           "expected_output": "1,2,3,4",
-          "fail_node_id": "node_dups_nochange"
+          "fail_node_id": "l1_c2_p1_node_dups_nochange"
         },
         {
           "id": "dup_tc_03",
           "input": "2,2,2,2",
           "expected_output": "2",
-          "fail_node_id": "node_dups_all_same"
+          "fail_node_id": "l1_c2_p1_node_dups_all_same"
         },
         {
           "id": "dup_tc_04",
           "input": "1,1,1,2,2,3,3,3,3",
           "expected_output": "1,2,3",
-          "fail_node_id": "node_dups_multiple_blocks"
+          "fail_node_id": "l1_c2_p1_node_dups_multiple_blocks"
         }
       ]
     },
@@ -114,23 +114,23 @@
       "bug_targets": [
         {
           "id": "bug_last_node_assignment",
-          "concept_node_id": "node_circ_last_next_assignment"
+          "concept_node_id": "l1_c3_p1_node_circ_last_next_assignment"
         },
         {
           "id": "bug_erroneous_return_statement",
-          "concept_node_id": "node_erroneous_return_statement"
+          "concept_node_id": "l1_c3_p1_node_erroneous_return_statement"
         },
         {
           "id": "bug_half_unlock_missing_arg",
-          "concept_node_id": "node_func_call_missing_arguments"
+          "concept_node_id": "l1_c3_p1_node_func_call_missing_arguments"
         },
         {
           "id": "bug_bptr_uses_a_index",
-          "concept_node_id": "node_wrong_variable_bptr"
+          "concept_node_id": "l1_c3_p1_node_wrong_variable_bptr"
         },
         {
           "id": "bug_main_guard_usage",
-          "concept_node_id": "node_main_guard_usage"
+          "concept_node_id": "l1_c3_p1_node_main_guard_usage"
         }
       ]
     },
@@ -153,87 +153,23 @@
     },
     "l2_c1_p1": {
       "type": "puzzle",
-      "expression": "x = a + b * c % d >> e",
-      "tests_concepts": [
-        "infix_to_postfix",
-        "operator_precedence",
-        "stack_usage"
-      ],
-      "error_patterns": [
-        "ignore_precedence_add_vs_mult",
-        "ignore_precedence_shift_vs_add",
-        "assignment_operator_wrong_place",
-        "no_stack_just_read_left_to_right"
-      ]
+      "expression": "x = a + b * c % d >> e"
     },
     "l2_c1_p2": {
       "description": "Convert the prefix expression '= y && << a b >> c + d e' into a correct infix expression.",
-      "type": "puzzle",
-      "concepts": [
-        "prefix_to_infix",
-        "operator_precedence",
-        "stack_usage",
-        "expression_grouping"
-      ],
-      "error_patterns": [
-        "l2_c1_p2_ignore_precedence_add_vs_shift",
-        "l2_c1_p2_ignore_precedence_shift_vs_and",
-        "l2_c1_p2_assignment_wrong_position",
-        "l2_c1_p2_missing_and_operator",
-        "l2_c1_p2_random_walk"
-      ]
+      "type": "puzzle"
     },
     "l2_c1_p3": {
       "description": "Convert the postfix expression 'x a b c * d % + e >> =' into a correct prefix expression.",
-      "type": "puzzle",
-      "concepts": [
-        "postfix_to_prefix",
-        "operator_precedence",
-        "stack_usage",
-        "expression_grouping",
-        "assignment_operator"
-      ],
-      "error_patterns": [
-        "l2_c1_p3_stack_not_used",
-        "l2_c1_p3_assignment_wrong_position",
-        "l2_c1_p3_wrong_grouping_add_vs_shift",
-        "l2_c1_p3_random_walk"
-      ]
+      "type": "puzzle"
     },
     "l2_c2_p1": {
       "description": "Reverse all items in the stack using only queue operations. You may only push and pop from the top of the stack, and enqueue/dequeue from the ends of the queue.",
-      "type": "puzzle",
-      "concepts": [
-        "stack_reversal",
-        "queue_usage",
-        "stack",
-        "queue",
-        "algorithmic_thinking"
-      ],
-      "error_patterns": [
-        "l2_c2_p1_never_used_queue",
-        "l2_c2_p1_rotated_before_transfer",
-        "l2_c2_p1_messed_partial_order",
-        "l2_c2_p1_wrong_operation_order",
-        "l2_c2_p1_random_walk"
-      ]
+      "type": "puzzle"
     },
     "l2_c2_p2": {
       "description": "Reorder the first k items of the queue using the stack so that those k items are restored to the correct order, while the remaining items stay in their original positions.",
-      "type": "puzzle",
-      "concepts": [
-        "queue_k_reversal",
-        "queue",
-        "stack",
-        "algorithmic_thinking"
-      ],
-      "error_patterns": [
-        "l2_c2_p2_missing_stack",
-        "l2_c2_p2_touched_tail_segment",
-        "l2_c2_p2_rotated_too_early",
-        "l2_c2_p2_wrong_operation_order",
-        "l2_c2_p2_random_walk"
-      ]
+      "type": "puzzle"
     },
     "l2_c2_p3": {
       "description": "Sort a stack in ascending order using only push/pop operations and one temporary stack.",
@@ -268,56 +204,30 @@
           "input": "7",
           "expected_output": "7",
           "fail_node_id": "l2_c2_p3_node_sortstack_single"
+        },
+
+        {
+          "id": "sortstack_tc_06_tutorial_example",
+          "input": "6,5,4,3,2,1",
+          "expected_output": "1,2,3,4,5,6",
+          "fail_node_id": "l2_c2_p3_node_sortstack_reverse_sorted"
         }
       ]
     },
     "l3_c1_p1": {
       "description": "Click the binary tree nodes in the correct In-order traversal sequence. A wrong click resets the puzzle.",
-      "type": "puzzle",
-      "concepts": [
-        "binary_tree",
-        "tree_traversal",
-        "inorder_traversal",
-        "recursion"
-      ],
-      "error_patterns": [
-        "l3_c1_p1_bt_inorder_root_first",
-        "l3_c1_p1_bt_inorder_left_not_finished",
-        "l3_c1_p1_bt_inorder_visual_guessing",
-        "l3_c1_p1_bt_inorder_general_hint"
-      ]
+      "type": "puzzle"
     },
-
     "l3_c1_p2": {
       "description": "Click the binary tree nodes in the correct Pre-order traversal sequence. A wrong click resets the puzzle.",
-      "type": "puzzle",
-      "concepts": [
-        "binary_tree",
-        "tree_traversal",
-        "preorder_traversal",
-        "recursion"
-      ],
-      "error_patterns": [
-        "l3_c1_p2_bt_preorder_not_root_first",
-        "l3_c1_p2_bt_preorder_right_before_left",
-        "l3_c1_p2_bt_preorder_visual_guessing",
-        "l3_c1_p2_bt_preorder_general_hint"
-      ]
+      "type": "puzzle"
     },
-
     "l3_c1_p3": {
-      "description": "Place the nodes in the tree using information from the previous 2 puzzles.",
-      "type": "puzzle",
-      "concepts": ["preorder_traversal", "inorder_traversal"],
-      "error_patterns": [
-        "l3_c1_p3_wrong_node_for_root",
-        "l3_c1_p3_wrong_side_of_binary_tree",
-        "l3_c1_p3_general_hint"
-      ]
+      "description": "Construct the binary tree using the given Pre-order and In-order traversal sequences.",
+      "type": "puzzle"
     },
-
     "l3_c2_p1": {
-      "description": "Find the max depth of a Binary Tree and return it.",
+      "description": "Find the maximum depth of a Binary Tree and return it.",
       "type": "code_function",
       "test_cases": [
         {
@@ -360,53 +270,38 @@
           "id": "maxdepth_tc_08_complete_three_levels",
           "input": "1,2,3,4,5,6,7-N,L,R,LL,LR,RL,RR",
           "expected_output": "2",
-          "fail_node_id": "l3_c2_p1_node_node_maxdepth_complete_tree"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_complete_tree"
         },
         {
           "id": "maxdepth_tc_09_zigzag_chain",
           "input": "1,2,3,4,5-N,L,LR,LRL,LRLR",
           "expected_output": "4",
           "fail_node_id": "l3_c2_p1_node_maxdepth_zigzag_structure"
+        },
+        {
+          "id": "maxdepth_tc_10_tutorial_example",
+          "input": "50,20,60,10,30,55,80-N,L,R,LL,LR,LRL,RR",
+          "expected_output": "3",
+          "fail_node_id": "l3_c2_p1_node_maxdepth_basic_height"
         }
       ]
     },
-
     "l3_c2_p2": {
       "type": "puzzle",
-      "description": "Perform level-order traversal (BFS) on the binary tree using a queue. Use the buttons to dequeue into cur, print cur.item, and enqueue cur's children to match the expected output.",
-      "tests_concepts": [
-        "level_order_traversal_bfs",
-        "queue_fifo",
-        "dequeue_sets_cur",
-        "enqueue_children_left_then_right",
-        "null_child_handling"
-      ],
-      "error_patterns": [
-        "print_before_dequeue_cur_is_null",
-        "enqueue_right_before_left_wrong_order",
-        "forget_enqueue_one_child",
-        "enqueue_null_child_or_no_null_check",
-        "treat_queue_like_stack_lifo",
-        "dequeue_too_many_times_skips_nodes",
-        "dequeue_when_queue_is_empty"
-      ]
+      "description": "Perform level-order traversal (Breadth-First Search) on the binary tree using a queue. Use the buttons to dequeue into cur, print cur.item, and enqueue cur's children to match the expected output."
     },
     "l3_c2_p3": {
       "type": "puzzle",
-      "description": "Search for the node with the target value by choosing left or right.",
-      "error_patterns": [
-        "choosing_a_smaller_value_than_target_value",
-        "choosing_a_larger_value_than_target_value"
-      ]
+      "description": "Search for a target value in a Binary Search Tree by deciding whether to move to the left or right child at each step."
     },
     "l4_c1_p1_q1": {
       "description": "Given L = [8,4,5] and Relics = [1,2,6,9,4,3], how many item comparisons of the form (Q.item == X) are made by subset(L, Relics)?",
       "type": "scroll_mcq",
       "correct_answer": "17",
       "option_to_concept_node": {
-        "10": "node_q1_counts_only_successful_searches",
-        "6": "node_q1_stops_after_first_found_instead_of_scan",
-        "3": "node_q1_counts_only_elements_in_L"
+        "10": "l4_c1_p1_q1_node_counts_only_successful_searches",
+        "6": "l4_c1_p1_q1_node_stops_after_first_found_instead_of_scan",
+        "3": "l4_c1_p1_q1_node_counts_only_elements_in_L"
       }
     },
     "l4_c1_p1_q2": {
@@ -414,9 +309,9 @@
       "type": "scroll_mcq",
       "correct_answer": "opt3",
       "option_to_concept_node": {
-        "opt1": "node_q2_wrong_thinks_missing_early_is_worst",
-        "opt2": "node_q2_wrong_ignores_final_failed_search_cost",
-        "opt4": "node_q2_wrong_thinks_all_present_at_end_is_worst"
+        "opt1": "l4_c1_p1_q2_node_wrong_thinks_missing_early_is_worst",
+        "opt2": "l4_c1_p1_q2_node_wrong_ignores_final_failed_search_cost",
+        "opt4": "l4_c1_p1_q2_node_wrong_thinks_all_present_at_end_is_worst"
       }
     },
     "l4_c1_p1_q3": {
@@ -424,9 +319,9 @@
       "type": "scroll_mcq",
       "correct_answer": "opt4",
       "option_to_concept_node": {
-        "opt1": "node_q3_wrong_thinks_only_R_matters",
-        "opt2": "node_q3_wrong_thinks_only_O_matters",
-        "opt3": "node_q3_wrong_add_instead_of_multiply"
+        "opt1": "l4_c1_p1_q3_node_focuses_only_on_R",
+        "opt2": "l4_c1_p1_q3_node_focuses_only_on_O",
+        "opt3": "l4_c1_p1_q3_node_adds_instead_of_multiplies"
       }
     },
     "l4_c1_p2_q1": {
@@ -434,9 +329,9 @@
       "type": "scroll_mcq",
       "correct_answer": "8",
       "option_to_concept_node": {
-        "6": "node_p2q1_wrong_counts_outer_only_or_off_by_one",
-        "12": "node_p2q1_wrong_multiplies_logs_or_assumes_full_inner_each_time",
-        "15": "node_p2q1_wrong_assumes_quadratic_or_linear_times_linear"
+        "6": "l4_c1_p2_q1_node_counts_outer_or_off_by_one",
+        "12": "l4_c1_p2_q1_node_multiplies_incorrectly",
+        "15": "l4_c1_p2_q1_node_treats_doubling_as_linear"
       }
     },
     "l4_c1_p2_q2": {
@@ -444,9 +339,9 @@
       "type": "scroll_mcq",
       "correct_answer": "opt1",
       "option_to_concept_node": {
-        "opt2": "node_p2q2_wrong_missing_plus_one",
-        "opt3": "node_p2q2_wrong_logN_base_confusion",
-        "opt4": "node_p2q2_wrong_forgets_initial_iteration"
+        "opt2": "l4_c1_p2_q2_node_missing_plus_one",
+        "opt3": "l4_c1_p2_q2_node_log_base_confusion",
+        "opt4": "l4_c1_p2_q2_node_forgets_starting_value"
       }
     },
     "l4_c1_p2_q3": {
@@ -454,19 +349,19 @@
       "type": "scroll_mcq",
       "correct_answer": "opt4",
       "option_to_concept_node": {
-        "opt1": "node_p2q3_wrong_base_confusion_log2",
-        "opt2": "node_p2q3_wrong_unspecified_log_base",
-        "opt3": "node_p2q3_wrong_missing_plus_one"
+        "opt1": "l4_c1_p2_q3_node_base_confusion_log2",
+        "opt2": "l4_c1_p2_q3_node_unspecified_log_base",
+        "opt3": "l4_c1_p2_q3_node_missing_plus_one"
       }
     },
     "l4_c1_p2_q4": {
-      "description": "For Sealer(N), find the time complexity in Big-O notation in terms of N. (Hint: inner loop has log₂(N) iterations and outer loop has log₃(N) iterations.)",
+      "description": "For Sealer(N), determine the time complexity in Big-O notation in terms of N. (Hint: the inner loop runs log₂(N) times and the outer loop runs log₃(N) times.)",
       "type": "scroll_mcq",
       "correct_answer": "opt3",
       "option_to_concept_node": {
-        "opt1": "node_p2q4_wrong_thinks_linear_N",
-        "opt2": "node_p2q4_wrong_collapses_logs_to_single_log",
-        "opt4": "node_p2q4_wrong_uses_log_of_N_squared_instead_of_product"
+        "opt1": "l4_c1_p2_q4_node_assumes_linear_growth",
+        "opt2": "l4_c1_p2_q4_node_collapses_nested_logs",
+        "opt4": "l4_c1_p2_q4_node_confuses_log_squared_identity"
       }
     },
     "l4_c1_p3_q1": {
@@ -474,9 +369,9 @@
       "type": "scroll_mcq",
       "correct_answer": "11",
       "option_to_concept_node": {
-        "7": "node_l4c1p3q1_wrong_counts_only_top_level",
-        "13": "node_l4c1p3q1_wrong_double_counts_levels",
-        "14": "node_l4c1p3q1_wrong_assumes_full_binary_without_linear_term"
+        "7": "l4_c1_p3_q1_node_counts_only_first_call",
+        "13": "l4_c1_p3_q1_node_overcounts_recursive_levels",
+        "14": "l4_c1_p3_q1_node_ignores_work_per_call"
       }
     },
     "l4_c1_p3_q2": {
@@ -484,9 +379,9 @@
       "type": "scroll_mcq",
       "correct_answer": "opt4",
       "option_to_concept_node": {
-        "opt1": "node_l4c1p3q2_wrong_single_recursive_call",
-        "opt2": "node_l4c1p3q2_wrong_fibonacci_assumption",
-        "opt3": "node_l4c1p3q2_wrong_missing_linear_term"
+        "opt1": "l4_c1_p3_q2_node_misses_second_recursive_call",
+        "opt2": "l4_c1_p3_q2_node_not_fibonacci_structure",
+        "opt3": "l4_c1_p3_q2_node_missing_linear_term"
       }
     },
     "l4_c1_p3_q3": {
@@ -494,141 +389,71 @@
       "type": "scroll_mcq",
       "correct_answer": "opt1",
       "option_to_concept_node": {
-        "opt2": "node_l4c1p3q3_wrong_thinks_quadratic",
-        "opt3": "node_l4c1p3q3_wrong_thinks_linear",
-        "opt4": "node_l4c1p3q3_wrong_thinks_factorial"
+        "opt2": "l4_c1_p3_q3_node_quadratic_misinterpretation",
+        "opt3": "l4_c1_p3_q3_node_linear_misinterpretation",
+        "opt4": "l4_c1_p3_q3_node_factorial_misinterpretation"
       }
     },
     "l4_c1_p4": {
-      "description": "Find the minimal element in a cyclically (rotated) sorted sequence in O(log n). The input may contain duplicates. m and n are the indices of the first and last elements respectively.",
+      "description": "Find the minimal element in a cyclically (rotated) sorted sequence in O(log n) time. m and n are the indices of the first and last elements respectively.",
       "type": "code_function",
       "test_cases": [
         {
           "id": "min_tc_01_sorted_no_rotation",
           "input": "1,2,3,4,5",
           "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_min_already_sorted_segment"
+          "fail_node_id": "l4_c1_p4_node_already_sorted_segment"
         },
-
         {
           "id": "min_tc_02_simple_rotation",
           "input": "4,5,1,2,3",
           "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_min_rotation_binary_search"
+          "fail_node_id": "l4_c1_p4_node_rotation_binary_search"
         },
         {
           "id": "min_tc_03_single_element",
           "input": "7",
           "expected_output": "7",
-          "fail_node_id": "l4_c1_p4_node_min_single_element"
+          "fail_node_id": "l4_c1_p4_node_single_element"
         },
         {
           "id": "min_tc_04_two_elements_rotated",
           "input": "2,1",
           "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_min_boundary_two_elements"
+          "fail_node_id": "l4_c1_p4_node_two_element_boundary"
         },
         {
-          "id": "min_tc_05_duplicates_not_rotated",
-          "input": "2,2,2,2",
-          "expected_output": "2",
-          "fail_node_id": "l4_c1_p4_node_min_duplicates_equal_values"
-        },
-        {
-          "id": "min_tc_06_duplicates_rotated_tricky",
-          "input": "4,5,2,3,4",
-          "expected_output": "2",
-          "fail_node_id": "l4_c1_p4_node_min_duplicates_break_sorted_check"
-        },
-        {
-          "id": "min_tc_07_duplicates_with_pivot",
-          "input": "3,3,3,1,2,3",
-          "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_min_duplicates_shrink_high"
-        },
-        {
-          "id": "min_tc_08_negative_values_rotated",
-          "input": "0,1,2,-3,-2,-1",
-          "expected_output": "-3",
-          "fail_node_id": "l4_c1_p4_node_min_handle_negatives"
-        },
-        {
-          "id": "min_tc_09_rotation_compare_low_failure",
+          "id": "min_tc_05_rotation_compare_boundary",
           "input": "3,4,5,1,2",
           "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_min_compare_wrong_boundary"
+          "fail_node_id": "l4_c1_p4_node_compare_wrong_boundary"
         }
       ]
     },
     "l5_c1_p1": {
       "type": "puzzle",
-      "description": "Return the books to the correct shelves so that each row’s load factor matches its target. A row’s load factor is α = n / m, where n is the total number of books placed in that row and m is the number of shelves in that row.",
-      "tests_concepts": [
-        "required_n_equals_target_times_m",
-        "row_underfilled_vs_overfilled"
-      ],
-      "error_patterns": ["general_hint", "bookreturn_row_overfilled"]
+      "description": "Return the books to the correct shelves so that each row’s load factor matches its target. Load factor is α = n / m, where n is the number of books in the row and m is the number of shelves in the row."
     },
     "l5_c1_p2_best": {
       "type": "puzzle",
-      "description": "...",
-      "concepts_taught": [
-        "hash_table_open_addressing",
-        "linear_probing",
-        "best_case_no_probing"
-      ],
-      "hint_nodes": {
-        "underfilled": "l5_c1_p2_row_underfilled",
-        "general_after_3": "l5_c1_p2_best_general_hint"
-      }
+      "description": "Arrange the books into the hash table (open addressing with linear probing) to represent the best-case scenario: no collisions and no probing."
     },
     "l5_c1_p2_worst": {
       "type": "puzzle",
-      "description": "Drag and drop books (keys) into the highlighted shelf row to create the required hash table scenario under Open Addressing + Linear Probing. Colors are randomized; only the letter (key) matters. Hover 'Evaluate' to see which row is graded. After arranging correctly, answer 1 MCQ about the average insertion cost at load factor 0.5.",
-      "concepts_taught": [
-        "hash_table_open_addressing",
-        "linear_probing",
-        "collision_vs_no_collision",
-        "worst_case_primary_clustering"
-      ],
-      "hint_nodes": {
-        "underfilled": "l5_c1_p2_row_underfilled",
-        "general_after_3": "l5_c1_p2_worst_general_hint"
-      }
+      "description": "Drag and drop books (keys) into the highlighted shelf row to create the required hash table scenario under Open Addressing + Linear Probing. Colors are randomized; only the letter (key) matters. Hover 'Evaluate' to see which row is graded. After arranging correctly, answer 1 MCQ about the average insertion cost at load factor 0.5."
     },
-
     "l5_c3_p1": {
-      "description": "Find the 4-character string that maps to 1779 in base 8.",
       "type": "puzzle",
-      "hint_sequence": [
-        "l5_c3_p1_node_hint_01_general_hint",
-        "l5_c3_p1_node_hint_02_place_values",
-        "l5_c3_p1_node_hint_03_mapping_check"
-      ]
+      "description": "Find the 4-character string that maps to 1779 in base 8."
     },
     "l5_c3_p2": {
-      "description": "Given the strings 'ABC', 'CAB', and 'BAC', compute their hash values using base r = 2^p (p=3) and h(k) = k mod (2^p - 1).",
       "type": "puzzle",
-      "hint_sequence": [
-        "l5_c3_p2_node_hint_01_letter_conversion",
-        "l5_c3_p2_node_hint_02_build_base8_number",
-        "l5_c3_p2_node_hint_03_apply_modulus",
-        "l5_c3_p2_node_hint_04_notice_permutation"
-      ]
+      "description": "Given the strings 'ABC', 'CAB', and 'BAC', compute their hash values using base r = 2^p (p=3) and h(k) = k mod (2^p - 1)."
     },
 
     "l6_c1_p1": {
-      "description": "Read the trie and input the words that exist in it by dragging and dropping the correct words onto the device.",
       "type": "puzzle",
-      "concepts": ["trie", "prefix_tree", "tree_traversal", "string_matching"],
-      "error_patterns": [
-        "l6_c1_p1_trie_prefix_only_not_word",
-        "l6_c1_p1_trie_wrong_branch_choice",
-        "l6_c1_p1_trie_missing_character_step",
-        "l6_c1_p1_trie_extra_character_step",
-        "l6_c1_p1_trie_confuse_similar_words",
-        "l6_c1_p1_trie_visual_guessing"
-      ]
+      "description": "Read the trie and input the words that exist in it by dragging and dropping the correct words onto the device."
     },
     "l6_c3_p1": {
       "description": "Given a Trie and a prefix, return all words in the Trie that start with the given prefix in alphabetical order.",
@@ -726,6 +551,814 @@
       "label": "Single Node Handling",
       "parent_id": "concept_ll_edge_cases",
       "generic_hint": null
+    },
+    "concept_ll_singly": {
+      "label": "Singly Linked List",
+      "parent_id": "concept_ll",
+      "generic_hint": "A singly linked list is a linear sequence of nodes; each node stores data and a reference (pointer) to the next node, ending with None."
+    },
+
+    "concept_ll_node_structure": {
+      "label": "Node Structure (data, next)",
+      "parent_id": "concept_ll_singly",
+      "generic_hint": "Each node stores the element (data) and a link to the next node. If you change links, do it carefully so you don't lose access to the rest of the list."
+    },
+
+    "concept_ll_head_pointer": {
+      "label": "Head Pointer",
+      "parent_id": "concept_ll_singly",
+      "generic_hint": "The head node is essential to locate the first node in the list. If the first node changes, you must update the head reference."
+    },
+
+    "concept_ll_operations": {
+      "label": "Key Operations (Traversal, Search, Insert, Delete)",
+      "parent_id": "concept_ll",
+      "generic_hint": "Most linked list operations rely on traversal: walking node-by-node using next until you find what you need (or reach None)."
+    },
+
+    "concept_ll_traversal": {
+      "label": "Traversal (walk through nodes)",
+      "parent_id": "concept_ll_operations",
+      "generic_hint": "To process a linked list, start from head and repeatedly move current = current.next until current is None."
+    },
+
+    "concept_ll_pointer_updates": {
+      "label": "Pointer Updates (Relinking)",
+      "parent_id": "concept_ll_operations",
+      "generic_hint": "When rearranging nodes, update next pointers in a safe order so you never lose the remaining chain and you don't accidentally create cycles."
+    },
+    "concept_ll_edge_case_no_change": {
+      "label": "No-Change Cases (already satisfied / all equal)",
+      "parent_id": "concept_ll_edge_cases",
+      "generic_hint": "If the operation does not require any movement (e.g., max already at head, or all values equal), the list should remain unchanged and still valid."
+    },
+    "concept_ll_duplicates_first_occurrence": {
+      "label": "Duplicates Handling (first occurrence)",
+      "parent_id": "concept_ll_edge_cases",
+      "generic_hint": "When multiple nodes share the same key value, define a consistent rule (commonly: use the first occurrence found during traversal) and keep all other nodes linked in their original relative order."
+    },
+
+    "concept_ll_delete_by_relink": {
+      "label": "Delete a Node (by relinking next pointers)",
+      "parent_id": "concept_ll_operations",
+      "generic_hint": "To remove a node in a linked list, you don't 'shift' elements—update links so the previous node points to the node after the removed one."
+    },
+
+    "concept_ll_sorted_consecutive_duplicates": {
+      "label": "Sorted List Property: Consecutive Duplicates",
+      "parent_id": "concept_ll_traversal",
+      "generic_hint": "Because the list is sorted, duplicates appear consecutively. While traversing, compare current with current.next; if equal, delete the next node (current.next = current.next.next) and check again."
+    },
+    "concept_ll_collapse_to_single_node": {
+      "label": "All Same Values → Single Node",
+      "parent_id": "concept_ll_edge_cases",
+      "generic_hint": "If all nodes contain the same value, keep the first node and delete every subsequent node by relinking next pointers until only one node remains."
+    },
+
+    "concept_ll_full_traversal_process_all_blocks": {
+      "label": "Process Entire List (Multiple Duplicate Blocks)",
+      "parent_id": "concept_ll_traversal",
+      "generic_hint": "Continue traversal until the end; after finishing one duplicate block, advance to the next distinct value and repeat until current reaches None."
+    },
+    "concept_ll_circular_link_assignment": {
+      "label": "Circular Linked List: Last Node Linking",
+      "parent_id": "concept_ll",
+      "generic_hint": "In a circular linked list, the last node's next pointer must reference the head node. Use assignment (=) to update links; comparison (==) does not change pointers."
+    },
+
+    "concept_function_return_value": {
+      "label": "Return Value (Function Output)",
+      "parent_id": null,
+      "generic_hint": "Functions must return the correct variable as specified. In linked list problems, this is often the head node after modification."
+    },
+
+    "concept_function_parameters_arguments": {
+      "label": "Function Definition vs Function Call",
+      "parent_id": null,
+      "generic_hint": "The number of arguments in a function call must match the number of parameters in its definition."
+    },
+
+    "concept_variable_usage_logic": {
+      "label": "Variable Usage and Logical Consistency",
+      "parent_id": null,
+      "generic_hint": "Ensure each variable represents what it is intended to represent. Using the wrong variable in calculations can cause subtle logical errors."
+    },
+
+    "concept_program_execution_environment": {
+      "label": "Program Structure and Execution Environment",
+      "parent_id": null,
+      "generic_hint": null
+    },
+    "concept_ll_circular": {
+      "label": "Circular Linked List",
+      "parent_id": "concept_ll",
+      "generic_hint": "A circular linked list is formed when the last node’s next pointer references the first node instead of None."
+    },
+
+    "concept_ll_circular_distance": {
+      "label": "Distance in a Circular List",
+      "parent_id": "concept_ll_circular",
+      "generic_hint": "In a circular list, traversal continues around the ring. The distance between two nodes is the number of steps taken following next pointers."
+    },
+
+    "concept_ll_circular_half_split": {
+      "label": "Equal Split of Circular List",
+      "parent_id": "concept_ll_circular",
+      "generic_hint": "To divide a circular list of n nodes into two equal rings, the cut points must be n/2 nodes apart."
+    },
+
+    "concept_ll_pointer_reassignment_circular": {
+      "label": "Pointer Reassignment in Circular List",
+      "parent_id": "concept_ll_circular",
+      "generic_hint": "Reassigning temp.next changes the structure of the ring. In circular lists, a single pointer reassignment can break or form new loops."
+    },
+
+    "concept_function_parameter_order": {
+      "label": "Function Parameter Order",
+      "parent_id": null,
+      "generic_hint": "The order of parameters in a function call determines which variable plays which role inside the function."
+    },
+
+    "concept_expr_infix_to_postfix_overview": {
+      "label": "Infix to Postfix Conversion (Overview)",
+      "parent_id": "concept_expr",
+      "generic_hint": "In postfix, an operator appears after its operands. While converting from infix, output operands immediately and manage operators using a stack."
+    },
+
+    "concept_stack_usage_in_infix_to_postfix": {
+      "label": "Stack Usage in Infix→Postfix",
+      "parent_id": "concept_expr_infix_to_postfix_overview",
+      "generic_hint": "When reading an operator, compare it with the operator on the stack top. Pop higher (or equal, depending on associativity) precedence operators before pushing the new one."
+    },
+
+    "concept_operator_precedence": {
+      "label": "Operator Precedence",
+      "parent_id": "concept_expr",
+      "generic_hint": "Higher precedence operators must be handled before lower precedence operators."
+    },
+
+    "concept_operator_precedence_table": {
+      "label": "Operator Precedence Table",
+      "parent_id": "concept_operator_precedence",
+      "generic_hint": "Precedence (high→low): *, /, %  >  +, -  >  <<, >>  >  &&  >  ="
+    },
+
+    "concept_assignment_lowest_precedence": {
+      "label": "Assignment is Lowest Precedence",
+      "parent_id": "concept_operator_precedence",
+      "generic_hint": "Treat '=' as lowest precedence: fully convert the RHS first, then apply assignment at the end in postfix."
+    },
+
+    "concept_expr_prefix_to_infix_overview": {
+      "label": "Prefix to Infix Conversion (Overview)",
+      "parent_id": "concept_expr",
+      "generic_hint": "In prefix, operators come before operands. Reconstruct the expression by identifying the outermost operator, building its left and right operands, and adding parentheses to preserve structure."
+    },
+
+    "concept_stack_usage_in_prefix_to_infix": {
+      "label": "Stack Usage in Prefix→Infix",
+      "parent_id": "concept_expr_prefix_to_infix_overview",
+      "generic_hint": "Scan tokens from right-to-left: push operands; when you see an operator, pop two expressions, wrap them as (left op right), then push back."
+    },
+
+    "concept_logical_and_grouping": {
+      "label": "Logical AND Grouping (&&)",
+      "parent_id": "concept_expression_grouping",
+      "generic_hint": "Ensure && combines two complete boolean/relational subexpressions. In this puzzle, those are the two shift expressions."
+    },
+    "concept_expr": {
+      "label": "Expression Processing",
+      "parent_id": null,
+      "generic_hint": null
+    },
+
+    "concept_expr_postfix_to_prefix_overview": {
+      "label": "Postfix to Prefix Conversion (Overview)",
+      "parent_id": "concept_expr",
+      "generic_hint": "Postfix places operators after operands. Convert using a stack: scan tokens left-to-right, push operands; on an operator, pop right then left, form a prefix fragment (op left right), then push it back."
+    },
+
+    "concept_stack_usage_in_postfix_to_prefix": {
+      "label": "Stack Usage in Postfix→Prefix",
+      "parent_id": "concept_expr_postfix_to_prefix_overview",
+      "generic_hint": "When you encounter an operator in postfix, pop two expressions: first is the right operand, second is the left operand. Combine as (op left right) and push back."
+    },
+
+    "concept_expression_grouping": {
+      "label": "Expression Grouping with Subexpressions",
+      "parent_id": "concept_expr",
+      "generic_hint": "In postfix, whenever you finish processing an operator, you have built a complete subexpression. Treat it as a single unit for later operators."
+    },
+
+    "concept_expr_grouping_postfix_structure": {
+      "label": "Grouping by Postfix Structure",
+      "parent_id": "concept_expression_grouping",
+      "generic_hint": "Identify complete chunks in postfix: a chunk is formed when an operator combines the two most recent expressions on the stack. Build inner chunks fully before applying later operators like shifts or assignment."
+    },
+
+    "concept_assignment_operator": {
+      "label": "Assignment Operator",
+      "parent_id": "concept_expr",
+      "generic_hint": "Assignment binds the final computed expression to a variable. In prefix/polish form, '=' often becomes the outermost operator."
+    },
+
+    "concept_assignment_as_outermost_operator": {
+      "label": "Assignment as Outermost Operator in Prefix",
+      "parent_id": "concept_assignment_operator",
+      "generic_hint": "In prefix, the outermost operator comes first. For 'x ... =', the final prefix should start with '= x <RHS>'. Build the entire RHS first."
+    },
+
+    "concept_stack_queue_reversal_overview": {
+      "label": "Reverse a Stack Using a Queue",
+      "parent_id": "concept_stack",
+      "generic_hint": "To reverse a stack with a queue, transfer all items from stack to queue, then transfer all items from queue back to stack. The FIFO property of the queue combined with pushing back into the stack reverses the order."
+    },
+
+    "concept_queue_usage_for_reversal": {
+      "label": "Using a Queue as Auxiliary Storage",
+      "parent_id": "concept_stack_queue_reversal_overview",
+      "generic_hint": "The queue acts as a temporary holder so items leave the stack and re-enter it in the opposite order under the allowed operations."
+    },
+
+    "concept_queue_order_preservation": {
+      "label": "Preserve Queue Order During Transfer",
+      "parent_id": "concept_queue",
+      "generic_hint": "During reversal, avoid extra rotations or reordering inside the queue. Keep enqueue/dequeue behavior consistent so the queue preserves the correct intermediate order."
+    },
+
+    "concept_full_transfer_required": {
+      "label": "Full Transfer Requirement",
+      "parent_id": "concept_stack_queue_reversal_overview",
+      "generic_hint": "A complete reversal requires moving all elements out and all elements back. Partial transfers only reverse a prefix and will not produce a fully reversed stack."
+    },
+
+    "concept_algorithmic_steps_two_phase": {
+      "label": "Two-Phase Algorithm (Transfer Out, Transfer Back)",
+      "parent_id": "concept_stack_queue_reversal_overview",
+      "generic_hint": "Phase 1 empties the stack into the queue. Phase 2 empties the queue back into the stack. Keeping phases separate prevents mixing operations that corrupts order."
+    },
+    "concept_queue": {
+      "label": "Queue",
+      "parent_id": null,
+      "generic_hint": "A queue is a First-In-First-Out (FIFO) structure. Items are added at the rear (enqueue) and removed from the front (dequeue)."
+    },
+    "concept_queue_first_k_reversal_overview": {
+      "label": "Reverse First k Items in a Queue Using a Stack",
+      "parent_id": "concept_queue",
+      "generic_hint": "To reverse the first k items while keeping the rest in order: move the first k from queue to stack, move them back to queue (reversed), then rotate the remaining n-k items to keep them behind the reversed block."
+    },
+
+    "concept_stack_usage_for_first_k": {
+      "label": "Use Stack to Reverse a Prefix",
+      "parent_id": "concept_queue_first_k_reversal_overview",
+      "generic_hint": "The stack reverses order because it is LIFO. Pushing k dequeued items and then popping them back produces the reversed prefix."
+    },
+
+    "concept_queue_segment_preservation": {
+      "label": "Preserve Tail Segment (n-k items)",
+      "parent_id": "concept_queue_first_k_reversal_overview",
+      "generic_hint": "Only the first k items should be manipulated. The remaining n-k items must stay in the same relative order and end up behind the reversed prefix."
+    },
+
+    "concept_queue_rotation_timing": {
+      "label": "Queue Rotation Timing",
+      "parent_id": "concept_queue_first_k_reversal_overview",
+      "generic_hint": "Rotation (dequeue then enqueue) is used after reversing the first k items to move the untouched tail segment behind the reversed block."
+    },
+
+    "concept_algorithmic_steps_three_stage": {
+      "label": "Three-Stage Algorithm (Extract k, Reinsert, Rotate)",
+      "parent_id": "concept_queue_first_k_reversal_overview",
+      "generic_hint": "Stage 1: extract first k into stack. Stage 2: reinsert by popping back to queue. Stage 3: rotate the remaining n-k items so the reversed k items appear at the front."
+    },
+    "concept_stack": {
+      "label": "Stack",
+      "parent_id": null,
+      "generic_hint": "A stack is LIFO. You can only access the top via push and pop."
+    },
+
+    "concept_stack_operations": {
+      "label": "Stack Operations (push/pop)",
+      "parent_id": "concept_stack",
+      "generic_hint": "push adds to the top; pop removes from the top. Under this tutorial constraint, you should not access elements by index."
+    },
+
+    "concept_stack_sort": {
+      "label": "Sorting a Stack Using Another Stack",
+      "parent_id": "concept_stack",
+      "generic_hint": "Maintain a temporary stack in sorted order. Insert each popped value into the correct position by moving obstructing elements back to the original stack."
+    },
+
+    "concept_stack_sort_with_temp_stack": {
+      "label": "Temp Stack Sorted Insertion",
+      "parent_id": "concept_stack_sort",
+      "generic_hint": "Pop one item (cur). While temp is not empty and temp.top is larger than cur, pop temp back to original. Push cur into temp. Repeat until all items processed."
+    },
+
+    "concept_stack_sort_iterative_insertion": {
+      "label": "Iterative Insertion Process",
+      "parent_id": "concept_stack_sort",
+      "generic_hint": "Sorting emerges from repeatedly inserting each item into its correct position in the temp stack, not from a single pass."
+    },
+
+    "concept_stack_sort_comparison_condition": {
+      "label": "Comparison Condition in Inner Loop",
+      "parent_id": "concept_stack_sort",
+      "generic_hint": "The inner loop condition determines when items move between stacks. A wrong condition can cause unnecessary moves or incorrect ordering."
+    },
+
+    "concept_stack_sort_duplicates_handling": {
+      "label": "Handling Duplicates in Stack Sort",
+      "parent_id": "concept_stack_sort",
+      "generic_hint": "Use a consistent rule for equality (strict > vs >=) so duplicates are kept correctly and you don't infinite-loop or misplace equal items."
+    },
+
+    "concept_stack_edge_cases": {
+      "label": "Edge Cases",
+      "parent_id": "concept_stack",
+      "generic_hint": null
+    },
+
+    "concept_stack_edge_case_single_element": {
+      "label": "Single Element (No Change)",
+      "parent_id": "concept_stack_edge_cases",
+      "generic_hint": "A single element stack is already sorted. Ensure your algorithm doesn't pop from an empty stack or lose the element during transfers."
+    },
+    "concept_bt": {
+      "label": "Binary Tree",
+      "parent_id": null,
+      "generic_hint": "A binary tree is a hierarchical structure where each node has at most two children: left and right."
+    },
+
+    "concept_bt_traversal": {
+      "label": "Tree Traversal",
+      "parent_id": "concept_bt",
+      "generic_hint": "Traversal defines the order in which nodes of a tree are visited."
+    },
+
+    "concept_bt_inorder_definition": {
+      "label": "In-order Traversal (Left → Node → Right)",
+      "parent_id": "concept_bt_traversal",
+      "generic_hint": "In in-order traversal, recursively traverse the left subtree, then visit the node, then traverse the right subtree."
+    },
+
+    "concept_bt_recursive_subtree_processing": {
+      "label": "Recursive Subtree Processing",
+      "parent_id": "concept_bt_traversal",
+      "generic_hint": "Each subtree is itself a binary tree. Apply the same traversal rule recursively to every subtree."
+    },
+
+    "concept_bt_traversal_rule_application": {
+      "label": "Systematic Traversal Rule Application",
+      "parent_id": "concept_bt_traversal",
+      "generic_hint": "Do not rely on visual intuition. Apply the traversal rule consistently at every node."
+    },
+
+    "concept_bt_traversal_strategy": {
+      "label": "Tracing Strategy for Traversal",
+      "parent_id": "concept_bt_traversal",
+      "generic_hint": "A reliable strategy for in-order is: go to the leftmost node, visit it, then move upward following Left → Node → Right."
+    },
+
+    "concept_l3_bt_preorder_traversal": {
+      "label": "Pre-order Traversal",
+      "parent_id": "concept_l3_tree_traversal",
+      "generic_hint": "Pre-order traversal visits nodes in the order: Root → Left Subtree → Right Subtree."
+    },
+
+    "concept_l3_bt_preorder_definition": {
+      "label": "Pre-order Traversal Definition",
+      "parent_id": "concept_l3_bt_preorder_traversal",
+      "generic_hint": "For every node in the tree: first visit the node (Root), then recursively traverse its Left Subtree, followed by its Right Subtree."
+    },
+
+    "concept_l3_bt_traversal_left_subtree_first": {
+      "label": "Left Subtree before Right Subtree",
+      "parent_id": "concept_l3_tree_traversal",
+      "generic_hint": "In traversal types where Left precedes Right, the entire Left Subtree must be completed before moving to the Right Subtree."
+    },
+
+    "concept_l3_bt_recursive_traversal": {
+      "label": "Recursive Tree Traversal",
+      "parent_id": "concept_l3_tree_traversal",
+      "generic_hint": "Tree traversals are naturally defined using recursion: apply the traversal rule to the current node, then recursively apply it to the left and right subtrees."
+    },
+    "concept_l3_bt_preorder_root_property": {
+      "label": "Pre-order Traversal Root Property",
+      "parent_id": "concept_l3_bt_preorder_traversal",
+      "generic_hint": "In Pre-order traversal, the first element in the sequence is always the root of the tree or subtree."
+    },
+
+    "concept_l3_bt_inorder_subtree_partition": {
+      "label": "In-order Subtree Partition Property",
+      "parent_id": "concept_l3_tree_traversal",
+      "generic_hint": "In In-order traversal, once the root is located, all elements before it form the Left Subtree and all elements after it form the Right Subtree."
+    },
+
+    "concept_l3_bt_tree_construction_from_traversals": {
+      "label": "Constructing Binary Tree from Pre-order and In-order",
+      "parent_id": "concept_l3_tree_traversal",
+      "generic_hint": "A binary tree can be constructed using Pre-order and In-order traversal sequences by identifying the root from Pre-order and partitioning the In-order sequence into left and right subtrees recursively."
+    },
+    "concept_bt_maxdepth": {
+      "label": "Maximum Depth of Binary Tree",
+      "parent_id": "concept_l3_tree_traversal",
+      "generic_hint": "Maximum depth is the length of the longest path from the root to a leaf (often measured in edges in these tutorials)."
+    },
+
+    "concept_bt_maxdepth_base_case": {
+      "label": "Base Case for maxDepth (None / Leaf)",
+      "parent_id": "concept_bt_maxdepth",
+      "generic_hint": "Define what maxDepth returns for an empty tree (None). With edge-counting depth, None is typically -1 so a leaf becomes 0."
+    },
+
+    "concept_bt_maxdepth_recursion": {
+      "label": "Recursive Definition of maxDepth",
+      "parent_id": "concept_bt_maxdepth",
+      "generic_hint": "maxDepth(node) = max(maxDepth(node.left), maxDepth(node.right)) + 1."
+    },
+
+    "concept_bt_maxdepth_take_max": {
+      "label": "Take Maximum of Subtree Depths",
+      "parent_id": "concept_bt_maxdepth",
+      "generic_hint": "Depth is determined by the deeper subtree, so choose the maximum, not the sum."
+    },
+
+    "concept_bt_maxdepth_traverse_both_sides": {
+      "label": "Traverse Both Subtrees",
+      "parent_id": "concept_bt_maxdepth",
+      "generic_hint": "To find the longest path, compute depth for both left and right subtrees at every node."
+    },
+    "concept_l3_binary_tree": {
+      "label": "Binary Tree",
+      "parent_id": null,
+      "generic_hint": "A binary tree is a hierarchical data structure where each node has at most two children: left and right."
+    },
+
+    "concept_l3_tree_traversal": {
+      "label": "Tree Traversal",
+      "parent_id": "concept_l3_binary_tree",
+      "generic_hint": "Tree traversal is the process of visiting each node in the tree according to a specific order."
+    },
+
+    "concept_l3_bt_level_order": {
+      "label": "Level-order Traversal (Breadth-First Search)",
+      "parent_id": "concept_l3_tree_traversal",
+      "generic_hint": "Level-order traversal (BFS) visits nodes level by level, from the root downward, using a queue."
+    },
+
+    "concept_queue_fifo": {
+      "label": "FIFO Property (Queue Order)",
+      "parent_id": "concept_queue",
+      "generic_hint": "FIFO means the first element enqueued is the first element dequeued. This property is why BFS visits nodes level by level."
+    },
+
+    "concept_queue_empty_handling": {
+      "label": "Empty Queue Handling",
+      "parent_id": "concept_queue",
+      "generic_hint": "Dequeue is only valid when the queue is not empty. If the queue is empty, there are no more nodes to process."
+    },
+
+    "concept_l3_bt_bfs_dequeue_sets_cur": {
+      "label": "Dequeue Sets Current Node (cur)",
+      "parent_id": "concept_l3_bt_level_order",
+      "generic_hint": "In BFS, the next node to process is obtained by dequeuing from the queue. That dequeued node becomes the current node (cur)."
+    },
+
+    "concept_l3_bt_bfs_process_node_fully": {
+      "label": "Process Node Fully Before Next Dequeue",
+      "parent_id": "concept_l3_bt_level_order",
+      "generic_hint": "For each dequeued node: (1) visit/print it, then (2) enqueue its children. Only then move on to the next dequeue."
+    },
+
+    "concept_l3_bt_bfs_process_children": {
+      "label": "Enqueue Children During BFS",
+      "parent_id": "concept_l3_bt_level_order",
+      "generic_hint": "After visiting a node in BFS, enqueue its children so they will be visited in the correct level-order later."
+    },
+
+    "concept_l3_bt_bfs_enqueue_left_then_right": {
+      "label": "Enqueue Left Child Then Right Child",
+      "parent_id": "concept_l3_bt_level_order",
+      "generic_hint": "To preserve standard left-to-right order within a level, enqueue the left child first, then the right child."
+    },
+
+    "concept_l3_bt_bfs_null_check_children": {
+      "label": "Null Check Before Enqueue",
+      "parent_id": "concept_l3_bt_level_order",
+      "generic_hint": "Only enqueue existing (non-null) child nodes. Null children should be skipped to avoid invalid dequeues."
+    },
+    "concept_l3_binary_search_tree": {
+      "label": "Binary Search Tree (BST)",
+      "parent_id": "concept_l3_binary_tree",
+      "generic_hint": "A Binary Search Tree is a binary tree in which, for every node, all keys in the left subtree are smaller than the node’s key and all keys in the right subtree are larger."
+    },
+
+    "concept_l3_bst_ordering_property": {
+      "label": "BST Ordering Property",
+      "parent_id": "concept_l3_binary_search_tree",
+      "generic_hint": "For every node in a BST: left subtree keys < node key < right subtree keys."
+    },
+
+    "concept_l3_bst_search_process": {
+      "label": "Searching in a Binary Search Tree",
+      "parent_id": "concept_l3_binary_search_tree",
+      "generic_hint": "To search in a BST, compare the target with the current node: if smaller, move to the left child; if larger, move to the right child; repeat until found or null."
+    },
+    "concept_ll_linear_search": {
+      "label": "Linear Search on Linked List",
+      "parent_id": "concept_linked_list",
+      "generic_hint": "Linear search scans nodes one by one until the target is found or the end of the list is reached."
+    },
+
+    "concept_ll_linear_search_count_comparisons": {
+      "label": "Counting Comparisons in Linear Search",
+      "parent_id": "concept_ll_linear_search",
+      "generic_hint": "In linear search, one (Q.item == X) comparison is performed for each node visited during the scan."
+    },
+
+    "concept_ll_position_of_match_affects_cost": {
+      "label": "Position of Match Affects Cost",
+      "parent_id": "concept_ll_linear_search",
+      "generic_hint": "The number of comparisons depends on the position of the matching element. If the match appears later in the list, more comparisons are performed."
+    },
+
+    "concept_ll_nested_traversal_outer_vs_inner": {
+      "label": "Nested Traversal (Outer Loop vs Inner Scan)",
+      "parent_id": "concept_ll_linear_search",
+      "generic_hint": "When a function calls another search function inside a loop, the total cost includes both the outer loop and the inner scan."
+    },
+    "concept_ll_case_analysis": {
+      "label": "Best Case vs Worst Case Analysis",
+      "parent_id": "concept_ll_linear_search",
+      "generic_hint": "Case analysis considers inputs that make an algorithm run fastest (best case) or slowest (worst case)."
+    },
+
+    "concept_ll_best_vs_worst_case_early_termination": {
+      "label": "Early Termination (Best vs Worst Case)",
+      "parent_id": "concept_ll_case_analysis",
+      "generic_hint": "If an algorithm can stop early, the best case often occurs when it terminates quickly. Worst case often requires delayed termination after much work is done."
+    },
+
+    "concept_ll_worst_case_full_scan_on_failure": {
+      "label": "Worst Case: Full Scan on Failure",
+      "parent_id": "concept_ll_case_analysis",
+      "generic_hint": "For linear search, the worst case occurs when the target is absent or appears only at the end, forcing a full scan through the list."
+    },
+
+    "concept_ll_worst_case_conditions_success_vs_failure": {
+      "label": "Worst-case Conditions (Success vs Failure Searches)",
+      "parent_id": "concept_ll_case_analysis",
+      "generic_hint": "Worst-case inputs often combine many long successful searches with an additional failed search that requires scanning the entire list."
+    },
+
+    "concept_worst_case_analysis": {
+      "label": "Worst-Case Analysis",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "Worst-case analysis considers the input that causes the maximum number of operations."
+    },
+
+    "concept_linear_search_inner_cost": {
+      "label": "Cost of Linear Search",
+      "parent_id": "concept_worst_case_analysis",
+      "generic_hint": "A linear search may require scanning all elements in the list, giving Θ(n) time in the worst case."
+    },
+
+    "concept_nested_traversal_worst_case": {
+      "label": "Nested Traversals",
+      "parent_id": "concept_worst_case_analysis",
+      "generic_hint": "When one loop is inside another, the total running time in the worst case is often multiplicative."
+    },
+
+    "concept_multiplicative_growth_nested_loops": {
+      "label": "Multiplicative Growth in Nested Loops",
+      "parent_id": "concept_nested_traversal_worst_case",
+      "generic_hint": "If an O(n) operation is performed inside a loop that runs O(m) times, the total worst-case time is O(mn)."
+    },
+    "concept_algorithm_analysis": {
+      "label": "Algorithm Analysis",
+      "parent_id": null,
+      "generic_hint": "Algorithm analysis studies how running time grows as a function of input size."
+    },
+
+    "concept_nested_loop_tracing": {
+      "label": "Tracing Nested Loops",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "To analyse nested loops, trace each loop carefully and count how many times the inner statement executes."
+    },
+
+    "concept_nested_loop_iteration_count": {
+      "label": "Counting Iterations in Nested Loops",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "When loops are nested, compute the number of iterations of each loop separately before combining them."
+    },
+
+    "concept_logarithmic_growth_doubling": {
+      "label": "Logarithmic Growth (Doubling Pattern)",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "If a variable doubles each iteration (k = 1, 2, 4, 8, ...), the loop runs in O(log N) time."
+    },
+    "concept_logarithmic_loop": {
+      "label": "Logarithmic-Time Loop",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "If a loop variable grows multiplicatively (e.g., doubles each iteration), the loop runs in logarithmic time."
+    },
+
+    "concept_logarithmic_loop_off_by_one": {
+      "label": "Off-by-One in Logarithmic Loops",
+      "parent_id": "concept_logarithmic_loop",
+      "generic_hint": "When counting iterations in a doubling loop starting at 1, the number of iterations is floor(log₂(N)) + 1."
+    },
+
+    "concept_logarithm_base_interpretation": {
+      "label": "Logarithm Base Interpretation",
+      "parent_id": "concept_logarithmic_loop",
+      "generic_hint": "When a variable doubles each iteration, the loop count corresponds to log base 2."
+    },
+
+    "concept_geometric_progression_loop_count": {
+      "label": "Geometric Progression in Loop Analysis",
+      "parent_id": "concept_logarithmic_loop",
+      "generic_hint": "A sequence like 1, 2, 4, 8, ... forms a geometric progression. Counting how many terms are ≤ N determines the number of loop iterations."
+    },
+    "concept_logarithmic_loop_growth": {
+      "label": "Logarithmic Growth in Loops",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "If a loop variable changes multiplicatively (e.g., doubles or triples each iteration), the loop runs in logarithmic time."
+    },
+
+    "concept_nested_loops_multiplicative_cost": {
+      "label": "Nested Loops – Multiplicative Cost",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "When one loop is inside another, their iteration counts multiply in the worst case."
+    },
+
+    "concept_logarithm_rules_and_change_of_base": {
+      "label": "Logarithm Rules and Change of Base",
+      "parent_id": "concept_logarithmic_loop",
+      "generic_hint": "Different logarithm bases differ only by constant factors in Big-O notation. Products of logarithms can behave like (log N)²."
+    },
+    "concept_recursion": {
+      "label": "Recursion",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "A recursive function solves a problem by calling itself on smaller inputs until reaching a base case."
+    },
+
+    "concept_recursion_tree": {
+      "label": "Recursion Tree Method",
+      "parent_id": "concept_recursion",
+      "generic_hint": "A recursion tree helps you visualise recursive calls level by level and sum the work done at each level."
+    },
+
+    "concept_recursion_tree_expansion": {
+      "label": "Expanding Recursive Calls",
+      "parent_id": "concept_recursion_tree",
+      "generic_hint": "When a function calls itself multiple times, each call repeats its own local work and spawns further recursive calls."
+    },
+
+    "concept_recursion_level_summing": {
+      "label": "Summing Work Per Level",
+      "parent_id": "concept_recursion_tree",
+      "generic_hint": "Count how many calls occur at each recursion depth, multiply by the work per call at that level, and sum across levels."
+    },
+
+    "concept_recurrence_relation": {
+      "label": "Recurrence Relation",
+      "parent_id": "concept_recursion",
+      "generic_hint": "A recurrence relation describes the running time (or operation count) in terms of smaller input sizes."
+    },
+
+    "concept_recurrence_linear_plus_recursive": {
+      "label": "Linear Work + Recursive Work",
+      "parent_id": "concept_recurrence_relation",
+      "generic_hint": "Many recurrences have the form T(N) = a·T(N−1) + f(N). You must account for both branching (the a·T term) and the extra work done in each call (the f(N) term)."
+    },
+    "concept_recurrence_counting_recursive_calls": {
+      "label": "Counting Recursive Calls in a Recurrence",
+      "parent_id": "concept_recurrence_relation",
+      "generic_hint": "When forming a recurrence, count exactly how many recursive calls are made and what input size each call uses."
+    },
+
+    "concept_match_code_to_recurrence": {
+      "label": "Matching Code Structure to a Recurrence",
+      "parent_id": "concept_recurrence_relation",
+      "generic_hint": "Build the recurrence directly from the code: identify the number of recursive calls, their argument sizes, and the extra work done in the current call."
+    },
+    "concept_recursion_tree_exponential_growth": {
+      "label": "Exponential Growth in Recursion Trees",
+      "parent_id": "concept_recursion_tree",
+      "generic_hint": "If each recursive call generates a constant number greater than 1 of smaller calls, the total number of calls can grow exponentially."
+    },
+
+    "concept_dominant_term_in_recurrence": {
+      "label": "Dominant Term in a Recurrence",
+      "parent_id": "concept_recurrence_relation",
+      "generic_hint": "When analysing a recurrence, identify which term grows fastest. That term determines the overall time complexity."
+    },
+
+    "concept_compare_growth_rates": {
+      "label": "Comparing Growth Rates",
+      "parent_id": "concept_algorithm_analysis",
+      "generic_hint": "Exponential growth (e.g., 2^N) is faster than polynomial growth (e.g., N²), but slower than factorial growth (N!)."
+    },
+    "concept_decrease_and_conquer": {
+      "label": "Decrease-and-Conquer Strategy",
+      "parent_id": "concept_algorithm_design",
+      "generic_hint": "Solve a problem by reducing it to a smaller instance of the same problem."
+    },
+
+    "concept_binary_search": {
+      "label": "Binary Search",
+      "parent_id": "concept_decrease_and_conquer",
+      "generic_hint": "Repeatedly divide a sorted sequence in half to locate a target or property."
+    },
+
+    "concept_binary_search_boundary_decision": {
+      "label": "Binary Search Boundary Decision",
+      "parent_id": "concept_binary_search",
+      "generic_hint": "The choice of comparison boundary determines which half of the array is explored."
+    },
+
+    "concept_binary_search_boundary_conditions": {
+      "label": "Binary Search Boundary Conditions",
+      "parent_id": "concept_binary_search",
+      "generic_hint": "Correctly updating low and high pointers prevents infinite loops and off-by-one errors."
+    },
+
+    "concept_binary_search_sorted_segment_check": {
+      "label": "Sorted Segment Detection",
+      "parent_id": "concept_binary_search",
+      "generic_hint": "If a segment is strictly increasing, its first element is the minimum."
+    },
+
+    "concept_binary_search_base_case": {
+      "label": "Binary Search Base Case",
+      "parent_id": "concept_binary_search",
+      "generic_hint": "When the search interval reduces to one element, that element is the answer."
+    },
+    "concept_hash_table": {
+      "label": "Hash Table",
+      "parent_id": null,
+      "generic_hint": null
+    },
+
+    "concept_ht_load_factor": {
+      "label": "Load Factor (α)",
+      "parent_id": "concept_hash_table",
+      "generic_hint": "Load factor measures how full a hash table is. It is commonly defined as α = n / m."
+    },
+
+    "concept_ht_load_factor_compute_n": {
+      "label": "Computing Required n from α",
+      "parent_id": "concept_ht_load_factor",
+      "generic_hint": "Given α and m, the required number of stored items is n = α × m."
+    },
+
+    "concept_ht_load_factor_over_under": {
+      "label": "Overfilled vs Underfilled (relative to α)",
+      "parent_id": "concept_ht_load_factor",
+      "generic_hint": "If the row has n greater than α×m it is overfilled; if n is less than α×m it is underfilled."
+    },
+    "concept_ht_linear_probing_worst_case": {
+      "label": "Worst Case (Linear Probing)",
+      "parent_id": "concept_ht_linear_probing",
+      "generic_hint": "Worst case occurs when primary clustering forms, causing long probe sequences before insertion."
+    },
+    "concept_radix_representation": {
+      "label": "Radix (Base) Representation",
+      "parent_id": "concept_hash_function_design",
+      "generic_hint": "A number can be interpreted in base b using positional notation: a·b^k + ... + d."
+    },
+    "concept_modulo_operation": {
+      "label": "Modulo Operation",
+      "parent_id": "concept_hash_function_design",
+      "generic_hint": "The modulo operation returns the remainder after division and is commonly used to map hash values into table indices."
+    },
+    "concept_trie": {
+      "label": "Trie (Prefix Tree)",
+      "parent_id": null,
+      "generic_hint": "A trie is a tree-based data structure for efficient string operations; it is also called a prefix tree."
+    },
+    "concept_trie_word_search": {
+      "label": "Search a Word in a Trie",
+      "parent_id": "concept_trie",
+      "generic_hint": "Search proceeds character-by-character by following child links. If a required child does not exist, the word is not in the trie."
+    },
+    "concept_trie_end_of_word": {
+      "label": "End-of-Word Marker (is_end_of_word)",
+      "parent_id": "concept_trie",
+      "generic_hint": "A string is a valid stored word only if its final node is marked as end-of-word (is_end_of_word = True)."
+    },
+    "concept_trie_children_iteration": {
+      "label": "Trie Children Traversal (first_child / next_sibling)",
+      "parent_id": "concept_trie",
+      "generic_hint": "If children are stored as a linked list (first_child, next_sibling), you must iterate siblings to visit every child."
+    },
+
+    "concept_trie_alphabetical_traversal": {
+      "label": "Alphabetical Output from a Trie",
+      "parent_id": "concept_trie",
+      "generic_hint": "To list words in alphabetical order, visit children in sorted character order before recursing."
     }
   },
   "runtime_rules": [
@@ -803,626 +1436,669 @@
       "hint_text": "Have you considered the case where the list contains only one node? Make sure you handle this edge case correctly.",
       "concept_id": "concept_ll_single_node_handling"
     },
-    "node_max_not_front": {
-      "hint_text": "After your function runs, the largest value in the list should be the very first node.",
-      "related_concept": "Linked Lists"
-    },
-    "node_max_already_front": {
-      "hint_text": "If the maximum value is already at the head, your function should not duplicate nodes or break the list.",
-      "related_concept": "Edge Cases"
-    },
-    "node_max_all_equal": {
-      "hint_text": "When all values are the same, there is no real 'maximum' to move. The list should look unchanged.",
-      "related_concept": "Edge Cases"
-    },
-    "node_max_multiple": {
-      "hint_text": "When there are several equal maximum values, usually only the first one is moved to the front. Make sure you don't lose or reorder the others incorrectly.",
-      "related_concept": "Pointer Manipulation"
+    "l1_c1_p2_node_max_not_front": {
+      "hint_text": "After your function runs, the largest value in the list should become the head node. Verify you are relinking nodes so the max node is first, not just swapping values incorrectly.",
+      "concept_id": "concept_ll_head_pointer_update"
     },
 
-    "node_dups_core": {
-      "hint_text": "You should remove consecutive duplicates so each value appears once. Make sure you keep skipping nodes while the next value is the same.",
-      "related_concept": "Linked Lists"
-    },
-    "node_dups_nochange": {
-      "hint_text": "If there are no duplicates in the list, your function should leave it completely unchanged.",
-      "related_concept": "Edge Cases"
-    },
-    "node_dups_all_same": {
-      "hint_text": "When all elements are equal, the final list should contain just a single node with that value.",
-      "related_concept": "Edge Cases"
-    },
-    "node_dups_multiple_blocks": {
-      "hint_text": "There can be multiple groups of duplicates. Make sure you correctly collapse every group, not just the first one.",
-      "related_concept": "Pointer Manipulation"
+    "l1_c1_p2_node_max_already_front": {
+      "hint_text": "If the maximum value is already at the head, your function should return the same list structure. Be careful not to detach the head, duplicate nodes, or accidentally create a cycle.",
+      "concept_id": "concept_ll_edge_case_no_change"
     },
 
-    "node_circ_last_next_assignment": {
-      "hint_text": "To make the list circular, you must update the last node's next pointer so it points back to the head. Using a comparison operator here will not change the list.",
-      "related_concept": "Linked Lists / Assignment vs Comparison"
+    "l1_c1_p2_node_max_all_equal": {
+      "hint_text": "When all values are the same, there is no unique maximum to move. Your output should look unchanged, and you should avoid unnecessary pointer rewiring that could break links.",
+      "concept_id": "concept_ll_edge_case_no_change"
     },
 
-    "node_erroneous_return_statement": {
-      "hint_text": "Please check all the return statements in your code. Make sure you are returning the correct variable representing the head of the list, rather than returning None or another unintended value.",
-      "related_concept": "Return Statements"
+    "l1_c1_p2_node_max_multiple": {
+      "hint_text": "If there are multiple nodes with the same maximum value, usually only the first max encountered is moved to the front. Make sure you do not lose the remaining max nodes or reorder nodes incorrectly while relinking.",
+      "concept_id": "concept_ll_duplicates_first_occurrence"
     },
 
-    "node_func_call_missing_arguments": {
-      "hint_text": "Check the definition of half_unlock. Every call to this function should pass the same number of arguments as the parameter list requires.",
-      "related_concept": "Function Calls / Parameters"
+    "l1_c2_p1_node_dups_core": {
+      "hint_text": "Because the list is sorted, duplicates appear next to each other. Traverse the list and whenever current.data == current.next.data, delete the next node by relinking current.next to current.next.next. Keep skipping until the next value is different.",
+      "concept_id": "concept_ll_sorted_consecutive_duplicates"
     },
 
-    "node_wrong_variable_bptr": {
-      "hint_text": "When finding b_ptr, use the index that was read for Bptr, not the one for Aptr. Compare how you compute a_ptr and b_ptr.",
-      "related_concept": "Variables / Logic Errors"
+    "l1_c2_p1_node_dups_nochange": {
+      "hint_text": "If there are no duplicates, your function should leave the list unchanged. Make sure you don't delete nodes when current.data != current.next.data.",
+      "concept_id": "concept_ll_edge_case_no_change"
     },
 
-    "node_main_guard_usage": {
-      "hint_text": "Think about how this code will be run in the grading environment. Do you actually need a 'if __name__ == \"__main__\"' block here, or should the judge call your functions directly?",
-      "related_concept": "Program Structure / Execution Environment"
+    "l1_c2_p1_node_dups_all_same": {
+      "hint_text": "When all values are the same, the final list should contain exactly one node. You should keep the first node and remove every following node by repeatedly relinking next pointers.",
+      "concept_id": "concept_ll_collapse_to_single_node"
+    },
+
+    "l1_c2_p1_node_dups_multiple_blocks": {
+      "hint_text": "There can be many duplicate blocks (e.g., 1s then 2s then 3s). Ensure your traversal continues through the entire list and collapses every block, not just the first one.",
+      "concept_id": "concept_ll_full_traversal_process_all_blocks"
+    },
+
+    "l1_c3_p1_node_circ_last_next_assignment": {
+      "hint_text": "To form a circular linked list, the last node’s next pointer must be assigned to head. Using '==' only compares values and does not modify the link.",
+      "concept_id": "concept_ll_circular_link_assignment"
+    },
+
+    "l1_c3_p1_node_erroneous_return_statement": {
+      "hint_text": "Check what your function returns. A linked list function should usually return the head node. Returning None or a wrong variable will break the list logic.",
+      "concept_id": "concept_function_return_value"
+    },
+
+    "l1_c3_p1_node_func_call_missing_arguments": {
+      "hint_text": "Ensure that every function call provides the correct number of arguments according to the function definition. Missing parameters will cause runtime errors.",
+      "concept_id": "concept_function_parameters_arguments"
+    },
+
+    "l1_c3_p1_node_wrong_variable_bptr": {
+      "hint_text": "Compare how a_ptr and b_ptr are computed. Make sure you are using the correct index variable when locating b_ptr.",
+      "concept_id": "concept_variable_usage_logic"
+    },
+
+    "l1_c3_p1_node_main_guard_usage": {
+      "hint_text": "Consider how the grading environment executes your code. If the judge directly imports and calls your functions, a '__main__' guard may not be necessary.",
+      "concept_id": "concept_program_execution_environment"
     },
     "l1_c4_p1_node_circle_adjacent": {
-      "hint_text": "Aptr and Bptr are too close. Look for nodes that are opposite each other on the ring, not neighbours.",
-      "related_concept": "Circular Linked Lists"
+      "hint_text": "Aptr and Bptr are too close together. In a circular list of 10 nodes, splitting equally requires selecting nodes that are 5 steps apart, not neighbours.",
+      "concept_id": "concept_ll_circular_distance"
     },
+
     "l1_c4_p1_node_circle_wrong_distance": {
-      "hint_text": "Try counting how many nodes you move when you walk from Aptr to Bptr. It should be half of the total nodes in the circle.",
-      "related_concept": "Circular Linked Lists"
+      "hint_text": "Count how many nodes you traverse from Aptr until you reach Bptr. For an equal split in a 10-node circular list, the distance must be exactly n/2 = 5 nodes.",
+      "concept_id": "concept_ll_circular_half_split"
     },
+
     "l1_c4_p1_node_circle_swapped": {
-      "hint_text": "Your distance looks right, but the roles of Aptr and Bptr might be swapped. Try switching which node is Aptr and which is Bptr.",
-      "related_concept": "Function Parameters"
+      "hint_text": "The distance between the nodes looks correct, but remember that T2Q1(s, q) modifies the link before q. The order of parameters affects which sub-circle is formed.",
+      "concept_id": "concept_function_parameter_order"
     },
+
     "l1_c4_p1_node_circle_opposite_wrong_pair": {
-      "hint_text": "You picked nodes that are opposite (5 steps apart), which is close — but not every opposite pair will work. Remember that half_unlock(s, q) reassigns the node before q. The split must happen at the correct cut points of the circle.",
-      "related_concept": "Circular Linked Lists / Pointer Rewiring"
+      "hint_text": "Not every opposite pair works. Recall that the function finds the node before q and redirects its next pointer to s. The cut must occur at the correct boundary of the circle.",
+      "concept_id": "concept_ll_pointer_reassignment_circular"
     },
+    "l2_c1_p1_general_hint": {
+      "hint_text": "Don’t read the expression left-to-right directly. Use operator precedence to decide what is evaluated first, and remember postfix outputs an operator only after its operands are ready.",
+      "concept_id": "concept_expr_infix_to_postfix_overview"
+    },
+
     "l2_c1_p1_stack_not_used": {
-      "related_concept": "stack_usage",
-      "hint_text": "If you just follow the infix order, some operators will appear too early. A stack lets you delay outputting operators until it is their turn."
+      "hint_text": "In infix-to-postfix conversion, you need a stack to temporarily hold operators. Pop operators from the stack when they should appear in the output based on precedence.",
+      "concept_id": "concept_stack_usage_in_infix_to_postfix"
     },
+
     "l2_c1_p1_ignore_precedence_add_vs_mult": {
-      "related_concept": "operator_precedence",
-      "hint_text": "Remember that *, /, and % have higher precedence than + and -. Try first converting 'a + b * c' to postfix."
+      "hint_text": "*, /, and % have higher precedence than + and -. Convert the subexpression 'b * c % d' first before combining it with 'a + ...'.",
+      "concept_id": "concept_operator_precedence_table"
     },
+
     "l2_c1_p1_assignment_wrong_position": {
-      "related_concept": "infix_to_postfix",
-      "hint_text": "In postfix, the assignment operator '=' is treated like an operator with the lowest precedence. First convert a + b * c % d >> e completely into postfix form. Only after the entire right-hand side is formed should '=' appear."
+      "hint_text": "The assignment operator '=' has the lowest precedence. First convert the entire right-hand side into postfix form, then place '=' only after the full RHS is formed.",
+      "concept_id": "concept_assignment_lowest_precedence"
     },
-    "l2_c1_p1_random_walk": {
-      "related_concept": "general",
-      "hint_text": "Think about which part of the expression is evaluated first. In postfix, each operation appears after its two operands. Identify the smallest high-precedence subexpression first."
+
+    "l2_c1_p2_general_hint": {
+      "hint_text": "Break the prefix into chunks by the outermost operators: '=' is the outermost, then '&&' combines two big parts. Convert the left part (a << b) and the right part (c >> (d + e)) first, then join with &&, and finally attach to y with '='.",
+      "concept_id": "concept_expr_prefix_to_infix_overview"
     },
 
     "l2_c1_p2_ignore_precedence_add_vs_shift": {
-      "related_concept": "operator_precedence",
-      "hint_text": "Remember that + has higher precedence than << and >>. The sum d + e should be formed first, then used in the right-shift with c."
+      "hint_text": "Remember that + has higher precedence than << and >>. Form (d + e) first, then use it as the right operand of the shift: c >> (d + e).",
+      "concept_id": "concept_operator_precedence_table"
     },
+
     "l2_c1_p2_ignore_precedence_shift_vs_and": {
-      "related_concept": "operator_precedence",
-      "hint_text": "Shifts (<<, >>) have higher precedence than logical &&. Treat a << b and c >> (d + e) as two complete pieces before applying && between them."
+      "hint_text": "Shifts (<<, >>) have higher precedence than logical &&. Treat (a << b) and (c >> (d + e)) as two complete subexpressions before applying && between them.",
+      "concept_id": "concept_operator_precedence_table"
     },
+
     "l2_c1_p2_assignment_wrong_position": {
-      "related_concept": "prefix_structure",
-      "hint_text": "In prefix, '=' is the outermost operator here. That means it combines y with the entire expression that follows. First reconstruct the full right-hand side before attaching it to y."
+      "hint_text": "In this prefix expression, '=' is the outermost operator. That means y is assigned the value of the entire expression after it. Build the full RHS first, then place '=' with y on the left.",
+      "concept_id": "concept_assignment_lowest_precedence"
     },
+
     "l2_c1_p2_missing_and_operator": {
-      "related_concept": "logical_and",
-      "hint_text": "Your path never uses &&. The final expression should combine the left shift and the right shift with a logical AND in between."
+      "hint_text": "Your infix expression must include a logical AND. The final RHS should combine the left shift and the right shift with '&&' between them: (a << b) && (c >> (d + e)).",
+      "concept_id": "concept_logical_and_grouping"
     },
-    "l2_c1_p2_random_walk": {
-      "related_concept": "general",
-      "hint_text": "Try to see the expression as two big parts: a << b and c >> (d + e). Convert each part carefully, then join them with && and finally '='."
+
+    "l2_c1_p3_general_hint": {
+      "hint_text": "Use the standard postfix→prefix stack procedure: scan left-to-right, push operands; when you see an operator, pop the right operand then the left operand, build a new prefix fragment (op left right), and push it back. The final stack item is the full prefix expression.",
+      "concept_id": "concept_expr_postfix_to_prefix_overview"
     },
 
     "l2_c1_p3_stack_not_used": {
-      "related_concept": "stack_usage",
-      "hint_text": "If you simply read the postfix expression left-to-right or just reverse it, operators will attach to the wrong operands. For postfix to prefix, use a stack: scan symbols, push operands, and when you see an operator, pop the right number of operands and build a sub-expression."
+      "hint_text": "If you just reverse or read postfix directly, operators will attach to the wrong operands. For postfix→prefix, use a stack: push operands; on an operator, pop two expressions (right first, then left), combine into '(op left right)', and push back.",
+      "concept_id": "concept_stack_usage_in_postfix_to_prefix"
     },
 
     "l2_c1_p3_assignment_wrong_position": {
-      "related_concept": "assignment_operator",
-      "hint_text": "In prefix form, the assignment operator '=' should appear at the very beginning. Its two operands are the variable on the left (x) and the entire right-hand expression built from the rest of the symbols."
+      "hint_text": "In prefix form, '=' is the outermost operator, so it should appear at the very beginning. Its operands are the variable x and the entire right-hand expression built from the remaining tokens.",
+      "concept_id": "concept_assignment_as_outermost_operator"
     },
 
     "l2_c1_p3_wrong_grouping_add_vs_shift": {
-      "related_concept": "expression_grouping",
-      "hint_text": "Treat 'a b c * d % +' as one big sub-expression before combining it with e using '>>'. In prefix, that inner part becomes '+ a % * b c d', which is then shifted with e and finally assigned to x."
+      "hint_text": "Make sure you group the RHS correctly before applying '>>'. In postfix, 'a b c * d % +' forms one complete subexpression, then it combines with e using '>>'. Build that inner subexpression on the stack first, then apply the shift, then finally '=' with x.",
+      "concept_id": "concept_expr_grouping_postfix_structure"
     },
 
-    "l2_c1_p3_random_walk": {
-      "related_concept": "general",
-      "hint_text": "Try simulating the postfix-to-prefix algorithm step by step on paper: start with an empty stack, scan each symbol from left to right, push operands, and when you see an operator, pop operands, build a small prefix fragment, and push it back."
+    "l2_c2_p1_general_hint": {
+      "hint_text": "Think in two phases: move everything out of the stack into the queue, then move everything back from the queue into the stack. Use only pop/push for the stack and enqueue/dequeue for the queue.",
+      "concept_id": "concept_stack_queue_reversal_overview"
     },
 
     "l2_c2_p1_never_used_queue": {
-      "related_concept": "queue_usage",
-      "hint_text": "A stack alone cannot reverse itself. You must transfer items into the queue to reverse their order, then move them back into the stack."
+      "hint_text": "A stack alone cannot reverse itself under these operation constraints. You must transfer items into the queue (enqueue) and then move them back into the stack (push) to reverse the order.",
+      "concept_id": "concept_queue_usage_for_reversal"
     },
+
     "l2_c2_p1_rotated_before_transfer": {
-      "related_concept": "queue_rotation",
-      "hint_text": "Before rotating the queue, make sure all stack items have been moved into the queue. Rotating too early will scramble the intended reversed order."
+      "hint_text": "Don’t rotate or rearrange the queue midway. First move all stack items into the queue. Only after the transfer is complete should you start moving items back to the stack.",
+      "concept_id": "concept_queue_order_preservation"
     },
+
     "l2_c2_p1_messed_partial_order": {
-      "related_concept": "stack_reversal",
-      "hint_text": "To reverse the entire stack, all items must be removed from the stack, enqueued in order, and then dequeued back into the stack. A partial reversal will not work."
+      "hint_text": "To reverse the entire stack, you must remove every item from the stack and enqueue it, then dequeue every item and push it back. If you leave some items behind or stop early, the final order will not be fully reversed.",
+      "concept_id": "concept_full_transfer_required"
     },
+
     "l2_c2_p1_wrong_operation_order": {
-      "related_concept": "algorithm_steps",
-      "hint_text": "Try following this structure: 1) Pop every item from the stack and enqueue it. 2) Dequeue items back into the stack. This sequence fully reverses the stack."
+      "hint_text": "Use this exact structure: (1) while stack not empty: pop and enqueue. (2) while queue not empty: dequeue and push. Swapping the phases or mixing operations will break the reversal.",
+      "concept_id": "concept_algorithmic_steps_two_phase"
+    },
+
+    "l2_c2_p2_general_hint": {
+      "hint_text": "Treat the queue as two segments: the first k items (which you will manipulate) and the remaining n-k items (which must stay in the same relative order). Use a stack only on the first k items, then rotate the queue to restore the front segment position.",
+      "concept_id": "concept_queue_first_k_reversal_overview"
     },
 
     "l2_c2_p2_missing_stack": {
-      "related_concept": "stack_usage",
-      "hint_text": "A queue alone cannot reverse the first k logs. Try moving the first k logs into the stack and then back to the queue so that their order is flipped."
+      "hint_text": "A queue alone cannot reverse the first k items under the allowed operations. Dequeue the first k items into a stack (push), then pop them back into the queue to reverse their order.",
+      "concept_id": "concept_stack_usage_for_first_k"
     },
 
     "l2_c2_p2_touched_tail_segment": {
-      "related_concept": "queue_segments",
-      "hint_text": "Only the first k logs should be rearranged. If you dequeue or move too many logs, you will disturb the items that are supposed to stay in their original positions."
+      "hint_text": "Only the first k items should be moved into the stack. If you dequeue more than k, you will disturb the remaining n-k items that must stay in their original order.",
+      "concept_id": "concept_queue_segment_preservation"
     },
 
     "l2_c2_p2_rotated_too_early": {
-      "related_concept": "queue_rotation",
-      "hint_text": "Rotating the queue (moving head items to the tail) is useful only after the first k logs have been reversed. If you rotate too early, both the front and back segments become scrambled."
+      "hint_text": "Queue rotation (moving front items to the back) should happen only after you have reversed the first k items and enqueued them back. Rotating too early scrambles which items belong to the first-k segment.",
+      "concept_id": "concept_queue_rotation_timing"
     },
 
     "l2_c2_p2_wrong_operation_order": {
-      "related_concept": "algorithm_steps",
-      "hint_text": "Think in stages: first move the first k logs from the queue into the stack, then pop them back into the queue, and only after that rotate the queue so the reversed segment moves to the front."
+      "hint_text": "Use these stages: (1) dequeue first k items, push into stack; (2) pop all k items back into queue; (3) rotate the remaining n-k items by dequeue+enqueue so the reversed k items return to the front.",
+      "concept_id": "concept_algorithmic_steps_three_stage"
     },
 
     "l2_c2_p3_node_sortstack_core": {
-      "hint_text": "Use one temporary stack. Pop from the original stack and insert into the temp stack in sorted position by moving larger items back to the original stack, then push them back.",
-      "related_concept": "Stacks"
+      "hint_text": "Use exactly one temporary stack. Repeatedly pop from the original stack, and insert that value into the temp stack in sorted position by moving larger items back to the original stack first. Then push the value into temp and move the displaced items back.",
+      "concept_id": "concept_stack_sort_with_temp_stack"
     },
+
     "l2_c2_p3_node_sortstack_already_sorted": {
-      "hint_text": "If the stack is already in ascending order, your algorithm should not disturb it. Double-check your comparison condition inside the while-loop.",
-      "related_concept": "Correctness"
+      "hint_text": "If the stack is already ascending, your algorithm should effectively do minimal movement. Double-check your comparison inside the inner loop so you don't move items back and forth unnecessarily.",
+      "concept_id": "concept_stack_sort_comparison_condition"
     },
+
     "l2_c2_p3_node_sortstack_reverse_sorted": {
-      "hint_text": "A reverse-sorted stack forces the most moves. Make sure you repeatedly move items between the two stacks until the temp stack remains sorted after each insertion.",
-      "related_concept": "Algorithmic Thinking"
+      "hint_text": "A reverse-sorted stack is the worst case: you must repeatedly move multiple items between the two stacks to maintain sorted order in the temp stack after each insertion.",
+      "concept_id": "concept_stack_sort_iterative_insertion"
     },
+
     "l2_c2_p3_node_sortstack_duplicates": {
-      "hint_text": "Handle equal values carefully. Decide whether your inner loop should move values only when tempTop > current (strict) or >= current (non-strict) so duplicates end up correct.",
-      "related_concept": "Edge Cases"
+      "hint_text": "Handle equal values carefully. Decide whether to move items only when tempTop > current (strict) or tempTop >= current (non-strict). This choice affects where duplicates end up.",
+      "concept_id": "concept_stack_sort_duplicates_handling"
     },
+
     "l2_c2_p3_node_sortstack_single": {
-      "hint_text": "With one element, no operations are needed. If this fails, your function may be popping/pushing incorrectly when the stack becomes empty.",
-      "related_concept": "Edge Cases"
+      "hint_text": "With one element, sorting should be a no-op. If this fails, your push/pop logic may be incorrect when the stack becomes empty or when transferring back at the end.",
+      "concept_id": "concept_stack_edge_case_single_element"
     },
-
     "l3_c1_p1_bt_inorder_root_first": {
-      "hint_text": "In-order traversal does not start by clicking the root. You must finish the entire left subtree first, then visit the node, then the right subtree (Left -> Node -> Right).",
-      "related_concept": "Traversal Types"
+      "hint_text": "In in-order traversal, you do NOT visit the root first. Always fully traverse the left subtree before visiting the node itself.",
+      "concept_id": "concept_bt_inorder_definition"
     },
+
     "l3_c1_p1_bt_inorder_left_not_finished": {
-      "hint_text": "You clicked a node before completing everything in its left subtree. In-order is recursive: completely traverse the left subtree before clicking the parent node.",
-      "related_concept": "Recursion / Subtrees"
+      "hint_text": "You clicked a node before completing everything in its left subtree. In-order traversal is recursive: fully finish the left subtree before visiting the parent node.",
+      "concept_id": "concept_bt_recursive_subtree_processing"
     },
+
     "l3_c1_p1_bt_inorder_visual_guessing": {
-      "hint_text": "Traversal order depends on the tree structure: left subtree first, then node, then right subtree.",
-      "related_concept": "In-order traversal"
+      "hint_text": "Traversal order is determined by structure, not by visual appearance. For every node, apply Left → Node → Right systematically.",
+      "concept_id": "concept_bt_traversal_rule_application"
     },
+
     "l3_c1_p1_bt_inorder_general_hint": {
-      "hint_text": "Try a consistent method: start from the leftmost node, then work upward applying Left -> Node -> Right at every subtree. Don't guess, instead, trace the next node logically.",
-      "related_concept": "Tracing / Strategy"
+      "hint_text": "Start from the leftmost node in the tree. Then move upward, applying Left → Node → Right at every subtree. Think recursively instead of guessing.",
+      "concept_id": "concept_bt_traversal_strategy"
     },
-
     "l3_c1_p2_bt_preorder_not_root_first": {
-      "hint_text": "Pre-order traversal always starts at the root node. The rule is Root Node -> Left -> Right, so the root must be clicked first.",
-      "related_concept": "Traversal Types"
-    },
-    "l3_c1_p2_bt_preorder_right_before_left": {
-      "hint_text": "You moved to the right subtree too early. Pre-order traversal always explores the left subtree before the right subtree.",
-      "related_concept": "Left vs Right Subtrees"
-    },
-    "l3_c1_p2_bt_preorder_visual_guessing": {
-      "hint_text": "Don't rely on visual layout. Pre-order traversal depends on tree structure, follow this sequence: Root Node -> Left -> Right.",
-      "related_concept": "Abstract Data Structures"
-    },
-    "l3_c1_p2_bt_preorder_general_hint": {
-      "hint_text": "Use a systematic approach: start at the root, then repeatedly apply Root Node -> Left -> Right at every subtree. Avoid guessing.",
-      "related_concept": "Tracing / Strategy"
+      "hint_text": "Pre-order traversal visits the Root first. According to the traversal definition, the order is Root → Left Subtree → Right Subtree. The root must be selected before any child nodes.",
+      "concept_id": "concept_l3_bt_preorder_traversal"
     },
 
+    "l3_c1_p2_bt_preorder_right_before_left": {
+      "hint_text": "In Pre-order traversal, after visiting the Root, you must completely traverse the Left Subtree before moving to the Right Subtree.",
+      "concept_id": "concept_l3_bt_traversal_left_subtree_first"
+    },
+
+    "l3_c1_p2_bt_preorder_visual_guessing": {
+      "hint_text": "Traversal depends on the tree structure, not the visual layout. Apply the Pre-order rule (Root → Left → Right) recursively at every subtree.",
+      "concept_id": "concept_l3_bt_recursive_traversal"
+    },
+
+    "l3_c1_p2_bt_preorder_general_hint": {
+      "hint_text": "Apply the traversal rule systematically: visit the Root node, then recursively traverse the Left Subtree, and finally recursively traverse the Right Subtree.",
+      "concept_id": "concept_l3_bt_preorder_definition"
+    },
     "l3_c1_p3_wrong_node_for_root": {
-      "hint_text": "Please check the root node again. The Pre-order traversal always starts with the root node.",
-      "related_concept": "Pre-order traversal"
+      "hint_text": "In Pre-order traversal, the first element is always the Root of the tree. Recheck the first element of the Pre-order sequence.",
+      "concept_id": "concept_l3_bt_preorder_root_property"
     },
+
     "l3_c1_p3_wrong_side_of_binary_tree": {
-      "hint_text": "Are you sure that node is on the right side of the tree? Check the traversal order again!",
-      "related_concept": "Tracing"
+      "hint_text": "After identifying the Root, locate it in the In-order sequence. All elements to the left of the Root belong to the Left Subtree, and all elements to the right belong to the Right Subtree.",
+      "concept_id": "concept_l3_bt_inorder_subtree_partition"
     },
+
     "l3_c1_p3_general_hint": {
-      "hint_text": "Please ensure that all nodes have been placed in the tree.",
-      "related_concept": "Reminder"
+      "hint_text": "Step 1: Take the first element of the Pre-order sequence as the Root. Step 2: Split the In-order sequence into Left and Right Subtrees. Step 3: Recursively repeat this process for each subtree.",
+      "concept_id": "concept_l3_bt_tree_construction_from_traversals"
     },
 
     "l3_c2_p1_node_maxdepth_single_node": {
-      "hint_text": "Depth counts edges. A leaf node has depth 0 from itself (and a single-node tree also has depth 0). Check your base case for leaf/None.",
-      "related_concept": "Edge-Based Depth Definition"
-    },
-    "l3_c2_p1_node_maxdepth_basic_height": {
-      "hint_text": "You correctly compute the depth of the left and right subtrees. However, does your return statement include the current edge level (i.e., are you adding 1 after taking the maximum)?",
-      "related_concept": "Recursive Depth Accumulation"
-    },
-    "l3_c2_p1_node_maxdepth_skewed_left": {
-      "hint_text": "Consider a tree where all nodes are connected through left children only. Does your solution explore the left subtree when computing depth?",
-      "related_concept": "Recursive Exploration of Left Subtree"
-    },
-    "l3_c2_p1_node_maxdepth_skewed_right": {
-      "hint_text": "Consider a tree where all nodes are connected through right children only. Does your solution explore the right subtree when computing depth?",
-      "related_concept": "Recursive Exploration of Right Subtree"
-    },
-    "l3_c2_p1_node_maxdepth_unbalanced_tree": {
-      "hint_text": "In an unbalanced tree, one subtree may be deeper than the other. Are you correctly selecting the maximum depth between the left and right subtrees?",
-      "related_concept": "Choosing Maximum Subtree Depth"
-    },
-    "l3_c2_p1_node_maxdepth_null_children_handling": {
-      "hint_text": "Think about what your function should return when a child node is None? Ensure your base case correctly handles missing (null) children so depth is computed accurately.",
-      "related_concept": "Base Case for Null Nodes"
-    },
-    "l3_c2_p1_node_node_maxdepth_complete_tree": {
-      "hint_text": "In a complete tree with multiple levels, depth should reflect the longest root-to-leaf path. Does your recursive logic continue exploring until it reaches the deepest level?",
-      "related_concept": "Full Recursive Traversal"
-    },
-    "l3_c2_p1_node_maxdepth_zigzag_structure": {
-      "hint_text": "The longest path in a tree may alternate between left and right children. Does your solution correctly consider both subtrees at every node?",
-      "related_concept": "Recursive Traversal of Both Subtrees"
+      "hint_text": "A single-node tree has maximum depth 0 (counting edges). Make sure your base case handles an empty child correctly and your recursion returns 0 for a leaf.",
+      "concept_id": "concept_bt_maxdepth_base_case"
     },
 
-    "node_maxdepth_ignore_node_values": {
-      "hint_text": "You are close! Check your code again!",
-      "related_concept": "Wrong logic"
+    "l3_c2_p1_node_maxdepth_basic_height": {
+      "hint_text": "Maximum depth is computed recursively: max(depth(left), depth(right)) + 1. Check whether you add 1 after taking the maximum of the two subtree depths.",
+      "concept_id": "concept_bt_maxdepth_recursion"
+    },
+
+    "l3_c2_p1_node_maxdepth_skewed_left": {
+      "hint_text": "For a left-skewed tree, the maximum depth is entirely in the left subtree. Ensure your recursion explores the left child correctly until it reaches None.",
+      "concept_id": "concept_bt_maxdepth_traverse_both_sides"
+    },
+
+    "l3_c2_p1_node_maxdepth_skewed_right": {
+      "hint_text": "For a right-skewed tree, the maximum depth is entirely in the right subtree. Ensure your recursion explores the right child correctly until it reaches None.",
+      "concept_id": "concept_bt_maxdepth_traverse_both_sides"
+    },
+
+    "l3_c2_p1_node_maxdepth_unbalanced_tree": {
+      "hint_text": "In an unbalanced tree, one subtree can be deeper. You must take the maximum of the left and right subtree depths (not sum them).",
+      "concept_id": "concept_bt_maxdepth_take_max"
+    },
+
+    "l3_c2_p1_node_maxdepth_null_children_handling": {
+      "hint_text": "If a child is None, its depth should be treated as -1 (if you count edges) so that a leaf ends up as 0 after +1. Check your base case for None carefully.",
+      "concept_id": "concept_bt_maxdepth_base_case"
+    },
+
+    "l3_c2_p1_node_maxdepth_complete_tree": {
+      "hint_text": "In a multi-level tree, the recursion must continue until it reaches the deepest leaf. Make sure you compute both subtrees at every node and take the maximum.",
+      "concept_id": "concept_bt_maxdepth_traverse_both_sides"
+    },
+
+    "l3_c2_p1_node_maxdepth_zigzag_structure": {
+      "hint_text": "The longest root-to-leaf path may alternate left and right. Your function must evaluate both subtrees at each node and keep the maximum depth found.",
+      "concept_id": "concept_bt_maxdepth_traverse_both_sides"
     },
 
     "l3_c2_p2_print_before_dequeue_cur_is_null": {
-      "related_concept": "dequeue_sets_cur",
-      "hint_text": "Cur is still null. You need to dequeue a node from the queue before you can print cur.item."
+      "hint_text": "cur is still null. In level-order traversal, you must Dequeue a node into cur before you can Print cur.item.",
+      "concept_id": "concept_l3_bt_bfs_dequeue_sets_cur"
     },
+
     "l3_c2_p2_enqueue_right_before_left_wrong_order": {
-      "related_concept": "enqueue_children_left_then_right",
-      "hint_text": "In level-order traversal, enqueue the left child before the right child to preserve the correct order within each level."
+      "hint_text": "Within the same level, the standard level-order traversal enqueues the left child before the right child. Enqueue cur.left first, then cur.right.",
+      "concept_id": "concept_l3_bt_bfs_enqueue_left_then_right"
     },
+
     "l3_c2_p2_forget_enqueue_one_child": {
-      "related_concept": "level_order_traversal_bfs",
-      "hint_text": "If a node has two children, both usually need to be enqueued. Skipping one child will cause missing values in the output."
+      "hint_text": "If cur has two children, both should be enqueued (as long as they exist). Missing one child causes missing nodes in later output.",
+      "concept_id": "concept_l3_bt_bfs_process_children"
     },
+
     "l3_c2_p2_enqueue_null_child_or_no_null_check": {
-      "related_concept": "null_child_handling",
-      "hint_text": "Only enqueue children that exist. Enqueuing null nodes leads to invalid steps later when dequeuing."
+      "hint_text": "Only enqueue children that exist (non-null). If you enqueue null, you'll get invalid steps later when you dequeue.",
+      "concept_id": "concept_l3_bt_bfs_null_check_children"
     },
+
     "l3_c2_p2_treat_queue_like_stack_lifo": {
-      "related_concept": "queue_fifo",
-      "hint_text": "A queue is FIFO, not LIFO. The first node enqueued should be the first node dequeued—don’t treat it like a stack."
+      "hint_text": "A queue is FIFO (First-In-First-Out), not LIFO. The first node enqueued must be the first node dequeued—don’t treat it like a stack.",
+      "concept_id": "concept_queue_fifo"
     },
+
     "l3_c2_p2_dequeue_too_many_times_skips_nodes": {
-      "related_concept": "level_order_traversal_bfs",
-      "hint_text": "After dequeuing a node, you should process it fully (print it and enqueue its children) before dequeuing again."
+      "hint_text": "After you Dequeue into cur, you should complete the node’s processing (Print cur.item, then enqueue its children) before dequeuing again.",
+      "concept_id": "concept_l3_bt_bfs_process_node_fully"
     },
+
     "l3_c2_p2_dequeue_when_queue_is_empty": {
-      "related_concept": "empty_queue",
-      "hint_text": "Your enqueue is empty, there is nothing to dequeue!"
+      "hint_text": "The queue is empty—there is nothing to dequeue. You need to enqueue nodes first (or you already finished processing all reachable nodes).",
+      "concept_id": "concept_queue_empty_handling"
     },
+
     "l3_c2_p3_choosing_a_smaller_value_than_target_value": {
-      "related_concept": "Arrangement of nodes in Binary Search Tree",
-      "hint_text": "In a Binary Search Tree, the left child has a value smaller than the parents value."
+      "hint_text": "In a Binary Search Tree (BST), all keys in the left subtree are smaller than the node’s key. If the target value is smaller than the current node’s value, you should move to the left child.",
+      "concept_id": "concept_l3_bst_ordering_property"
     },
+
     "l3_c2_p3_choosing_a_larger_value_than_target_value": {
-      "related_concept": "Arrangement of nodes in Binary Search Tree",
-      "hint_text": "In a Binary Search Tree, the right child has a value larger than the parent value."
+      "hint_text": "In a Binary Search Tree (BST), all keys in the right subtree are larger than the node’s key. If the target value is larger than the current node’s value, you should move to the right child.",
+      "concept_id": "concept_l3_bst_ordering_property"
     },
-    "l4_c1_p4_node_min_already_sorted_segment": {
-      "hint_text": "If the current search range is already in increasing order, the first element of that range is the minimum. But be careful: with duplicates, equality at the ends can be misleading.",
-      "related_concept": "Binary Search"
-    },
-
-    "l4_c1_p4_node_min_compare_wrong_boundary": {
-      "hint_text": "Comparing array[mid] with the left boundary does not always correctly determine which half contains the minimum. Consider comparing with the right boundary instead.",
-      "related_concept": "Binary Search Boundary Conditions"
-    },
-    "l4_c1_p4_node_min_rotation_binary_search": {
-      "hint_text": "Use binary search by comparing the middle element with the rightmost element to decide which half contains the minimum.",
-      "related_concept": "Divide and Conquer"
-    },
-    "l4_c1_p4_node_min_single_element": {
-      "hint_text": "If there is only one element in the range, that element must be the minimum.",
-      "related_concept": "Edge Cases"
-    },
-    "l4_c1_p4_node_min_boundary_two_elements": {
-      "hint_text": "For two elements, make sure your logic still returns the smaller one even if the array is rotated (e.g., [2,1]).",
-      "related_concept": "Boundary Conditions"
-    },
-    "l4_c1_p4_node_min_duplicates_equal_values": {
-      "hint_text": "When many values are identical, comparisons may not tell you which side to search. Your method should still return the correct minimum.",
-      "related_concept": "Edge Cases"
-    },
-    "l4_c1_p4_node_min_duplicates_break_sorted_check": {
-      "hint_text": "If the first and last elements are equal, the segment might NOT be fully sorted (e.g., [4,5,2,3,4]). Avoid using a simple 'already sorted' shortcut in this case.",
-      "related_concept": "Duplicates in Binary Search"
-    },
-    "l4_c1_p4_node_min_duplicates_shrink_high": {
-      "hint_text": "When array[mid] equals array[high], you can't decide which half is correct—shrink the search range safely (e.g., decrease high by 1) and continue.",
-      "related_concept": "Duplicates in Binary Search"
-    },
-    "l4_c1_p4_node_min_handle_negatives": {
-      "hint_text": "The same rotated-array logic works with negative numbers too. Don't assume values are non-negative—only rely on comparisons.",
-      "related_concept": "Comparison-Based Algorithms"
+    "l4_c1_p1_q1_node_counts_only_successful_searches": {
+      "hint_text": "You are undercounting. Even when an element is found, element(X, Q) still performs comparisons against each earlier node visited. Count every (Q.item == X) comparison until the match is found (or Q becomes None).",
+      "concept_id": "concept_ll_linear_search_count_comparisons"
     },
 
-    "node_q1_counts_only_successful_searches": {
-      "hint_text": "You are undercounting: even when an element is found, element(X, Q) still compares against each earlier node it visited. Count every (Q.item == X) comparison along the path until the match is found (or Q becomes None).",
-      "related_concept": "Linked Lists / Counting Comparisons in Linear Search"
+    "l4_c1_p1_q1_node_stops_after_first_found_instead_of_scan": {
+      "hint_text": "You assumed each element() call needs only 1 comparison when the value exists. However, element() may scan several nodes before reaching the match. Check the position of 4 in Relics—it is not at the beginning.",
+      "concept_id": "concept_ll_position_of_match_affects_cost"
     },
 
-    "node_q1_stops_after_first_found_instead_of_scan": {
-      "hint_text": "You seem to assume each element() call only needs 1 comparison when it eventually finds the value. But element() may compare against many Relics nodes before it reaches the matching node. Trace where 4 appears in Relics (it’s not at the start).",
-      "related_concept": "Tracing Execution / Position of Match in a Linked List"
+    "l4_c1_p1_q1_node_counts_only_elements_in_L": {
+      "hint_text": "You counted only the outer loop over L. The real work happens inside element(X, Relics), which scans Relics and performs one (Q.item == X) comparison per node visited.",
+      "concept_id": "concept_ll_nested_traversal_outer_vs_inner"
+    },
+    "l4_c1_p1_q2_node_wrong_thinks_missing_early_is_worst": {
+      "hint_text": "If the first element of L is not in R, subset() stops immediately after one element() call. That is usually fast, not worst-case. Worst-case happens when you spend a long time searching before you can stop.",
+      "concept_id": "concept_ll_best_vs_worst_case_early_termination"
     },
 
-    "node_q1_counts_only_elements_in_L": {
-      "hint_text": "You counted only the number of items in L (or only the outer loop). But the real work happens inside element(X, Relics), which scans through Relics and performs one (Q.item == X) comparison per node visited.",
-      "related_concept": "Nested Traversal / Outer Loop vs Inner Scan"
-    },
-    "node_q2_wrong_thinks_missing_early_is_worst": {
-      "hint_text": "If the first element of L is not in R, subset() stops immediately after one element() call. That usually makes it FAST, not worst-case. Worst-case needs you to spend a lot of time searching before you can stop.",
-      "related_concept": "Early Termination / Best vs Worst Case"
+    "l4_c1_p1_q2_node_wrong_ignores_final_failed_search_cost": {
+      "hint_text": "Having the first |L|-1 elements found near the end of R is already costly, but worst-case is even worse when the final search fails only after scanning all of R (the last element of L is not in R).",
+      "concept_id": "concept_ll_worst_case_full_scan_on_failure"
     },
 
-    "node_q2_wrong_ignores_final_failed_search_cost": {
-      "hint_text": "Having the first |L|-1 elements found near the end of R does cause long searches, but worst-case is even worse when you also do a final full scan that FAILS (the last element of L is not in R), because element() must traverse all of R before returning False.",
-      "related_concept": "Worst Case Reasoning / Full Scan on Failure"
+    "l4_c1_p1_q2_node_wrong_thinks_all_present_at_end_is_worst": {
+      "hint_text": "If all elements of L are present (even near the end of R), each element() call eventually succeeds. The typical worst-case for subset-check occurs when many searches are long and the final one fails only after a full scan of R.",
+      "concept_id": "concept_ll_worst_case_conditions_success_vs_failure"
+    },
+    "l4_c1_p1_q3_node_focuses_only_on_R": {
+      "hint_text": "If you chose Θ(|R|), you may be focusing only on the inner search. But subset() loops over every element in O, and for each one it may scan through R. So the total cost depends on both |O| and |R|.",
+      "concept_id": "concept_nested_traversal_worst_case"
     },
 
-    "node_q2_wrong_thinks_all_present_at_end_is_worst": {
-      "hint_text": "If L forms the last |L| elements of R, then every element of L IS in R, so every element() search will eventually succeed. The worst-case for subset-check typically occurs when many searches are long AND the final one fails only after scanning all of R.",
-      "related_concept": "Worst Case Conditions / Success vs Failure Search"
-    },
-    "node_q3_wrong_thinks_only_R_matters": {
-      "hint_text": "Θ(|R|) would only be true if subset() called element() a constant number of times. But subset() loops over O, and each iteration may scan through many nodes of R. So the total work depends on BOTH |O| and |R|.",
-      "related_concept": "Worst-Case Complexity / Nested Traversals"
+    "l4_c1_p1_q3_node_focuses_only_on_O": {
+      "hint_text": "If you chose Θ(|O|), you may be assuming that element() runs in constant time. However, element() performs a linear scan of R, which can take up to |R| comparisons in the worst case.",
+      "concept_id": "concept_linear_search_inner_cost"
     },
 
-    "node_q3_wrong_thinks_only_O_matters": {
-      "hint_text": "Θ(|O|) would only make sense if element() were O(1). But element() is a linear scan of R (it may compare against every node if the item is at the end or not present). That inner scan dominates the cost.",
-      "related_concept": "Linear Search in Linked Lists / Inner Loop Cost"
+    "l4_c1_p1_q3_node_adds_instead_of_multiplies": {
+      "hint_text": "Θ(|O| + |R|) usually applies when each list is traversed once. Here, for each element in O, you may traverse R again. That repeated scanning leads to multiplicative growth in the worst case.",
+      "concept_id": "concept_multiplicative_growth_nested_loops"
+    },
+    "l4_c1_p2_q1_node_counts_outer_or_off_by_one": {
+      "hint_text": "Make sure you are counting the calls to Seal() inside the inner loop. The outer loop controls how many rounds happen, but Seal() is called each time k doubles (1, 2, 4, 8, ... while k ≤ N). Trace the exact sequence for N = 8.",
+      "concept_id": "concept_nested_loop_tracing"
     },
 
-    "node_q3_wrong_add_instead_of_multiply": {
-      "hint_text": "Θ(|O| + |R|) is typical when you traverse two lists once each. Here, you traverse O, and for EACH item in O you may traverse R again via element(). That’s repeated work, so the costs multiply in the worst case.",
-      "related_concept": "Nested Loops / Additive vs Multiplicative Growth"
-    },
-    "node_p2q1_wrong_counts_outer_only_or_off_by_one": {
-      "hint_text": "Don’t count only the outer loop. The number of Seal() calls comes from the inner loop. For each outer-loop round, k starts at 1 and doubles (1, 2, 4, 8, ...), calling Seal() once per value of k while k <= N.",
-      "related_concept": "Tracing Nested Loops / Geometric Progression"
+    "l4_c1_p2_q1_node_multiplies_incorrectly": {
+      "hint_text": "First determine how many times the outer loop runs when j multiplies by 3 (j = 1, 3, 9, ...). Then count how many times the inner loop runs when k doubles (k = 1, 2, 4, 8, ...). Combine them carefully—don’t assume both loops run N times.",
+      "concept_id": "concept_nested_loop_iteration_count"
     },
 
-    "node_p2q1_wrong_multiplies_logs_or_assumes_full_inner_each_time": {
-      "hint_text": "Be careful not to multiply incorrectly. First, list how many times the OUTER loop runs when j multiplies by 3 (j = 1, 3, 9, ...). Then separately count how many Seal() calls happen per outer iteration when k doubles (k = 1, 2, 4, 8, ...).",
-      "related_concept": "Nested Loops / Counting Iterations Precisely"
+    "l4_c1_p2_q1_node_treats_doubling_as_linear": {
+      "hint_text": "Notice that k does not increase by 1—it doubles each time. That means the inner loop runs in logarithmic steps, not N steps. Write out the exact k values for N = 8 to see how many times Seal() is actually called.",
+      "concept_id": "concept_logarithmic_growth_doubling"
+    },
+    "l4_c1_p2_q2_node_missing_plus_one": {
+      "hint_text": "The loop starts with k = 1 and continues while k ≤ N. Since k doubles each time (1, 2, 4, 8, ...), you must count the starting value k = 1 as one iteration. That’s why the answer is not just log₂(N), but floor(log₂(N)) + 1.",
+      "concept_id": "concept_logarithmic_loop_off_by_one"
     },
 
-    "node_p2q1_wrong_assumes_quadratic_or_linear_times_linear": {
-      "hint_text": "This is not a 'k++' inner loop. Since k doubles each time, the inner loop runs in logarithmic steps, not N steps. Try writing down the exact k sequence for N=8 to avoid overcounting.",
-      "related_concept": "Logarithmic Loops / Doubling Pattern"
-    },
-    "node_p2q2_wrong_missing_plus_one": {
-      "hint_text": "The loop starts with k = 1 and continues while k <= N. Since k doubles each time (1, 2, 4, 8, ...), you must count the initial value k = 1 as an iteration. That’s why it is not just log₂(N), but floor(log₂(N)) + 1.",
-      "related_concept": "Logarithmic Loops / Off-by-One Counting"
+    "l4_c1_p2_q2_node_log_base_confusion": {
+      "hint_text": "Because k doubles each time (k *= 2), the growth is base 2. The number of times you can double 1 before exceeding N is related to log₂(N), not a logarithm with an unspecified base.",
+      "concept_id": "concept_logarithm_base_interpretation"
     },
 
-    "node_p2q2_wrong_logN_base_confusion": {
-      "hint_text": "Be careful with notation. The loop doubles k each time (k *= 2), so the growth is base 2. The number of times you can double 1 before exceeding N is related to log₂(N), not log(N) with an unspecified base.",
-      "related_concept": "Logarithms / Base Interpretation"
+    "l4_c1_p2_q2_node_forgets_starting_value": {
+      "hint_text": "Try listing the values of k for a small N (e.g., N = 8): 1, 2, 4, 8. There are 4 iterations. Since log₂(8) = 3, you need one extra count for the starting value.",
+      "concept_id": "concept_geometric_progression_loop_count"
+    },
+    "l4_c1_p2_q3_node_base_confusion_log2": {
+      "hint_text": "Notice that j multiplies by 3 each time (j *= 3), not by 2. So the growth follows powers of 3: 1, 3, 9, 27, ... The number of iterations is therefore related to log₃(N), not log₂(N).",
+      "concept_id": "concept_logarithm_matches_growth_factor"
     },
 
-    "node_p2q2_wrong_forgets_initial_iteration": {
-      "hint_text": "List the actual values of k for a small N (e.g., N = 8): 1, 2, 4, 8. Notice there are 4 iterations. Since log₂(8) = 3, you need one extra count for the starting value k = 1.",
-      "related_concept": "Tracing Geometric Progression / Boundary Conditions"
-    },
-    "node_p2q3_wrong_base_confusion_log2": {
-      "hint_text": "The outer loop multiplies j by 3 each time (j *= 3), not by 2. So the number of times j can grow from 1 to exceed N is determined by powers of 3, which relates to log₃(N), not log₂(N).",
-      "related_concept": "Logarithms / Matching Base to Growth Factor"
+    "l4_c1_p2_q3_node_unspecified_log_base": {
+      "hint_text": "Since j grows as powers of 3, the correct logarithm must have base 3. Writing just log(N) without specifying the base hides this important detail.",
+      "concept_id": "concept_logarithm_base_interpretation"
     },
 
-    "node_p2q3_wrong_unspecified_log_base": {
-      "hint_text": "Be precise about the base. Since j grows as 1, 3, 9, 27, ... (powers of 3), the correct logarithm must be base 3. Using logN without specifying base can hide this key detail.",
-      "related_concept": "Logarithms / Base Interpretation"
+    "l4_c1_p2_q3_node_missing_plus_one": {
+      "hint_text": "Try listing the actual values of j for a small N (e.g., N = 9): 1, 3, 9. That gives 3 iterations. Since log₃(9) = 2, you need to add 1 to account for the starting value j = 1. That’s why the answer is floor(log₃(N)) + 1.",
+      "concept_id": "concept_geometric_progression_off_by_one"
+    },
+    "l4_c1_p2_q4_node_assumes_linear_growth": {
+      "hint_text": "Neither loop increases by +1. The inner loop doubles k (k *= 2) and the outer loop triples j (j *= 3), so both loops run in logarithmic time. Since neither loop is linear, the overall complexity cannot be O(N).",
+      "concept_id": "concept_logarithmic_loop_growth"
     },
 
-    "node_p2q3_wrong_missing_plus_one": {
-      "hint_text": "List the actual values of j for a small N (e.g., N = 9): 1, 3, 9. That’s 3 iterations. Since log₃(9) = 2, you need to add 1 to count the initial value j = 1. That’s why it’s floor(log₃(N)) + 1.",
-      "related_concept": "Geometric Progression / Off-by-One Counting"
-    },
-    "node_p2q4_wrong_thinks_linear_N": {
-      "hint_text": "Neither loop increases by +1. The inner loop doubles k (k *= 2) and the outer loop triples j (j *= 3), so both loops run logarithmically, not linearly. The total cannot be O(N).",
-      "related_concept": "Logarithmic Loops / Growth Factors"
+    "l4_c1_p2_q4_node_collapses_nested_logs": {
+      "hint_text": "Because the loops are nested, their iteration counts multiply: log₂(N) × log₃(N). You should not simplify this to just O(log N), since both logarithmic factors contribute multiplicatively.",
+      "concept_id": "concept_nested_loops_multiplicative_cost"
     },
 
-    "node_p2q4_wrong_collapses_logs_to_single_log": {
-      "hint_text": "The loops are nested, so you multiply their iteration counts: (log₂(N)) * (log₃(N)). You should not simplify this into just O(log N) because both logs contribute multiplicatively.",
-      "related_concept": "Nested Loops / Multiplying Costs"
+    "l4_c1_p2_q4_node_confuses_log_squared_identity": {
+      "hint_text": "Be careful with logarithm rules. log(N²) equals 2·log(N), which is still O(log N). Here, however, you have (log₂(N))·(log₃(N)), which behaves like (log N)² up to constant factors (by change of base).",
+      "concept_id": "concept_logarithm_rules_and_change_of_base"
+    },
+    "l4_c1_p3_q1_node_counts_only_first_call": {
+      "hint_text": "It looks like you counted only the first call’s loop (Read() done N times). But Book(N) also makes two recursive calls to Book(N−1), and each of those calls performs its own Read() loop as well.",
+      "concept_id": "concept_recursion_tree_expansion"
     },
 
-    "node_p2q4_wrong_uses_log_of_N_squared_instead_of_product": {
-      "hint_text": "Be careful with log identities: log(N^2) means 2·log(N), which is still O(log N). Here you have (log₂(N))·(log₃(N)), which grows like (log N)^2 up to constant factors (change of base).",
-      "related_concept": "Logarithm Rules / (log N)^2 vs log(N^2)"
-    },
-    "node_l4c1p3q1_wrong_counts_only_top_level": {
-      "hint_text": "You may be counting only the first call’s for-loop (Read() done N times). But after that, Book(N) calls Book(N-1) twice, and each of those calls also performs its own reads and recursive calls.",
-      "related_concept": "Recursion Tree / Expanding Recursive Calls"
+    "l4_c1_p3_q1_node_overcounts_recursive_levels": {
+      "hint_text": "Try expanding level by level without double-counting. From N = 3: you have 1 call at N = 3, then 2 calls at N = 2, then 4 calls at N = 1. Each call contributes exactly N Read() operations at its level. Sum the reads across these levels.",
+      "concept_id": "concept_recursion_level_summing"
     },
 
-    "node_l4c1p3q1_wrong_double_counts_levels": {
-      "hint_text": "Be careful not to overcount. Each Book(N) call contributes exactly N Read() calls, then spawns two Book(N-1) calls. Try expanding from N=3 → two calls at N=2 → four calls at N=1, and sum the reads per level.",
-      "related_concept": "Tracing Recursion / Summing Per-Level Work"
+    "l4_c1_p3_q1_node_ignores_work_per_call": {
+      "hint_text": "Don’t count only the branching. Each call to Book(N) also performs a loop that executes Read() N times. So the total includes both the recursive structure (two calls each time) and the per-call linear work.",
+      "concept_id": "concept_recurrence_linear_plus_recursive"
     },
 
-    "node_l4c1p3q1_wrong_assumes_full_binary_without_linear_term": {
-      "hint_text": "This recursion is not only about the number of nodes in a binary tree. Every node also does a for-loop with N reads at that level. Include both the branching (two calls) and the linear work done at each call.",
-      "related_concept": "Recurrence Relations / Combining Linear and Recursive Work"
-    },
-    "node_l4c1p3q2_wrong_single_recursive_call": {
-      "hint_text": "Book(N) makes TWO recursive calls to Book(N-1), not one. So W(N) must include 2·W(N-1), not just W(N-1). Also remember to include the N reads from the for-loop.",
-      "related_concept": "Recurrence Relations / Counting Recursive Calls"
+    "l4_c1_p3_q2_node_misses_second_recursive_call": {
+      "hint_text": "Book(N) makes two recursive calls to Book(N−1), not one. So the recurrence must include 2·W(N−1). Also remember that each call performs N Read() operations in its loop.",
+      "concept_id": "concept_recurrence_counting_recursive_calls"
     },
 
-    "node_l4c1p3q2_wrong_fibonacci_assumption": {
-      "hint_text": "This is not a Fibonacci-style recursion. Both recursive calls are Book(N-1), not Book(N-1) and Book(N-2). Carefully match the recurrence to the actual recursive structure.",
-      "related_concept": "Recursion Structure / Matching Code to Recurrence"
+    "l4_c1_p3_q2_node_not_fibonacci_structure": {
+      "hint_text": "This recursion is not Fibonacci-style. Both recursive calls are Book(N−1); there is no Book(N−2) term. Match the recurrence directly to the calls made in the code.",
+      "concept_id": "concept_match_code_to_recurrence"
     },
 
-    "node_l4c1p3q2_wrong_missing_linear_term": {
-      "hint_text": "Each call to Book(N) performs N Read() operations before making the recursive calls. So besides the 2·W(N-1) part, you must also add the linear term N.",
-      "related_concept": "Recurrence Relations / Combining Recursive and Linear Work"
+    "l4_c1_p3_q2_node_missing_linear_term": {
+      "hint_text": "Each call to Book(N) performs N Read() operations before the recursive calls. So besides 2·W(N−1), you must add the linear term +N.",
+      "concept_id": "concept_recurrence_linear_plus_recursive"
     },
-    "node_l4c1p3q3_wrong_thinks_quadratic": {
-      "hint_text": "The function makes two recursive calls at each level: Book(N-1) and Book(N-1). That branching causes exponential growth in the number of calls. A quadratic time complexity (O(N^2)) grows much slower than this recursion tree.",
-      "related_concept": "Recursion Tree / Exponential Growth"
-    },
-
-    "node_l4c1p3q3_wrong_thinks_linear": {
-      "hint_text": "Although each call performs N Read() operations, the key factor is the two recursive calls to Book(N-1). This creates a binary recursion tree, which grows exponentially, not linearly.",
-      "related_concept": "Recurrence Relations / Dominant Term"
+    "l4_c1_p3_q3_node_quadratic_misinterpretation": {
+      "hint_text": "At each level, Book(N) makes two recursive calls to Book(N−1). This branching leads to exponential growth in the number of calls. A quadratic complexity O(N²) grows much more slowly than an exponential recursion tree.",
+      "concept_id": "concept_recursion_tree_exponential_growth"
     },
 
-    "node_l4c1p3q3_wrong_thinks_factorial": {
-      "hint_text": "Factorial time usually appears when each level branches into N, N-1, N-2, ... calls. Here, each level makes exactly two recursive calls. That leads to exponential growth like 2^N, not N!.",
-      "related_concept": "Recursion Patterns / Comparing Growth Rates"
+    "l4_c1_p3_q3_node_linear_misinterpretation": {
+      "hint_text": "Although each call performs N Read() operations, the dominant factor is the two recursive calls to Book(N−1). This creates a binary recursion tree, which grows exponentially rather than linearly.",
+      "concept_id": "concept_dominant_term_in_recurrence"
+    },
+
+    "l4_c1_p3_q3_node_factorial_misinterpretation": {
+      "hint_text": "Factorial time typically occurs when each level branches into N, N−1, N−2, ... calls. Here, each level makes exactly two recursive calls. That leads to exponential growth like 2^N, not N!.",
+      "concept_id": "concept_compare_growth_rates"
+    },
+    "l4_c1_p4_node_already_sorted_segment": {
+      "hint_text": "If the current segment is already strictly increasing, then the first element is the minimum. You can detect this before continuing binary search.",
+      "concept_id": "concept_binary_search_sorted_segment_check"
+    },
+
+    "l4_c1_p4_node_compare_wrong_boundary": {
+      "hint_text": "To decide which half contains the minimum, compare arr[mid] with the right boundary. Comparing with the left boundary may not always give the correct direction.",
+      "concept_id": "concept_binary_search_boundary_decision"
+    },
+
+    "l4_c1_p4_node_rotation_binary_search": {
+      "hint_text": "Apply a divide-and-conquer approach. If arr[mid] is greater than arr[high], the minimum lies in the right half; otherwise, it lies in the left half.",
+      "concept_id": "concept_divide_and_conquer_binary_search"
+    },
+
+    "l4_c1_p4_node_single_element": {
+      "hint_text": "If the search interval reduces to a single element, that element must be the minimum.",
+      "concept_id": "concept_binary_search_base_case"
+    },
+
+    "l4_c1_p4_node_two_element_boundary": {
+      "hint_text": "When only two elements remain (e.g., [2,1]), ensure your boundary update logic still identifies the smaller value correctly.",
+      "concept_id": "concept_binary_search_boundary_conditions"
     },
 
     "l5_c1_p1_general_hint": {
-      "related_concept": "required_n_equals_target_times_m",
-      "hint_text": "Convert the target into a required book count: n = α × m. Multiply the target load factor by the number of shelves in the row to get exactly how many books that row must contain."
+      "hint_text": "Convert each row’s target into an exact required book count: n = α × m. Multiply the target load factor by the number of shelves in that row.",
+      "concept_id": "concept_ht_load_factor_compute_n"
     },
+
     "l5_c1_p1_bookreturn_row_overfilled": {
-      "related_concept": "row_underfilled_vs_overfilled",
-      "hint_text": "This row is overfilled: it has too many books for its target. Remove or move some books out until n matches the required count."
+      "hint_text": "This row has too many books for its target. Move books out until the row’s count n matches the required value (n = α × m).",
+      "concept_id": "concept_ht_load_factor_over_under"
     },
 
     "l5_c1_p2_row_underfilled": {
-      "related_concept": "Hashing",
-      "hint_text": "All slots have to be filled. You have too little books on the bookshelf."
+      "hint_text": "You still have empty slots. Fill every slot in the table before evaluating.",
+      "concept_id": "concept_ht_open_addressing_table_state"
     },
+
     "l5_c1_p2_best_general_hint": {
-      "related_concept": "Best-Case Linear Probing",
-      "hint_text": "Best-case for linear probing means: every key lands in its first hashed slot with no collisions, so no probing happens."
+      "hint_text": "Best case for linear probing: every key is placed into its first hashed slot, so there are no collisions and no probing steps.",
+      "concept_id": "concept_ht_linear_probing_best_case"
     },
     "l5_c1_p2_worst_general_hint": {
-      "related_concept": "Worst-Case Linear Probing",
-      "hint_text": "Worst-case happens when many keys collide and form one long contiguous cluster. Linear probing then checks many slots before finding an empty one."
+      "hint_text": "Worst case for linear probing occurs when many keys hash to the same initial slot, forming one long contiguous cluster. New insertions must probe through almost the entire cluster before finding an empty slot.",
+      "concept_id": "concept_ht_linear_probing_worst_case"
     },
 
     "l5_c3_p1_node_hint_01_general_hint": {
-      "hint_text": "Treat 1779 as a base-8 number with 4 digits: a·8^3 + b·8^2 + c·8 + d.",
-      "related_concept": "Hashing / Base Representation"
+      "hint_text": "Treat 1779 as a number in base 8 using positional notation: a·8^3 + b·8^2 + c·8 + d.",
+      "concept_id": "concept_radix_representation"
     },
+
     "l5_c3_p1_node_hint_02_place_values": {
-      "hint_text": "Compute 8^3=512, 8^2=64, 8^1=8. Divide step-by-step: first by 512 to get a, then use the remainder for b, c, d.",
-      "related_concept": "Positional Notation"
+      "hint_text": "Compute 8^3 = 512, 8^2 = 64, 8^1 = 8. Divide step-by-step to extract each digit from highest place value to lowest.",
+      "concept_id": "concept_radix_representation"
     },
+
     "l5_c3_p1_node_hint_03_mapping_check": {
-      "hint_text": "After you get (a,b,c,d), convert each number using A=1, B=2, ..., H=8 to form the final 4-letter code.",
-      "related_concept": "Symbol Mapping"
+      "hint_text": "After finding the digits, convert them into the corresponding letters as instructed.",
+      "concept_id": null
     },
 
     "l5_c3_p2_node_hint_01_letter_conversion": {
-      "related_concept": "Letter Mapping",
-      "hint_text": "Replace the letters with numbers: A=1, B=2, C=3. Start by writing the numbers for each string."
+      "hint_text": "Replace the letters with numbers using A=1, B=2, C=3. Write down the numeric version of each string first.",
+      "concept_id": null
     },
 
     "l5_c3_p2_node_hint_02_build_base8_number": {
-      "related_concept": "Base 8 Place Values",
-      "hint_text": "Use this formula for 3 letters: first letter × 64, second letter × 8, last letter × 1. Add them together."
+      "hint_text": "Use positional notation in base 8: first letter × 8^2, second letter × 8^1, last letter × 8^0. Then add them together.",
+      "concept_id": "concept_radix_representation"
     },
 
     "l5_c3_p2_node_hint_03_apply_modulus": {
-      "related_concept": "Modulo Operation",
-      "hint_text": "After you get the number, divide it by 7 and take the remainder. That remainder is the hash value."
+      "hint_text": "After computing the number, divide it by 7 and take the remainder. The remainder is the hash value.",
+      "concept_id": "concept_modulo_operation"
     },
 
     "l5_c3_p2_node_hint_04_notice_permutation": {
-      "related_concept": "Hash Collisions",
-      "hint_text": "All three strings contain the same letters in different order. Think about whether their final values might end up the same."
+      "hint_text": "All three strings contain the same letters in different order. Think about whether their final values might end up the same.",
+      "concept_id": "concept_hash_collisions"
     },
 
     "l6_c1_p1_trie_prefix_only_not_word": {
       "hint_text": "A path in a trie is not automatically a valid word. The word only counts if the path ends exactly at a terminal (end-of-word) node. If you stop too early, it’s only a prefix.",
-      "related_concept": "Prefix vs Complete Word"
+      "concept_id": "concept_trie_end_of_word"
     },
     "l6_c1_p1_trie_wrong_branch_choice": {
       "hint_text": "After choosing the first letter, you must follow the correct child branch for the next character. If the next character is not available as a child node, that word cannot be formed.",
-      "related_concept": "Branching in Tries"
+      "concept_id": "concept_trie_word_search"
     },
     "l6_c1_p1_trie_missing_character_step": {
       "hint_text": "You skipped a character. In a trie, each step down the tree represents exactly one next letter in the word—no letters can be jumped over.",
-      "related_concept": "Character-by-Character Traversal"
+      "concept_id": "concept_trie_word_search"
     },
     "l6_c1_p1_trie_extra_character_step": {
       "hint_text": "You added an extra letter beyond what the trie supports. Even if a shorter word exists, a longer word is only valid if the trie continues with matching child nodes and ends at a terminal node.",
-      "related_concept": "Exact Path Matching"
+      "concept_id": "concept_trie_end_of_word"
     },
     "l6_c1_p1_trie_confuse_similar_words": {
-      "hint_text": "Be careful with similar-looking options (e.g., 'rat' vs 'rap' vs 'rapt'). Check the trie path letter by letter, and confirm the terminal node at the exact final letter.",
-      "related_concept": "Disambiguating Similar Prefixes"
+      "hint_text": "Be careful with similar-looking options (e.g., 'rat' vs 'rap' vs 'rapt'). Trace the trie letter by letter, and confirm the terminal node at the exact final letter.",
+      "concept_id": "concept_trie_word_search"
     },
     "l6_c1_p1_trie_visual_guessing": {
-      "hint_text": "Don’t choose words based on what 'looks' likely. Trace the trie properly: start at the root, follow each letter down, and only accept the word if you land on a terminal node at the end.",
-      "related_concept": "Systematic Tracing Strategy"
+      "hint_text": "Don’t choose words based on what 'looks' likely. Start at the root, follow each letter down, and only accept the word if you land on a terminal node at the end.",
+      "concept_id": "concept_trie_word_search"
     },
     "l6_c3_p1_node_trie_prefix_core": {
-      "hint_text": "First follow the prefix down from trie.root using _find_child for each character. Only once you reach the node for the last prefix character should you start collecting words below it.",
-      "related_concept": "Trie Traversal"
+      "hint_text": "First walk down the trie from trie.root following the prefix characters one by one. Only after reaching the node for the last prefix character should you start collecting words below it.",
+      "concept_id": "concept_trie_word_search"
     },
+
     "l6_c3_p1_node_trie_prefix_alphabetical": {
-      "hint_text": "This trie stores children using first_child + next_sibling (linked list). To output words in alphabetical order, collect all children of the current node, sort by child.char, then DFS in that sorted order.",
-      "related_concept": "Traversal Order"
+      "hint_text": "Children are stored using first_child + next_sibling. To output words in alphabetical order, gather all children of a node, sort them by child.char, then DFS in that sorted order.",
+      "concept_id": "concept_trie_alphabetical_traversal"
     },
+
     "l6_c3_p1_node_trie_prefix_not_found": {
       "hint_text": "If any prefix character is missing during the walk-down, there are no matches. Return [\"empty!\"] (a list with one string) so the program prints empty! and does not crash.",
-      "related_concept": "Edge Cases"
+      "concept_id": "concept_output_contract_empty_marker"
     },
+
     "l6_c3_p1_node_trie_prefix_word_vs_prefix": {
       "hint_text": "After reaching the prefix node, if node.is_end_of_word is True, include the prefix itself as a result before exploring deeper children (e.g., prefix=\"app\" matches \"app\").",
-      "related_concept": "Prefix vs Complete Word"
+      "concept_id": "concept_trie_end_of_word"
     },
+
     "l6_c3_p1_node_trie_prefix_sibling_traversal": {
-      "hint_text": "When exploring a node's children, don't just follow first_child. You must iterate through every next_sibling and explore each branch to collect all valid words.",
-      "related_concept": "First-Child / Next-Sibling Representation"
+      "hint_text": "When exploring children, don’t stop at first_child. Walk through every next_sibling and explore each branch so you don’t miss valid words.",
+      "concept_id": "concept_trie_children_iteration"
     },
     "node_runtime_attr_none": {
       "hint_text": "You tried to access an attribute on None (null). In linked lists, this often means you used cur.next.item when cur.next was None at the tail. Add a guard like: while cur and cur.next.",
-      "related_concept": "Null Checks / Pointer Safety"
+      "concept_id": "concept_runtime_null_checks"
     },
     "node_runtime_index_oob": {
       "hint_text": "You accessed an index that doesn't exist (index out of range). Check loops over arrays/lists and make sure indices stay within 0..len-1.",
-      "related_concept": "Bounds Checking"
+      "concept_id": "concept_runtime_bounds_checking"
     },
     "node_runtime_syntax": {
       "hint_text": "Your code has a syntax error (Python couldn't parse it). Check missing colons, mismatched brackets/quotes, and invalid indentation blocks.",
-      "related_concept": "Syntax"
+      "concept_id": "concept_runtime_syntax_errors"
     },
     "node_runtime_indentation": {
       "hint_text": "Your code has an indentation error. In Python, blocks must be consistently indented (spaces recommended). Make sure the function body and if/while blocks align correctly.",
-      "related_concept": "Indentation"
+      "concept_id": "concept_runtime_indentation_errors"
     },
     "node_runtime_recursion": {
       "hint_text": "Your recursion never stops (max recursion depth exceeded). Check your base case and make sure each recursive call moves toward it.",
-      "related_concept": "Recursion / Base Case"
+      "concept_id": "concept_runtime_recursion_base_case"
     },
     "node_runtime_type": {
       "hint_text": "A TypeError happened: an operation was applied to the wrong type (e.g., adding int to str, calling a non-function, etc.). Print/debug variable types near the failing line.",
-      "related_concept": "Types"
+      "concept_id": "concept_runtime_type_errors"
     },
     "node_runtime_value": {
       "hint_text": "A ValueError happened: a conversion or operation got an invalid value (e.g., int('abc')). Check parsing and assumptions about input format.",
-      "related_concept": "Input Parsing"
+      "concept_id": "concept_runtime_value_errors"
     },
     "node_runtime_generic": {
       "hint_text": "Your program crashed before producing an answer. Read the error message (stderr) and check the line where it failed to see what was None / out of range / wrong type.",
-      "related_concept": "Runtime Error"
+      "concept_id": "concept_runtime_error_debugging"
     }
   }
 }
