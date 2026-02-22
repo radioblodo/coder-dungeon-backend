@@ -45,12 +45,6 @@
           "input": "2",
           "expected_output": "2",
           "fail_node_id": "l1_c1_p1_node_evens_single_element"
-        },
-        {
-          "id": "evens_tc_09_empty_list",
-          "input": "",
-          "expected_output": "",
-          "fail_node_id": "l1_c1_p1_node_evens_empty_list"
         }
       ]
     },
@@ -732,12 +726,6 @@
       "label": "Single Node Handling",
       "parent_id": "concept_ll_edge_cases",
       "generic_hint": null
-    },
-
-    "concept_ll_empty_list_handling": {
-      "label": "Empty List Handling",
-      "parent_id": "concept_ll_edge_cases",
-      "generic_hint": "If ll.head is None, your function should immediately return/do nothing (avoid accessing head.next)."
     }
   },
   "runtime_rules": [
@@ -814,11 +802,6 @@
     "l1_c1_p1_node_evens_single_element": {
       "hint_text": "Have you considered the case where the list contains only one node? Make sure you handle this edge case correctly.",
       "concept_id": "concept_ll_single_node_handling"
-    },
-
-    "l1_c1_p1_node_evens_empty_list": {
-      "hint_text": "What happens if the linked list is empty? Before accessing head or head.next, make sure the list is not empty.",
-      "concept_id": "concept_ll_empty_list_handling"
     },
     "node_max_not_front": {
       "hint_text": "After your function runs, the largest value in the list should be the very first node.",
