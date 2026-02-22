@@ -90,18 +90,102 @@ def allowed_fail_nodes_for_problem(problem_data: dict) -> list[str]:
 # ============================================================
 # AI Classifier (label-only)
 # ============================================================
-def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, problem_data: dict) -> tuple[str | None, float | None]:
+# def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, problem_data: dict) -> tuple[str | None, float | None]:
+#     """
+#     Uses LLM to pick ONE concept_id from allowed list.
+#     Returns (concept_id, confidence). If unavailable/invalid -> (None, None)
+#     """
+#     client = get_openai_client()
+#     if not client:
+#         return None, None
+
+#     allowed = allowed_fail_nodes_for_problem(problem_data)
+#     if not allowed:
+#         return None, None
+
+#     compact_failures = []
+#     for f in failures:
+#         compact_failures.append({
+#             "case_id": f.get("case_id"),
+#             "input": f.get("input"),
+#             "expected": f.get("expected"),
+#             "actual": f.get("actual"),
+#             "stderr": (f.get("stderr") or "")[:250],
+#         })
+
+#     payload = {
+#         "problem_id": problem_id,
+#         "allowed_concept_ids": allowed,
+#         "student_code": (student_code or "")[:6000],
+#         "failures": compact_failures,
+#     }
+
+#     system_prompt = (
+#         "You are a strict classifier for a programming tutor.\n"
+#         "Pick exactly ONE concept_id from allowed_concept_ids.\n"
+#         "Return ONLY JSON: {\"concept_id\":\"...\",\"confidence\":0.0}\n"
+#         "No markdown, no extra keys, do not invent new IDs."
+#     )
+
+#     try:
+#         resp = client.responses.create(
+#             model=OPENAI_MODEL,
+#             temperature=0,
+#             input=[
+#                 {"role": "system", "content": system_prompt},
+#                 {"role": "user", "content": json.dumps(payload)},
+#             ],
+#         )
+
+#         text = (resp.output_text or "").strip()
+#         obj = json.loads(text)
+
+#         cid = obj.get("concept_id")
+#         conf = obj.get("confidence", None)
+
+#         try:
+#             conf = float(conf) if conf is not None else None
+#         except Exception:
+#             conf = None
+
+#         if cid in allowed:
+#             if AI_LOG:
+#                 print(f"[AI] problem={problem_id} picked={cid} confidence={conf}")
+#             return cid, conf
+
+#         if AI_LOG:
+#             print(f"[AI] INVALID concept_id returned: {cid} (allowed count={len(allowed)})")
+#         return None, conf
+
+#     except Exception as e:
+#         print("[AI] classify error:", e)
+#         return None, None
+
+def ai_pick_node_and_microhint(
+    problem_id: str,
+    student_code: str,
+    failures: list,
+    problem_data: dict,
+) -> tuple[str | None, float | None, str | None]:
     """
-    Uses LLM to pick ONE concept_id from allowed list.
-    Returns (concept_id, confidence). If unavailable/invalid -> (None, None)
+    Uses LLM to:
+    1) Pick ONE concept_id from allowed list OR "__generic__"
+    2) Generate ONE short micro-hint sentence (<=25 words)
+
+    Returns:
+        (concept_id_or_None, confidence, micro_hint_or_None)
     """
+
     client = get_openai_client()
     if not client:
-        return None, None
+        return None, None, None
 
     allowed = allowed_fail_nodes_for_problem(problem_data)
     if not allowed:
-        return None, None
+        return None, None, None
+
+    # Add generic escape option
+    allowed_with_generic = allowed + ["__generic__"]
 
     compact_failures = []
     for f in failures:
@@ -115,16 +199,26 @@ def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, pr
 
     payload = {
         "problem_id": problem_id,
-        "allowed_concept_ids": allowed,
+        "allowed_concept_ids": allowed_with_generic,
         "student_code": (student_code or "")[:6000],
         "failures": compact_failures,
     }
 
     system_prompt = (
-        "You are a strict classifier for a programming tutor.\n"
-        "Pick exactly ONE concept_id from allowed_concept_ids.\n"
-        "Return ONLY JSON: {\"concept_id\":\"...\",\"confidence\":0.0}\n"
-        "No markdown, no extra keys, do not invent new IDs."
+        "You are a strict programming tutor assistant.\n\n"
+        "Tasks:\n"
+        "1) Pick exactly ONE concept_id from allowed_concept_ids.\n"
+        "   If none are a good fit, choose \"__generic__\".\n"
+        "2) Write ONE short micro_hint sentence (max 25 words).\n\n"
+        "Rules:\n"
+        "- The micro_hint must reference the observed failure (expected vs actual, crash, timeout, etc).\n"
+        "- Suggest a likely cause area (e.g., pointer update, base case, loop condition, head update).\n"
+        "- Do NOT mention concept_id names.\n"
+        "- Do NOT be overly confident.\n"
+        "- If confidence is below 0.55, choose \"__generic__\".\n\n"
+        "Return ONLY JSON in this format:\n"
+        "{\"concept_id\":\"...\",\"confidence\":0.0,\"micro_hint\":\"...\"}\n"
+        "No markdown. No extra keys."
     )
 
     try:
@@ -142,25 +236,31 @@ def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, pr
 
         cid = obj.get("concept_id")
         conf = obj.get("confidence", None)
+        micro_hint = obj.get("micro_hint")
 
         try:
             conf = float(conf) if conf is not None else None
         except Exception:
             conf = None
 
-        if cid in allowed:
+        # Validate concept_id
+        if cid not in allowed_with_generic:
             if AI_LOG:
-                print(f"[AI] problem={problem_id} picked={cid} confidence={conf}")
-            return cid, conf
+                print(f"[AI] INVALID concept_id returned: {cid}")
+            return None, conf, micro_hint
 
         if AI_LOG:
-            print(f"[AI] INVALID concept_id returned: {cid} (allowed count={len(allowed)})")
-        return None, conf
+            print(f"[AI] picked={cid} confidence={conf}")
+
+        # If generic or low confidence → treat as no node
+        if cid == "__generic__" or (conf is not None and conf < 0.55):
+            return None, conf, micro_hint
+
+        return cid, conf, micro_hint
 
     except Exception as e:
-        print("[AI] classify error:", e)
-        return None, None
-
+        print("[AI] pick_node_and_microhint error:", e)
+        return None, None, None
 # ============================================================
 # Health
 # ============================================================
@@ -245,30 +345,60 @@ def submit_code():
         })
 
     # 1) AI picks best concept node from allowed list
-    chosen_node_id, confidence = ai_classify_fail_node(problem_id, code, failures, problem_data)
+    # chosen_node_id, confidence = ai_classify_fail_node(problem_id, code, failures, problem_data)
+    chosen_node_id, confidence, micro_hint = ai_pick_node_and_microhint(problem_id, code, failures, problem_data)
 
-    # 2) fallback: first failed testcase node
-    if not chosen_node_id:
-        chosen_node_id = failures[0].get("fail_node_id")
+    # # 2) fallback: first failed testcase node
+    # if not chosen_node_id:
+    #     chosen_node_id = failures[0].get("fail_node_id")
 
-    node_data = knowledge_graph.get("graph_nodes", {}).get(chosen_node_id, {}) if chosen_node_id else {}
+    # node_data = knowledge_graph.get("graph_nodes", {}).get(chosen_node_id, {}) if chosen_node_id else {}
 
-    # Show testcase matching the chosen node (less confusing)
-    shown = next((f for f in failures if f.get("fail_node_id") == chosen_node_id), failures[0])
+    # # Show testcase matching the chosen node (less confusing)
+    # shown = next((f for f in failures if f.get("fail_node_id") == chosen_node_id), failures[0])
+
+    # return jsonify({
+    #     "status": "failed",
+    #     "hint": node_data.get("hint_text", "Check your logic."),
+    #     "failed_test_case": shown.get("input", ""),
+    #     "student_output": shown.get("actual", ""),
+    #     "expected_output": shown.get("expected", ""),
+    #     "concept_gap": node_data.get("related_concept", "General"),
+    #     # Keep during dev; remove later
+    #     "debug_chosen_node_id": chosen_node_id,
+    #     "debug_ai_confidence": confidence,
+    #     "debug_failures": failures,
+    # })
+    # 2) Always pick a node to show as fallback (for concept_gap + safe tip)
+    fallback_node_id = chosen_node_id or failures[0].get("fail_node_id")
+
+    node_data = knowledge_graph.get("graph_nodes", {}).get(fallback_node_id, {}) if fallback_node_id else {}
+
+    # Show testcase matching the node we decided to show (less confusing)
+    shown = next((f for f in failures if f.get("fail_node_id") == fallback_node_id), failures[0])
+
+    # Compose final hint: AI micro-hint + KG hint_text
+    kg_hint = node_data.get("hint_text")
+    if micro_hint and kg_hint:
+        final_hint = micro_hint.strip() + "\n\nTip: " + kg_hint
+    elif micro_hint:
+        final_hint = micro_hint.strip()
+    else:
+        final_hint = kg_hint or "Check your logic."
 
     return jsonify({
         "status": "failed",
-        "hint": node_data.get("hint_text", "Check your logic."),
+        "hint": final_hint,
         "failed_test_case": shown.get("input", ""),
         "student_output": shown.get("actual", ""),
         "expected_output": shown.get("expected", ""),
         "concept_gap": node_data.get("related_concept", "General"),
         # Keep during dev; remove later
-        "debug_chosen_node_id": chosen_node_id,
+        "debug_chosen_node_id": fallback_node_id,
         "debug_ai_confidence": confidence,
+        "debug_ai_micro_hint": micro_hint,
         "debug_failures": failures,
     })
-
 # ============================================================
 # /request-hint  (visual/interactive puzzles)
 # ============================================================
