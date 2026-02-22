@@ -376,19 +376,7 @@ def submit_code():
     failed_node_ids = [f.get("fail_node_id") for f in failures if f.get("fail_node_id")]
     concept_counts = concept_counts_from_failures(failures)
 
-    attempt_entry = {
-        "player_id": player_id,
-        "puzzle_name": problem_id,
-        "attempt_no": attempt_no,
-        "timestamp": now_iso_sg(),
-        "solved": 0,
-        "failed_node_ids": failed_node_ids,
-        "concept_counts": concept_counts,  # dict
-        # Optional debug fields if you want:
-        "ai_chosen_node_id": fallback_node_id,
-        "ai_confidence": confidence,
-    }
-    append_attempt_log(player_id, attempt_entry)
+    
 
     # 1) AI picks best concept node from allowed list
     # chosen_node_id, confidence = ai_classify_fail_node(problem_id, code, failures, problem_data)
@@ -418,6 +406,20 @@ def submit_code():
     # 2) Always pick a node to show as fallback (for concept_gap + safe tip)
     fallback_node_id = chosen_node_id or failures[0].get("fail_node_id")
 
+    attempt_entry = {
+        "player_id": player_id,
+        "puzzle_name": problem_id,
+        "attempt_no": attempt_no,
+        "timestamp": now_iso_sg(),
+        "solved": 0,
+        "failed_node_ids": failed_node_ids,
+        "concept_counts": concept_counts,  # dict
+        # Optional debug fields if you want:
+        "ai_chosen_node_id": fallback_node_id,
+        "ai_confidence": confidence,
+    }
+    append_attempt_log(player_id, attempt_entry)
+    
     node_data = knowledge_graph.get("graph_nodes", {}).get(fallback_node_id, {}) if fallback_node_id else {}
 
     # Show testcase matching the node we decided to show (less confusing)
