@@ -1524,11 +1524,6 @@
       "concept_id": "concept_expr_infix_to_postfix_overview"
     },
 
-    "l2_c1_p1_stack_not_used": {
-      "hint_text": "In infix-to-postfix conversion, you need a stack to temporarily hold operators. Pop operators from the stack when they should appear in the output based on precedence.",
-      "concept_id": "concept_stack_usage_in_infix_to_postfix"
-    },
-
     "l2_c1_p1_ignore_precedence_add_vs_mult": {
       "hint_text": "*, /, and % have higher precedence than + and -. Convert the subexpression 'b * c % d' first before combining it with 'a + ...'.",
       "concept_id": "concept_operator_precedence_table"
@@ -1559,11 +1554,6 @@
       "concept_id": "concept_assignment_lowest_precedence"
     },
 
-    "l2_c1_p2_missing_and_operator": {
-      "hint_text": "Your infix expression must include a logical AND. The final RHS should combine the left shift and the right shift with '&&' between them: (a << b) && (c >> (d + e)).",
-      "concept_id": "concept_logical_and_grouping"
-    },
-
     "l2_c1_p3_general_hint": {
       "hint_text": "Use the standard postfix→prefix stack procedure: scan left-to-right, push operands; when you see an operator, pop the right operand then the left operand, build a new prefix fragment (op left right), and push it back. The final stack item is the full prefix expression.",
       "concept_id": "concept_expr_postfix_to_prefix_overview"
@@ -1572,16 +1562,6 @@
     "l2_c1_p3_stack_not_used": {
       "hint_text": "If you just reverse or read postfix directly, operators will attach to the wrong operands. For postfix→prefix, use a stack: push operands; on an operator, pop two expressions (right first, then left), combine into '(op left right)', and push back.",
       "concept_id": "concept_stack_usage_in_postfix_to_prefix"
-    },
-
-    "l2_c1_p3_assignment_wrong_position": {
-      "hint_text": "In prefix form, '=' is the outermost operator, so it should appear at the very beginning. Its operands are the variable x and the entire right-hand expression built from the remaining tokens.",
-      "concept_id": "concept_assignment_as_outermost_operator"
-    },
-
-    "l2_c1_p3_wrong_grouping_add_vs_shift": {
-      "hint_text": "Make sure you group the RHS correctly before applying '>>'. In postfix, 'a b c * d % +' forms one complete subexpression, then it combines with e using '>>'. Build that inner subexpression on the stack first, then apply the shift, then finally '=' with x.",
-      "concept_id": "concept_expr_grouping_postfix_structure"
     },
 
     "l2_c2_p1_general_hint": {
