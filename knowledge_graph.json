@@ -1639,7 +1639,7 @@
       "concept_id": "concept_stack_edge_case_single_element"
     },
     "l3_c1_p1_bt_inorder_root_first": {
-      "hint_text": "In in-order traversal, you do NOT visit the root first. Always fully traverse the left subtree before visiting the node itself.",
+      "hint_text": "In in-order traversal, you should not visit the root first. Always fully traverse the left subtree before visiting the node itself.",
       "concept_id": "concept_bt_inorder_definition"
     },
 
