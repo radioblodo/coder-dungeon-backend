@@ -535,6 +535,11 @@ def api_login():
 
     return jsonify({"status": "error", "message": "Invalid credentials"}), 401
 
+@app.route("/token", methods=["POST", "OPTIONS"])
+def token():
+    if request.method == "OPTIONS":
+        return ("", 204)
+    return jsonify({"ok": True}), 200
 # ============================================================
 # Playerdata storage (GET/PATCH)
 # ============================================================
