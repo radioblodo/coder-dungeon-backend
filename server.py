@@ -441,15 +441,22 @@ def aggregate_penalties(knowledge_graph: dict, fail_node_ids: Set[str],) -> Dict
     """
     Sum penalties per concept across the given fail nodes.
     """
-    delta = defaultdict(float)
+    delta = {}
     graph_nodes = knowledge_graph.get("graph_nodes", {})
 
     for node_id in fail_node_ids:
         node = graph_nodes.get(node_id, {})
         penalties = node.get("penalties", {}) or {}
         for concept_id, p in penalties.items():
-            delta[concept_id] += float(p)
-    return dict(delta)
+            try:
+                p = float(p)
+            except Exception:
+                continue
+            if concept_id not in delta:
+                delta[concept_id] = p
+            else:
+                delta[concept_id] = min(delta[concept_id], p)
+    return delta
 
 
 def update_mastery(
