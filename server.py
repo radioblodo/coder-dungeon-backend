@@ -732,7 +732,8 @@ def export_attemptlog_csv():
         "timestamp",
         "solved",
         "failed_node_ids_json",
-        "concept_counts_json"
+        "concept_counts_json",
+        "concept_mastery_snapshot_json",
     ])
 
     def write_rows(pid: int, logs: list):
@@ -747,6 +748,7 @@ def export_attemptlog_csv():
                 int(e.get("solved", 0)),
                 json.dumps(e.get("failed_node_ids", []), ensure_ascii=False),
                 json.dumps(e.get("concept_counts", {}), ensure_ascii=False),
+                json.dumps(e.get("concept_mastery_snapshot", {}), ensure_ascii=False),
             ])
 
     # Single player
