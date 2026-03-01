@@ -149,12 +149,13 @@ def submit_code():
     except Exception:
         return jsonify({"status": "error", "message": "player_id must be an integer"}), 400
 
-    if attempt_no is None:
-        attempt_no = 1
     try:
         attempt_no = int(attempt_no)
     except Exception:
-        attempt_no = 1
+        attempt_no = None
+
+    if attempt_no is None or attempt_no < 1:
+        attempt_no = next_attempt_no_for_player(player_id, problem_id)
 
     if not problem_id or problem_id not in knowledge_graph.get("problems", {}):
         return jsonify({"status": "error", "message": "Invalid or missing problem_id"}), 400
@@ -733,7 +734,7 @@ def export_attemptlog_csv():
         "solved",
         "failed_node_ids_json",
         "concept_counts_json",
-        "concept_mastery_snapshot_json",
+        "concept_mastery_log_json",
     ])
 
     def write_rows(pid: int, logs: list):
@@ -748,7 +749,7 @@ def export_attemptlog_csv():
                 int(e.get("solved", 0)),
                 json.dumps(e.get("failed_node_ids", []), ensure_ascii=False),
                 json.dumps(e.get("concept_counts", {}), ensure_ascii=False),
-                json.dumps(e.get("concept_mastery_snapshot", {}), ensure_ascii=False),
+                json.dumps(e.get("concept_mastery_log", {}), ensure_ascii=False),
             ])
 
     # Single player
