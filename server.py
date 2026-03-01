@@ -238,6 +238,7 @@ def submit_code():
             "solved": 1,
             "failed_node_ids": [],
             "concept_counts": {},
+            "concept_mastery_log": {},
         }
         append_attempt_log(player_id, attempt_entry)
 
@@ -267,6 +268,12 @@ def submit_code():
     save_student_mastery(player_id, mastery)
 
     graph_nodes = knowledge_graph.get("graph_nodes", {})
+    concept_mastery_log = {}
+    for node_id in failed_node_ids:
+        node = graph_nodes.get(node_id, {})
+        concept_id = node.get("concept_id")
+        if concept_id:
+            concept_mastery_log[concept_id] = mastery.get(concept_id, 0.5)
 
     def mastery_for_node(node_id: str) -> float:
         node = graph_nodes.get(node_id, {})
@@ -294,6 +301,7 @@ def submit_code():
         "solved": 0,
         "failed_node_ids": failed_node_ids,
         "concept_counts": concept_counts,
+        "concept_mastery_log": concept_mastery_log,
         "ai_chosen_node_id": chosen_node_id,
         "ai_confidence": None,
     }
