@@ -99,7 +99,7 @@ def ai_explain_failure(
     )
     user_prompt = (
         f"The student is struggling with {concept_label}. "
-        "Looking at their code, explain why they failed this specific test case in 15 words."
+        "Looking at their code, explain why they failed this specific test case in 15 words. Explain it to the student as if you are talking to the student directly."
     )
 
     try:
@@ -274,7 +274,7 @@ def submit_code():
         node = graph_nodes.get(node_id, {})
         concept_id = node.get("concept_id")
         if concept_id:
-            concept_mastery_log[concept_id] = mastery.get(concept_id, 0.5)
+            concept_mastery_log[concept_id] = round(mastery.get(concept_id, 0.5), 2)
 
     def mastery_for_node(node_id: str) -> float:
         node = graph_nodes.get(node_id, {})
@@ -441,7 +441,7 @@ def aggregate_penalties(knowledge_graph: dict, fail_node_ids: Set[str],) -> Dict
     """
     Sum penalties per concept across the given fail nodes.
     """
-    delta = {}
+    delta = defaultdict(float)
     graph_nodes = knowledge_graph.get("graph_nodes", {})
 
     for node_id in fail_node_ids:
@@ -449,14 +449,10 @@ def aggregate_penalties(knowledge_graph: dict, fail_node_ids: Set[str],) -> Dict
         penalties = node.get("penalties", {}) or {}
         for concept_id, p in penalties.items():
             try:
-                p = float(p)
+                delta[concept_id] += float(p)
             except Exception:
                 continue
-            if concept_id not in delta:
-                delta[concept_id] = p
-            else:
-                delta[concept_id] = min(delta[concept_id], p)
-    return delta
+    return dict(delta)
 
 
 def update_mastery(

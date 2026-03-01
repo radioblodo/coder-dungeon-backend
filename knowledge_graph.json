@@ -57,24 +57,6 @@
           "input": "1,2,3,4,5",
           "expected_output": "5,1,2,3,4",
           "fail_node_id": "l1_c1_p2_node_max_not_front"
-        },
-        {
-          "id": "max_tc_02",
-          "input": "5,4,3,2,1",
-          "expected_output": "5,4,3,2,1",
-          "fail_node_id": "l1_c1_p2_node_max_already_front"
-        },
-        {
-          "id": "max_tc_03",
-          "input": "2,2,2,2",
-          "expected_output": "2,2,2,2",
-          "fail_node_id": "l1_c1_p2_node_max_all_equal"
-        },
-        {
-          "id": "max_tc_04",
-          "input": "1,5,3,5,4",
-          "expected_output": "5,1,3,5,4",
-          "fail_node_id": "l1_c1_p2_node_max_multiple"
         }
       ]
     },
@@ -630,33 +612,24 @@
       "prerequisites": [],
       "generic_hint": null
     },
-
     "concept_ll_all_even": {
       "label": "All Even Case",
       "parent_id": "concept_ll_edge_cases",
       "prerequisites": [],
       "generic_hint": null
     },
-
     "concept_ll_all_odd": {
       "label": "All Odd Case",
       "parent_id": "concept_ll_edge_cases",
       "prerequisites": [],
       "generic_hint": null
     },
-
     "concept_ll_edge_case_no_change": {
       "label": "No-Change Cases (already satisfied / all equal)",
       "parent_id": "concept_ll_edge_cases",
       "prerequisites": [],
       "generic_hint": "If the operation does not require any movement (e.g., max already at head, or all values equal), the list should remain unchanged and still valid."
     },
-    "concept_ll_duplicates_first_occurrence": {
-      "label": "Duplicates Handling (first occurrence)",
-      "parent_id": "concept_ll_edge_cases",
-      "generic_hint": "When multiple nodes share the same key value, define a consistent rule (commonly: use the first occurrence found during traversal) and keep all other nodes linked in their original relative order."
-    },
-
     "concept_ll_sorted_consecutive_duplicates": {
       "label": "Sorted List Property: Consecutive Duplicates",
       "parent_id": "concept_ll_traversal",
@@ -665,156 +638,171 @@
     "concept_ll_collapse_to_single_node": {
       "label": "All Same Values → Single Node",
       "parent_id": "concept_ll_edge_cases",
+      "prerequisites": ["concept_ll_sorted_consecutive_duplicates"],
       "generic_hint": "If all nodes contain the same value, keep the first node and delete every subsequent node by relinking next pointers until only one node remains."
     },
-
     "concept_ll_circular_link_assignment": {
       "label": "Circular Linked List: Last Node Linking",
       "parent_id": "concept_ll",
-      "generic_hint": "In a circular linked list, the last node's next pointer must reference the head node. Use assignment (=) to update links; comparison (==) does not change pointers."
+      "prerequisites": [
+        "concept_ll_node_structure",
+        "concept_ll_traversal",
+        "concept_ll_pointer_manipulation"
+      ],
+      "generic_hint": "In a circular linked list, the last node's next pointer must reference the head node. Use assignment operator (=) to update links; comparison operator (==) does not change pointers."
     },
-
     "concept_function_return_value": {
       "label": "Return Value (Function Output)",
       "parent_id": null,
+      "prerequisites": [],
       "generic_hint": "Functions must return the correct variable as specified. In linked list problems, this is often the head node after modification."
     },
-
     "concept_function_parameters_arguments": {
       "label": "Function Definition vs Function Call",
       "parent_id": null,
+      "prerequisites": [],
       "generic_hint": "The number of arguments in a function call must match the number of parameters in its definition."
     },
-
     "concept_variable_usage_logic": {
       "label": "Variable Usage and Logical Consistency",
       "parent_id": null,
-      "generic_hint": "Ensure each variable represents what it is intended to represent. Using the wrong variable in calculations can cause subtle logical errors."
+      "prerequisites": [],
+      "generic_hint": "Ensure each variable represents what it is intended to represent. Using the wrong variable in calculations can cause logical errors."
     },
-
     "concept_program_execution_environment": {
       "label": "Program Structure and Execution Environment",
       "parent_id": null,
+      "prerequisites": [],
       "generic_hint": null
     },
     "concept_ll_circular": {
       "label": "Circular Linked List",
       "parent_id": "concept_ll",
+      "prerequisites": [
+        "concept_ll_node_structure",
+        "concept_ll_traversal",
+        "concept_ll_pointer_manipulation"
+      ],
       "generic_hint": "A circular linked list is formed when the last node’s next pointer references the first node instead of None."
     },
-
     "concept_ll_circular_distance": {
       "label": "Distance in a Circular List",
       "parent_id": "concept_ll_circular",
       "prerequisites": ["concept_ll_circular"],
       "generic_hint": "In a circular list, traversal continues around the ring. The distance between two nodes is the number of steps taken following next pointers."
     },
-
     "concept_ll_circular_half_split": {
       "label": "Equal Split of Circular List",
       "parent_id": "concept_ll_circular",
+      "prerequisites": ["concept_ll_circular"],
       "generic_hint": "To divide a circular list of n nodes into two equal rings, the cut points must be n/2 nodes apart."
     },
-
     "concept_ll_pointer_reassignment_circular": {
       "label": "Pointer Reassignment in Circular List",
       "parent_id": "concept_ll_circular",
+      "prerequisites": ["concept_ll_circular"],
       "generic_hint": "Reassigning temp.next changes the structure of the ring. In circular lists, a single pointer reassignment can break or form new loops."
     },
-
     "concept_function_parameter_order": {
       "label": "Function Parameter Order",
       "parent_id": null,
+      "prerequisites": [],
       "generic_hint": "The order of parameters in a function call determines which variable plays which role inside the function."
     },
-
-    "concept_infix_to_postfix_general": {
-      "label": "Infix to Postfix Conversion (Overview)",
-      "parent_id": "concept_expr",
-      "generic_hint": "In postfix, an operator appears after its operands. While converting from infix, output operands immediately and manage operators using a stack."
+    "concept_expression_notation": {
+      "label": "Expression Processing",
+      "parent_id": null,
+      "prerequisites": [],
+      "generic_hint": null
+    },
+    "concept_infix_notation": {
+      "label": "Infix Notation",
+      "parent_id": "concept_expression_notation",
+      "prerequisites": ["concept_operator_precedence"],
+      "generic_hint": "In Infix, the operator is placed between operands (e.g., A + B). Use parentheses or precedence rules (BODMAS) to determine the order of evaluation."
+    },
+    "concept_prefix_notation": {
+      "label": "Prefix Notation",
+      "parent_id": "concept_expression_notation",
+      "prerequisites": ["concept_operator_precedence"],
+      "generic_hint": "In Prefix notation, the operator comes before its operands (e.g., + A B). It is evaluated from right to left or by finding the first operator-operand-operand pattern."
     },
 
-    "concept_stack_usage_in_infix_to_postfix": {
-      "label": "Stack Usage in Infix→Postfix",
-      "parent_id": "concept_infix_to_postfix_general",
-      "generic_hint": "When reading an operator, compare it with the operator on the stack top. Pop higher (or equal, depending on associativity) precedence operators before pushing the new one."
+    "concept_postfix_notation": {
+      "label": "Postfix Notation",
+      "parent_id": "concept_expression_notation",
+      "prerequisites": ["concept_operator_precedence"],
+      "generic_hint": "In Postfix notation, the operator follows its operands (e.g., A B +). This is the standard format for stack-based evaluation as it eliminates the need for parentheses."
+    },
+    "concept_infix_to_postfix_general": {
+      "label": "Infix to Postfix Conversion",
+      "parent_id": "concept_infix_notation",
+      "prerequisites": [
+        "concept_infix_notation",
+        "concept_postfix_notation",
+        "concept_operator_precedence"
+      ],
+      "generic_hint": "In postfix, an operator appears after its operands. While converting from infix, output operands immediately and manage operators using a stack."
     },
 
     "concept_operator_precedence": {
       "label": "Operator Precedence",
-      "parent_id": "concept_expr",
+      "parent_id": "concept_expression_notation",
+      "prerequisites": ["concept_operator_precedence_table"],
       "generic_hint": "Higher precedence operators must be handled before lower precedence operators."
     },
 
     "concept_operator_precedence_table": {
       "label": "Operator Precedence Table",
       "parent_id": "concept_operator_precedence",
+      "prerequisites": [],
       "generic_hint": "Precedence (high→low): *, /, %  >  +, -  >  <<, >>  >  &&  >  ="
     },
 
     "concept_assignment_lowest_precedence": {
       "label": "Assignment is Lowest Precedence",
       "parent_id": "concept_operator_precedence",
+      "prerequisites": ["concept_operator_precedence_table"],
       "generic_hint": "Treat '=' as lowest precedence: fully convert the RHS first, then apply assignment at the end in postfix."
     },
 
     "concept_prefix_to_infix_general": {
-      "label": "Prefix to Infix Conversion (Overview)",
-      "parent_id": "concept_expr",
+      "label": "Prefix to Infix Conversion",
+      "parent_id": "concept_expression_notation",
+      "prerequisites": [
+        "concept_prefix_notation",
+        "concept_infix_notation",
+        "concept_operator_precedence"
+      ],
       "generic_hint": "In prefix, operators come before operands. Reconstruct the expression by identifying the outermost operator, building its left and right operands, and adding parentheses to preserve structure."
     },
 
-    "concept_stack_usage_in_prefix_to_infix": {
-      "label": "Stack Usage in Prefix→Infix",
-      "parent_id": "concept_prefix_to_infix_general",
-      "generic_hint": "Scan tokens from right-to-left: push operands; when you see an operator, pop two expressions, wrap them as (left op right), then push back."
-    },
-
-    "concept_logical_and_grouping": {
-      "label": "Logical AND Grouping (&&)",
-      "parent_id": "concept_expression_grouping",
-      "generic_hint": "Ensure && combines two complete boolean/relational subexpressions. In this puzzle, those are the two shift expressions."
-    },
-    "concept_expr": {
-      "label": "Expression Processing",
-      "parent_id": null,
-      "generic_hint": null
-    },
-
     "concept_postfix_to_prefix_general": {
-      "label": "Postfix to Prefix Conversion (Overview)",
-      "parent_id": "concept_expr",
+      "label": "Postfix to Prefix Conversion",
+      "parent_id": "concept_expression_notation",
+      "prerequisites": [
+        "concept_postfix_notation",
+        "concept_prefix_notation",
+        "concept_operator_precedence"
+      ],
       "generic_hint": "Postfix places operators after operands. Convert using a stack: scan tokens left-to-right, push operands; on an operator, pop right then left, form a prefix fragment (op left right), then push it back."
     },
 
     "concept_stack_usage_in_postfix_to_prefix": {
       "label": "Stack Usage in Postfix→Prefix",
       "parent_id": "concept_postfix_to_prefix_general",
+      "prerequisites": ["concept_postfix_to_prefix_general"],
       "generic_hint": "When you encounter an operator in postfix, pop two expressions: first is the right operand, second is the left operand. Combine as (op left right) and push back."
     },
 
     "concept_expression_grouping": {
       "label": "Expression Grouping with Subexpressions",
-      "parent_id": "concept_expr",
+      "parent_id": "concept_expression_notation",
+      "prerequisites": [
+        "concept_expression_notation",
+        "concept_postfix_notation"
+      ],
       "generic_hint": "In postfix, whenever you finish processing an operator, you have built a complete subexpression. Treat it as a single unit for later operators."
-    },
-
-    "concept_expr_grouping_postfix_structure": {
-      "label": "Grouping by Postfix Structure",
-      "parent_id": "concept_expression_grouping",
-      "generic_hint": "Identify complete chunks in postfix: a chunk is formed when an operator combines the two most recent expressions on the stack. Build inner chunks fully before applying later operators like shifts or assignment."
-    },
-
-    "concept_assignment_operator": {
-      "label": "Assignment Operator",
-      "parent_id": "concept_expr",
-      "generic_hint": "Assignment binds the final computed expression to a variable. In prefix/polish form, '=' often becomes the outermost operator."
-    },
-
-    "concept_assignment_as_outermost_operator": {
-      "label": "Assignment as Outermost Operator in Prefix",
-      "parent_id": "concept_assignment_operator",
-      "generic_hint": "In prefix, the outermost operator comes first. For 'x ... =', the final prefix should start with '= x <RHS>'. Build the entire RHS first."
     },
 
     "concept_queue": {
@@ -880,6 +868,10 @@
     "concept_queue_rotation_timing": {
       "label": "Queue Rotation Timing",
       "parent_id": "concept_reverse_first_k_of_queue_with_stack_general",
+      "prerequisites": [
+        "concept_queue",
+        "concept_reverse_first_k_of_queue_with_stack_general"
+      ],
       "generic_hint": "Rotation (dequeue then enqueue) is used after reversing the first k items to move the untouched tail segment behind the reversed block."
     },
 
@@ -926,484 +918,557 @@
     },
 
     "concept_stack_edge_case_single_element": {
-      "label": "Single Element (No Change)",
+      "label": "Single Element",
       "parent_id": "concept_stack_edge_cases",
+      "prerequisites": ["concept_stack_edge_cases"],
       "generic_hint": "A single element stack is already sorted. Ensure your algorithm doesn't pop from an empty stack or lose the element during transfers."
-    },
-    "concept_bt": {
-      "label": "Binary Tree",
-      "parent_id": null,
-      "generic_hint": "A binary tree is a hierarchical structure where each node has at most two children: left and right."
     },
 
     "concept_bt_traversal": {
       "label": "Tree Traversal",
-      "parent_id": "concept_bt",
+      "parent_id": "concept_binary_tree",
+      "prerequisites": ["concept_binary_tree"],
       "generic_hint": "Traversal defines the order in which nodes of a tree are visited."
     },
 
     "concept_bt_inorder_definition": {
       "label": "In-order Traversal (Left → Node → Right)",
       "parent_id": "concept_bt_traversal",
+      "prerequisites": ["concept_bt_traversal"],
       "generic_hint": "In in-order traversal, recursively traverse the left subtree, then visit the node, then traverse the right subtree."
     },
 
     "concept_bt_recursive_subtree_processing": {
       "label": "Recursive Subtree Processing",
       "parent_id": "concept_bt_traversal",
+      "prerequisites": ["concept_bt_traversal"],
       "generic_hint": "Each subtree is itself a binary tree. Apply the same traversal rule recursively to every subtree."
     },
 
     "concept_bt_traversal_rule_application": {
       "label": "Systematic Traversal Rule Application",
       "parent_id": "concept_bt_traversal",
+      "prerequisites": ["concept_bt_traversal"],
       "generic_hint": "Do not rely on visual intuition. Apply the traversal rule consistently at every node."
     },
 
     "concept_bt_traversal_strategy": {
       "label": "Tracing Strategy for Traversal",
       "parent_id": "concept_bt_traversal",
+      "prerequisites": ["concept_bt_traversal"],
       "generic_hint": "A reliable strategy for in-order is: go to the leftmost node, visit it, then move upward following Left → Node → Right."
     },
 
     "concept_bt_preorder_traversal": {
       "label": "Pre-order Traversal",
       "parent_id": "concept_tree_traversal",
+      "prerequisites": ["concept_tree_traversal"],
       "generic_hint": "Pre-order traversal visits nodes in the order: Root → Left Subtree → Right Subtree."
     },
 
     "concept_bt_preorder_definition": {
       "label": "Pre-order Traversal Definition",
       "parent_id": "concept_bt_preorder_traversal",
+      "prerequisites": ["concept_bt_preorder_traversal"],
       "generic_hint": "For every node in the tree: first visit the node (Root), then recursively traverse its Left Subtree, followed by its Right Subtree."
     },
 
     "concept_bt_traversal_left_subtree_first": {
       "label": "Left Subtree before Right Subtree",
       "parent_id": "concept_tree_traversal",
+      "prerequisites": ["concept_tree_traversal"],
       "generic_hint": "In traversal types where Left precedes Right, the entire Left Subtree must be completed before moving to the Right Subtree."
     },
 
     "concept_bt_recursive_traversal": {
       "label": "Recursive Tree Traversal",
       "parent_id": "concept_tree_traversal",
+      "prerequisites": ["concept_tree_traversal"],
       "generic_hint": "Tree traversals are naturally defined using recursion: apply the traversal rule to the current node, then recursively apply it to the left and right subtrees."
     },
     "concept_bt_preorder_root_property": {
       "label": "Pre-order Traversal Root Property",
       "parent_id": "concept_bt_preorder_traversal",
+      "prerequisites": ["concept_bt_preorder_traversal"],
       "generic_hint": "In Pre-order traversal, the first element in the sequence is always the root of the tree or subtree."
     },
 
     "concept_bt_inorder_subtree_partition": {
       "label": "In-order Subtree Partition Property",
       "parent_id": "concept_tree_traversal",
+      "prerequisites": ["concept_bt_inorder_definition"],
       "generic_hint": "In In-order traversal, once the root is located, all elements before it form the Left Subtree and all elements after it form the Right Subtree."
     },
 
     "concept_bt_tree_construction_from_traversals": {
       "label": "Constructing Binary Tree from Pre-order and In-order",
       "parent_id": "concept_tree_traversal",
+      "prerequisites": [
+        "concept_bt_preorder_root_property",
+        "concept_bt_inorder_subtree_partition",
+        "concept_bt_recursive_traversal"
+      ],
       "generic_hint": "A binary tree can be constructed using Pre-order and In-order traversal sequences by identifying the root from Pre-order and partitioning the In-order sequence into left and right subtrees recursively."
     },
     "concept_bt_maxdepth": {
       "label": "Maximum Depth of Binary Tree",
       "parent_id": "concept_tree_traversal",
-      "generic_hint": "Maximum depth is the length of the longest path from the root to a leaf (often measured in edges in these tutorials)."
+      "prerequisites": ["concept_bt_traversal"],
+      "generic_hint": "Maximum depth is the length of the longest path from the root to a leaf."
     },
 
     "concept_bt_maxdepth_base_case": {
       "label": "Base Case for maxDepth (None / Leaf)",
       "parent_id": "concept_bt_maxdepth",
+      "prerequisites": ["concept_bt_maxdepth"],
       "generic_hint": "Define what maxDepth returns for an empty tree (None). With edge-counting depth, None is typically -1 so a leaf becomes 0."
     },
 
     "concept_bt_maxdepth_recursion": {
       "label": "Recursive Definition of maxDepth",
       "parent_id": "concept_bt_maxdepth",
+      "prerequisites": ["concept_bt_maxdepth_base_case"],
       "generic_hint": "maxDepth(node) = max(maxDepth(node.left), maxDepth(node.right)) + 1."
     },
 
     "concept_bt_maxdepth_take_max": {
       "label": "Take Maximum of Subtree Depths",
       "parent_id": "concept_bt_maxdepth",
+      "prerequisites": ["concept_bt_maxdepth_recursion"],
       "generic_hint": "Depth is determined by the deeper subtree, so choose the maximum, not the sum."
     },
 
     "concept_bt_maxdepth_traverse_both_sides": {
       "label": "Traverse Both Subtrees",
       "parent_id": "concept_bt_maxdepth",
+      "prerequisites": ["concept_bt_maxdepth_recursion"],
       "generic_hint": "To find the longest path, compute depth for both left and right subtrees at every node."
     },
     "concept_binary_tree": {
       "label": "Binary Tree",
       "parent_id": null,
+      "prerequisites": [],
       "generic_hint": "A binary tree is a hierarchical data structure where each node has at most two children: left and right."
     },
 
     "concept_tree_traversal": {
       "label": "Tree Traversal",
       "parent_id": "concept_binary_tree",
+      "prerequisites": ["concept_binary_tree"],
       "generic_hint": "Tree traversal is the process of visiting each node in the tree according to a specific order."
     },
 
     "concept_bt_level_order": {
       "label": "Level-order Traversal (Breadth-First Search)",
       "parent_id": "concept_tree_traversal",
+      "prerequisites": ["concept_queue"],
       "generic_hint": "Level-order traversal (BFS) visits nodes level by level, from the root downward, using a queue."
     },
 
     "concept_queue_fifo": {
       "label": "FIFO Property (Queue Order)",
       "parent_id": "concept_queue",
+      "prerequisites": ["concept_queue"],
       "generic_hint": "FIFO means the first element enqueued is the first element dequeued. This property is why BFS visits nodes level by level."
     },
 
     "concept_queue_empty_handling": {
       "label": "Empty Queue Handling",
       "parent_id": "concept_queue",
+      "prerequisites": ["concept_queue"],
       "generic_hint": "Dequeue is only valid when the queue is not empty. If the queue is empty, there are no more nodes to process."
     },
 
     "concept_bt_bfs_dequeue_sets_cur": {
       "label": "Dequeue Sets Current Node (cur)",
       "parent_id": "concept_bt_level_order",
+      "prerequisites": ["concept_queue_empty_handling"],
       "generic_hint": "In BFS, the next node to process is obtained by dequeuing from the queue. That dequeued node becomes the current node (cur)."
     },
 
     "concept_bt_bfs_process_node_fully": {
       "label": "Process Node Fully Before Next Dequeue",
       "parent_id": "concept_bt_level_order",
+      "prerequisites": ["concept_bt_bfs_dequeue_sets_cur"],
       "generic_hint": "For each dequeued node: (1) visit/print it, then (2) enqueue its children. Only then move on to the next dequeue."
     },
 
     "concept_bt_bfs_process_children": {
       "label": "Enqueue Children During BFS",
       "parent_id": "concept_bt_level_order",
+      "prerequisites": ["concept_bt_bfs_process_node_fully"],
       "generic_hint": "After visiting a node in BFS, enqueue its children so they will be visited in the correct level-order later."
     },
 
     "concept_bt_bfs_enqueue_left_then_right": {
       "label": "Enqueue Left Child Then Right Child",
       "parent_id": "concept_bt_level_order",
+      "prerequisites": ["concept_bt_bfs_process_children"],
       "generic_hint": "To preserve standard left-to-right order within a level, enqueue the left child first, then the right child."
     },
 
     "concept_bt_bfs_null_check_children": {
       "label": "Null Check Before Enqueue",
       "parent_id": "concept_bt_level_order",
+      "prerequisites": ["concept_bt_bfs_enqueue_left_then_right"],
       "generic_hint": "Only enqueue existing (non-null) child nodes. Null children should be skipped to avoid invalid dequeues."
     },
     "concept_binary_search_tree": {
       "label": "Binary Search Tree (BST)",
       "parent_id": "concept_binary_tree",
+      "prerequisites": ["concept_binary_tree"],
       "generic_hint": "A Binary Search Tree is a binary tree in which, for every node, all keys in the left subtree are smaller than the node’s key and all keys in the right subtree are larger."
     },
 
     "concept_bst_ordering_property": {
       "label": "BST Ordering Property",
       "parent_id": "concept_binary_search_tree",
+      "prerequisites": ["concept_binary_search_tree"],
       "generic_hint": "For every node in a BST: left subtree keys < node key < right subtree keys."
     },
 
-    "concept_bst_search_process": {
-      "label": "Searching in a Binary Search Tree",
-      "parent_id": "concept_binary_search_tree",
-      "generic_hint": "To search in a BST, compare the target with the current node: if smaller, move to the left child; if larger, move to the right child; repeat until found or null."
-    },
     "concept_ll_linear_search": {
       "label": "Linear Search on Linked List",
       "parent_id": "concept_linked_list",
+      "prerequisites": [
+        "concept_linked_list",
+        "concept_ll_traversal",
+        "concept_algorithm_analysis"
+      ],
       "generic_hint": "Linear search scans nodes one by one until the target is found or the end of the list is reached."
     },
 
     "concept_ll_linear_search_count_comparisons": {
       "label": "Counting Comparisons in Linear Search",
       "parent_id": "concept_ll_linear_search",
+      "prerequisites": ["concept_ll_linear_search"],
       "generic_hint": "In linear search, one (Q.item == X) comparison is performed for each node visited during the scan."
     },
 
     "concept_ll_position_of_match_affects_cost": {
       "label": "Position of Match Affects Cost",
       "parent_id": "concept_ll_linear_search",
+      "prerequisites": ["concept_ll_linear_search_count_comparisons"],
       "generic_hint": "The number of comparisons depends on the position of the matching element. If the match appears later in the list, more comparisons are performed."
     },
 
     "concept_ll_nested_traversal_outer_vs_inner": {
       "label": "Nested Traversal (Outer Loop vs Inner Scan)",
       "parent_id": "concept_ll_linear_search",
+      "prerequisites": ["concept_ll_linear_search"],
       "generic_hint": "When a function calls another search function inside a loop, the total cost includes both the outer loop and the inner scan."
     },
     "concept_ll_case_analysis": {
       "label": "Best Case vs Worst Case Analysis",
       "parent_id": "concept_ll_linear_search",
+      "prerequisites": ["concept_ll_linear_search"],
       "generic_hint": "Case analysis considers inputs that make an algorithm run fastest (best case) or slowest (worst case)."
     },
 
     "concept_ll_best_vs_worst_case_early_termination": {
       "label": "Early Termination (Best vs Worst Case)",
       "parent_id": "concept_ll_case_analysis",
+      "prerequisites": ["concept_ll_case_analysis"],
       "generic_hint": "If an algorithm can stop early, the best case often occurs when it terminates quickly. Worst case often requires delayed termination after much work is done."
     },
 
     "concept_ll_worst_case_full_scan_on_failure": {
       "label": "Worst Case: Full Scan on Failure",
       "parent_id": "concept_ll_case_analysis",
+      "prerequisites": ["concept_ll_case_analysis"],
       "generic_hint": "For linear search, the worst case occurs when the target is absent or appears only at the end, forcing a full scan through the list."
     },
 
     "concept_ll_worst_case_conditions_success_vs_failure": {
       "label": "Worst-case Conditions (Success vs Failure Searches)",
       "parent_id": "concept_ll_case_analysis",
+      "prerequisites": ["concept_ll_case_analysis"],
       "generic_hint": "Worst-case inputs often combine many long successful searches with an additional failed search that requires scanning the entire list."
     },
 
     "concept_worst_case_analysis": {
       "label": "Worst-Case Analysis",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_algorithm_analysis"],
       "generic_hint": "Worst-case analysis considers the input that causes the maximum number of operations."
     },
 
     "concept_linear_search_inner_cost": {
       "label": "Cost of Linear Search",
       "parent_id": "concept_worst_case_analysis",
+      "prerequisites": ["concept_worst_case_analysis"],
       "generic_hint": "A linear search may require scanning all elements in the list, giving Θ(n) time in the worst case."
     },
 
     "concept_nested_traversal_worst_case": {
       "label": "Nested Traversals",
       "parent_id": "concept_worst_case_analysis",
+      "prerequisites": ["concept_worst_case_analysis"],
       "generic_hint": "When one loop is inside another, the total running time in the worst case is often multiplicative."
     },
 
     "concept_multiplicative_growth_nested_loops": {
       "label": "Multiplicative Growth in Nested Loops",
       "parent_id": "concept_nested_traversal_worst_case",
+      "prerequisites": ["concept_nested_traversal_worst_case"],
       "generic_hint": "If an O(n) operation is performed inside a loop that runs O(m) times, the total worst-case time is O(mn)."
     },
     "concept_algorithm_analysis": {
       "label": "Algorithm Analysis",
       "parent_id": null,
+      "prerequisites": [],
       "generic_hint": "Algorithm analysis studies how running time grows as a function of input size."
     },
 
     "concept_nested_loop_tracing": {
       "label": "Tracing Nested Loops",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_algorithm_analysis"],
       "generic_hint": "To analyse nested loops, trace each loop carefully and count how many times the inner statement executes."
     },
 
     "concept_nested_loop_iteration_count": {
       "label": "Counting Iterations in Nested Loops",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_nested_loop_tracing"],
       "generic_hint": "When loops are nested, compute the number of iterations of each loop separately before combining them."
     },
 
     "concept_logarithmic_growth_doubling": {
       "label": "Logarithmic Growth (Doubling Pattern)",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_algorithm_analysis"],
       "generic_hint": "If a variable doubles each iteration (k = 1, 2, 4, 8, ...), the loop runs in O(log N) time."
     },
     "concept_logarithmic_loop": {
       "label": "Logarithmic-Time Loop",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_algorithm_analysis"],
       "generic_hint": "If a loop variable grows multiplicatively (e.g., doubles each iteration), the loop runs in logarithmic time."
     },
 
     "concept_logarithmic_loop_off_by_one": {
       "label": "Off-by-One in Logarithmic Loops",
       "parent_id": "concept_logarithmic_loop",
+      "prerequisites": ["concept_logarithmic_loop"],
       "generic_hint": "When counting iterations in a doubling loop starting at 1, the number of iterations is floor(log₂(N)) + 1."
     },
 
     "concept_logarithm_base_interpretation": {
       "label": "Logarithm Base Interpretation",
       "parent_id": "concept_logarithmic_loop",
+      "prerequisites": ["concept_logarithmic_loop"],
       "generic_hint": "When a variable doubles each iteration, the loop count corresponds to log base 2."
     },
 
     "concept_geometric_progression_loop_count": {
       "label": "Geometric Progression in Loop Analysis",
       "parent_id": "concept_logarithmic_loop",
+      "prerequisites": ["concept_logarithmic_loop"],
       "generic_hint": "A sequence like 1, 2, 4, 8, ... forms a geometric progression. Counting how many terms are ≤ N determines the number of loop iterations."
     },
     "concept_logarithmic_loop_growth": {
       "label": "Logarithmic Growth in Loops",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_logarithmic_loop"],
       "generic_hint": "If a loop variable changes multiplicatively (e.g., doubles or triples each iteration), the loop runs in logarithmic time."
     },
 
     "concept_nested_loops_multiplicative_cost": {
       "label": "Nested Loops – Multiplicative Cost",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_nested_loop_iteration_count"],
       "generic_hint": "When one loop is inside another, their iteration counts multiply in the worst case."
     },
 
     "concept_logarithm_rules_and_change_of_base": {
       "label": "Logarithm Rules and Change of Base",
       "parent_id": "concept_logarithmic_loop",
+      "prerequisites": ["concept_logarithmic_loop"],
       "generic_hint": "Different logarithm bases differ only by constant factors in Big-O notation. Products of logarithms can behave like (log N)²."
     },
     "concept_recursion": {
       "label": "Recursion",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_algorithm_analysis"],
       "generic_hint": "A recursive function solves a problem by calling itself on smaller inputs until reaching a base case."
     },
 
     "concept_recursion_tree": {
       "label": "Recursion Tree Method",
       "parent_id": "concept_recursion",
+      "prerequisites": ["concept_recursion"],
       "generic_hint": "A recursion tree helps you visualise recursive calls level by level and sum the work done at each level."
     },
 
     "concept_recursion_tree_expansion": {
       "label": "Expanding Recursive Calls",
       "parent_id": "concept_recursion_tree",
+      "prerequisites": ["concept_recursion_tree"],
       "generic_hint": "When a function calls itself multiple times, each call repeats its own local work and spawns further recursive calls."
     },
 
     "concept_recursion_level_summing": {
       "label": "Summing Work Per Level",
       "parent_id": "concept_recursion_tree",
+      "prerequisites": ["concept_recursion_tree"],
       "generic_hint": "Count how many calls occur at each recursion depth, multiply by the work per call at that level, and sum across levels."
     },
 
     "concept_recurrence_relation": {
       "label": "Recurrence Relation",
       "parent_id": "concept_recursion",
+      "prerequisites": ["concept_recursion"],
       "generic_hint": "A recurrence relation describes the running time (or operation count) in terms of smaller input sizes."
     },
 
     "concept_recurrence_linear_plus_recursive": {
       "label": "Linear Work + Recursive Work",
       "parent_id": "concept_recurrence_relation",
+      "prerequisites": ["concept_recurrence_relation"],
       "generic_hint": "Many recurrences have the form T(N) = a·T(N−1) + f(N). You must account for both branching (the a·T term) and the extra work done in each call (the f(N) term)."
     },
     "concept_recurrence_counting_recursive_calls": {
       "label": "Counting Recursive Calls in a Recurrence",
       "parent_id": "concept_recurrence_relation",
+      "prerequisites": ["concept_recurrence_relation"],
       "generic_hint": "When forming a recurrence, count exactly how many recursive calls are made and what input size each call uses."
     },
 
     "concept_match_code_to_recurrence": {
       "label": "Matching Code Structure to a Recurrence",
       "parent_id": "concept_recurrence_relation",
+      "prerequisites": ["concept_recurrence_relation"],
       "generic_hint": "Build the recurrence directly from the code: identify the number of recursive calls, their argument sizes, and the extra work done in the current call."
     },
     "concept_recursion_tree_exponential_growth": {
       "label": "Exponential Growth in Recursion Trees",
       "parent_id": "concept_recursion_tree",
+      "prerequisites": ["concept_recursion_tree_expansion"],
       "generic_hint": "If each recursive call generates a constant number greater than 1 of smaller calls, the total number of calls can grow exponentially."
     },
 
     "concept_dominant_term_in_recurrence": {
       "label": "Dominant Term in a Recurrence",
       "parent_id": "concept_recurrence_relation",
+      "prerequisites": ["concept_recurrence_relation"],
       "generic_hint": "When analysing a recurrence, identify which term grows fastest. That term determines the overall time complexity."
     },
 
     "concept_compare_growth_rates": {
       "label": "Comparing Growth Rates",
       "parent_id": "concept_algorithm_analysis",
+      "prerequisites": ["concept_algorithm_analysis"],
       "generic_hint": "Exponential growth (e.g., 2^N) is faster than polynomial growth (e.g., N²), but slower than factorial growth (N!)."
-    },
-    "concept_decrease_and_conquer": {
-      "label": "Decrease-and-Conquer Strategy",
-      "parent_id": "concept_algorithm_design",
-      "generic_hint": "Solve a problem by reducing it to a smaller instance of the same problem."
     },
 
     "concept_binary_search": {
       "label": "Binary Search",
-      "parent_id": "concept_decrease_and_conquer",
+      "parent_id": null,
+      "prerequisites": [],
       "generic_hint": "Repeatedly divide a sorted sequence in half to locate a target or property."
     },
 
     "concept_binary_search_boundary_decision": {
       "label": "Binary Search Boundary Decision",
       "parent_id": "concept_binary_search",
+      "prerequisites": ["concept_binary_search"],
       "generic_hint": "The choice of comparison boundary determines which half of the array is explored."
     },
 
     "concept_binary_search_boundary_conditions": {
       "label": "Binary Search Boundary Conditions",
       "parent_id": "concept_binary_search",
+      "prerequisites": ["concept_binary_search_boundary_decision"],
       "generic_hint": "Correctly updating low and high pointers prevents infinite loops and off-by-one errors."
     },
 
     "concept_binary_search_sorted_segment_check": {
       "label": "Sorted Segment Detection",
       "parent_id": "concept_binary_search",
+      "prerequisites": ["concept_binary_search"],
       "generic_hint": "If a segment is strictly increasing, its first element is the minimum."
     },
 
     "concept_binary_search_base_case": {
       "label": "Binary Search Base Case",
       "parent_id": "concept_binary_search",
+      "prerequisites": ["concept_binary_search"],
       "generic_hint": "When the search interval reduces to one element, that element is the answer."
     },
     "concept_hash_table": {
       "label": "Hash Table",
       "parent_id": null,
-      "generic_hint": null
+      "prerequisites": [],
+      "generic_hint": "A hash table is a data structure that maps keys to values using a hash function."
     },
-
     "concept_ht_load_factor": {
       "label": "Load Factor (α)",
       "parent_id": "concept_hash_table",
+      "prerequisites": ["concept_hash_table"],
       "generic_hint": "Load factor measures how full a hash table is. It is commonly defined as α = n / m."
     },
 
     "concept_ht_load_factor_compute_n": {
       "label": "Computing Required n from α",
       "parent_id": "concept_ht_load_factor",
+      "prerequisites": ["concept_ht_load_factor"],
       "generic_hint": "Given α and m, the required number of stored items is n = α × m."
     },
 
     "concept_ht_load_factor_over_under": {
       "label": "Overfilled vs Underfilled (relative to α)",
       "parent_id": "concept_ht_load_factor",
+      "prerequisites": ["concept_ht_load_factor_compute_n"],
       "generic_hint": "If the row has n greater than α×m it is overfilled; if n is less than α×m it is underfilled."
     },
     "concept_ht_linear_probing_worst_case": {
       "label": "Worst Case (Linear Probing)",
       "parent_id": "concept_ht_linear_probing",
+      "prerequisites": ["concept_ht_linear_probing"],
       "generic_hint": "Worst case occurs when primary clustering forms, causing long probe sequences before insertion."
     },
     "concept_radix_representation": {
       "label": "Radix (Base) Representation",
       "parent_id": "concept_hash_function_design",
+      "prerequisites": ["concept_hash_function_design"],
       "generic_hint": "A number can be interpreted in base b using positional notation: a·b^k + ... + d."
     },
     "concept_modulo_operation": {
       "label": "Modulo Operation",
       "parent_id": "concept_hash_function_design",
+      "prerequisites": ["concept_hash_function_design"],
       "generic_hint": "The modulo operation returns the remainder after division and is commonly used to map hash values into table indices."
     },
     "concept_trie": {
       "label": "Trie (Prefix Tree)",
       "parent_id": null,
+      "prerequisites": [],
       "generic_hint": "A trie is a tree-based data structure for efficient string operations; it is also called a prefix tree."
     },
     "concept_trie_word_search": {
       "label": "Search a Word in a Trie",
       "parent_id": "concept_trie",
+      "prerequisites": ["concept_trie"],
       "generic_hint": "Search proceeds character-by-character by following child links. If a required child does not exist, the word is not in the trie."
     },
     "concept_trie_end_of_word": {
       "label": "End-of-Word Marker (is_end_of_word)",
       "parent_id": "concept_trie",
+      "prerequisites": ["concept_trie_word_search"],
       "generic_hint": "A string is a valid stored word only if its final node is marked as end-of-word (is_end_of_word = True)."
     },
     "concept_trie_children_iteration": {
       "label": "Trie Children Traversal (first_child / next_sibling)",
       "parent_id": "concept_trie",
+      "prerequisites": ["concept_trie"],
       "generic_hint": "If children are stored as a linked list (first_child, next_sibling), you must iterate siblings to visit every child."
     },
 
     "concept_trie_alphabetical_traversal": {
       "label": "Alphabetical Output from a Trie",
       "parent_id": "concept_trie",
+      "prerequisites": ["concept_trie_children_iteration"],
       "generic_hint": "To list words in alphabetical order, visit children in sorted character order before recursing."
     }
   },
@@ -1512,33 +1577,6 @@
       "penalties": {
         "concept_ll_head_pointer_update": -0.2,
         "concept_ll_pointer_updates": -0.05,
-        "concept_ll_traversal": -0.05
-      }
-    },
-    "l1_c1_p2_node_max_already_front": {
-      "hint_text": "If the maximum value is already at the head, your function should return the same list structure. Be careful not to detach the head, duplicate nodes, or accidentally create a cycle.",
-      "concept_id": "concept_ll_edge_case_no_change",
-      "penalties": {
-        "concept_ll_edge_case_no_change": -0.2,
-        "concept_ll_head_pointer_update": -0.05,
-        "concept_ll_traversal": -0.05
-      }
-    },
-    "l1_c1_p2_node_max_all_equal": {
-      "hint_text": "When all values are the same, there is no unique maximum to move. Your output should look unchanged, and you should avoid unnecessary pointer rewiring that could break links.",
-      "concept_id": "concept_ll_edge_case_no_change",
-      "penalties": {
-        "concept_ll_edge_case_no_change": -0.2,
-        "concept_ll_head_pointer_update": -0.05,
-        "concept_ll_traversal": -0.05
-      }
-    },
-    "l1_c1_p2_node_max_multiple": {
-      "hint_text": "If there are multiple nodes with the same maximum value, usually only the first max encountered is moved to the front. Make sure you do not lose the remaining max nodes or reorder nodes incorrectly while relinking.",
-      "concept_id": "concept_ll_duplicates_first_occurrence",
-      "penalties": {
-        "concept_ll_duplicates_first_occurrence": -0.2,
-        "concept_ll_head_pointer_update": -0.05,
         "concept_ll_traversal": -0.05
       }
     },
