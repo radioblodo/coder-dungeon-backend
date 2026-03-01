@@ -4,7 +4,8 @@ import csv
 import io
 import glob
 import subprocess
-from collections import Counter
+from collections import Counter, defaultdict 
+from typing import Dict, List, Set, Tuple 
 from datetime import datetime, timezone, timedelta
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
@@ -69,158 +70,36 @@ def last_non_empty_line(stdout: str) -> str:
     lines = [ln for ln in lines if ln != ""]
     return lines[-1] if lines else ""
 
-def allowed_fail_nodes_for_problem(problem_data: dict) -> list[str]:
-    """
-    Allowed node IDs are exactly the fail_node_id listed in test_cases
-    that also exist in graph_nodes.
-    """
-    ids = []
-    for tc in problem_data.get("test_cases", []):
-        fid = tc.get("fail_node_id")
-        if fid:
-            ids.append(fid)
-
-    seen = set()
-    out = []
-    graph_nodes = knowledge_graph.get("graph_nodes", {})
-    for x in ids:
-        if x not in seen and x in graph_nodes:
-            seen.add(x)
-            out.append(x)
-    return out
-
-# ============================================================
-# AI Classifier (label-only)
-# ============================================================
-# def ai_classify_fail_node(problem_id: str, student_code: str, failures: list, problem_data: dict) -> tuple[str | None, float | None]:
-#     """
-#     Uses LLM to pick ONE concept_id from allowed list.
-#     Returns (concept_id, confidence). If unavailable/invalid -> (None, None)
-#     """
-#     client = get_openai_client()
-#     if not client:
-#         return None, None
-
-#     allowed = allowed_fail_nodes_for_problem(problem_data)
-#     if not allowed:
-#         return None, None
-
-#     compact_failures = []
-#     for f in failures:
-#         compact_failures.append({
-#             "case_id": f.get("case_id"),
-#             "input": f.get("input"),
-#             "expected": f.get("expected"),
-#             "actual": f.get("actual"),
-#             "stderr": (f.get("stderr") or "")[:250],
-#         })
-
-#     payload = {
-#         "problem_id": problem_id,
-#         "allowed_concept_ids": allowed,
-#         "student_code": (student_code or "")[:6000],
-#         "failures": compact_failures,
-#     }
-
-#     system_prompt = (
-#         "You are a strict classifier for a programming tutor.\n"
-#         "Pick exactly ONE concept_id from allowed_concept_ids.\n"
-#         "Return ONLY JSON: {\"concept_id\":\"...\",\"confidence\":0.0}\n"
-#         "No markdown, no extra keys, do not invent new IDs."
-#     )
-
-#     try:
-#         resp = client.responses.create(
-#             model=OPENAI_MODEL,
-#             temperature=0,
-#             input=[
-#                 {"role": "system", "content": system_prompt},
-#                 {"role": "user", "content": json.dumps(payload)},
-#             ],
-#         )
-
-#         text = (resp.output_text or "").strip()
-#         obj = json.loads(text)
-
-#         cid = obj.get("concept_id")
-#         conf = obj.get("confidence", None)
-
-#         try:
-#             conf = float(conf) if conf is not None else None
-#         except Exception:
-#             conf = None
-
-#         if cid in allowed:
-#             if AI_LOG:
-#                 print(f"[AI] problem={problem_id} picked={cid} confidence={conf}")
-#             return cid, conf
-
-#         if AI_LOG:
-#             print(f"[AI] INVALID concept_id returned: {cid} (allowed count={len(allowed)})")
-#         return None, conf
-
-#     except Exception as e:
-#         print("[AI] classify error:", e)
-#         return None, None
-
-def ai_pick_node_and_microhint(
-    problem_id: str,
+def ai_explain_failure(
+    chosen_node_id: str | None,
+    concept_label: str,
     student_code: str,
-    failures: list,
-    problem_data: dict,
-) -> tuple[str | None, float | None, str | None]:
-    """
-    Uses LLM to:
-    1) Pick ONE concept_id from allowed list OR "__generic__"
-    2) Generate ONE short micro-hint sentence (<=25 words)
-
-    Returns:
-        (concept_id_or_None, confidence, micro_hint_or_None)
-    """
-
+    failure: dict,
+) -> str | None:
     client = get_openai_client()
     if not client:
-        return None, None, None
-
-    allowed = allowed_fail_nodes_for_problem(problem_data)
-    if not allowed:
-        return None, None, None
-
-    # Add generic escape option
-    allowed_with_generic = allowed + ["__generic__"]
-
-    compact_failures = []
-    for f in failures:
-        compact_failures.append({
-            "case_id": f.get("case_id"),
-            "input": f.get("input"),
-            "expected": f.get("expected"),
-            "actual": f.get("actual"),
-            "stderr": (f.get("stderr") or "")[:250],
-        })
+        return None
 
     payload = {
-        "problem_id": problem_id,
-        "allowed_concept_ids": allowed_with_generic,
+        "chosen_node_id": chosen_node_id,
+        "concept_name": concept_label,
         "student_code": (student_code or "")[:6000],
-        "failures": compact_failures,
+        "test_case": {
+            "case_id": failure.get("case_id"),
+            "input": failure.get("input"),
+            "expected": failure.get("expected"),
+            "actual": failure.get("actual"),
+            "stderr": (failure.get("stderr") or "")[:250],
+        },
     }
 
     system_prompt = (
-        "You are a strict programming tutor assistant.\n\n"
-        "Tasks:\n"
-        "1) Pick exactly ONE concept_id from allowed_concept_ids.\n"
-        "   If none are a good fit, choose \"__generic__\".\n"
-        "2) Write ONE short micro_hint sentence (max 25 words).\n\n"
-        "Rules:\n"
-        "- The micro_hint must reference the observed failure (expected vs actual, crash, timeout, etc).\n"
-        "- Suggest a likely cause area (e.g., pointer update, base case, loop condition, head update).\n"
-        "- Do NOT mention concept_id names.\n"
-        "- Do NOT be overly confident.\n"
-        "- If confidence is below 0.55, choose \"__generic__\".\n\n"
-        "Return ONLY JSON in this format:\n"
-        "{\"concept_id\":\"...\",\"confidence\":0.0,\"micro_hint\":\"...\"}\n"
-        "No markdown. No extra keys."
+        "You are a strict programming tutor assistant. "
+        "Follow the user instruction exactly. Return only the sentence."
+    )
+    user_prompt = (
+        f"The student is struggling with {concept_label}. "
+        "Looking at their code, explain why they failed this specific test case in 15 words."
     )
 
     try:
@@ -229,40 +108,19 @@ def ai_pick_node_and_microhint(
             temperature=0,
             input=[
                 {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
                 {"role": "user", "content": json.dumps(payload)},
             ],
         )
-
-        text = (resp.output_text or "").strip()
-        obj = json.loads(text)
-
-        cid = obj.get("concept_id")
-        conf = obj.get("confidence", None)
-        micro_hint = obj.get("micro_hint")
-
-        try:
-            conf = float(conf) if conf is not None else None
-        except Exception:
-            conf = None
-
-        # Validate concept_id
-        if cid not in allowed_with_generic:
-            if AI_LOG:
-                print(f"[AI] INVALID concept_id returned: {cid}")
-            return None, conf, micro_hint
-
-        if AI_LOG:
-            print(f"[AI] picked={cid} confidence={conf}")
-
-        # If generic or low confidence → treat as no node
-        if cid == "__generic__" or (conf is not None and conf < 0.55):
-            return None, conf, micro_hint
-
-        return cid, conf, micro_hint
-
+        micro_hint = (resp.output_text or "").strip()
+        if micro_hint:
+            words = micro_hint.split()
+            if len(words) > 15:
+                micro_hint = " ".join(words[:15])
+        return micro_hint or None
     except Exception as e:
-        print("[AI] pick_node_and_microhint error:", e)
-        return None, None, None
+        print("[AI] explain_failure error:", e)
+        return None
 # ============================================================
 # Health
 # ============================================================
@@ -356,9 +214,25 @@ def submit_code():
             })
 
     if not failures:
+        prev_fail_nodes = []
+        for entry in reversed(_load_attempt_logs(player_id)):
+            if entry.get("puzzle_name") == problem_id:
+                prev_fail_nodes = entry.get("failed_node_ids") or []
+                break
+
+        mastery = load_student_mastery(player_id)
+        mastery, _ = update_mastery(
+            mastery,
+            knowledge_graph,
+            prev_fail_nodes,
+            [],
+            recovery_factor=0.5,
+        )
+        save_student_mastery(player_id, mastery)
+
         attempt_entry = {
             "player_id": player_id,
-            "puzzle_name": problem_id,          # keep naming consistent with your CSV
+            "puzzle_name": problem_id,
             "attempt_no": attempt_no,
             "timestamp": now_iso_sg(),
             "solved": 1,
@@ -376,35 +250,41 @@ def submit_code():
     failed_node_ids = [f.get("fail_node_id") for f in failures if f.get("fail_node_id")]
     concept_counts = concept_counts_from_failures(failures)
 
-    
+    prev_fail_nodes = []
+    for entry in reversed(_load_attempt_logs(player_id)):
+        if entry.get("puzzle_name") == problem_id:
+            prev_fail_nodes = entry.get("failed_node_ids") or []
+            break
 
-    # 1) AI picks best concept node from allowed list
-    # chosen_node_id, confidence = ai_classify_fail_node(problem_id, code, failures, problem_data)
-    chosen_node_id, confidence, micro_hint = ai_pick_node_and_microhint(problem_id, code, failures, problem_data)
+    mastery = load_student_mastery(player_id)
+    mastery, _ = update_mastery(
+        mastery,
+        knowledge_graph,
+        prev_fail_nodes,
+        failed_node_ids,
+        recovery_factor=0.5,
+    )
+    save_student_mastery(player_id, mastery)
 
-    # # 2) fallback: first failed testcase node
-    # if not chosen_node_id:
-    #     chosen_node_id = failures[0].get("fail_node_id")
+    graph_nodes = knowledge_graph.get("graph_nodes", {})
 
-    # node_data = knowledge_graph.get("graph_nodes", {}).get(chosen_node_id, {}) if chosen_node_id else {}
+    def mastery_for_node(node_id: str) -> float:
+        node = graph_nodes.get(node_id, {})
+        concept_id = node.get("concept_id")
+        if concept_id in mastery:
+            return mastery[concept_id]
+        return 0.5
 
-    # # Show testcase matching the chosen node (less confusing)
-    # shown = next((f for f in failures if f.get("fail_node_id") == chosen_node_id), failures[0])
-
-    # return jsonify({
-    #     "status": "failed",
-    #     "hint": node_data.get("hint_text", "Check your logic."),
-    #     "failed_test_case": shown.get("input", ""),
-    #     "student_output": shown.get("actual", ""),
-    #     "expected_output": shown.get("expected", ""),
-    #     "concept_gap": node_data.get("related_concept", "General"),
-    #     # Keep during dev; remove later
-    #     "debug_chosen_node_id": chosen_node_id,
-    #     "debug_ai_confidence": confidence,
-    #     "debug_failures": failures,
-    # })
-    # 2) Always pick a node to show as fallback (for concept_gap + safe tip)
-    fallback_node_id = chosen_node_id or failures[0].get("fail_node_id")
+    chosen_node_id = (
+        min(
+            failed_node_ids,
+            key=lambda node_id: (mastery_for_node(node_id), node_id),
+        )
+        if failed_node_ids
+        else None
+    )
+    if not chosen_node_id:
+        chosen_node_id = failures[0].get("fail_node_id")
 
     attempt_entry = {
         "player_id": player_id,
@@ -413,19 +293,21 @@ def submit_code():
         "timestamp": now_iso_sg(),
         "solved": 0,
         "failed_node_ids": failed_node_ids,
-        "concept_counts": concept_counts,  # dict
-        # Optional debug fields if you want:
-        "ai_chosen_node_id": fallback_node_id,
-        "ai_confidence": confidence,
+        "concept_counts": concept_counts,
+        "ai_chosen_node_id": chosen_node_id,
+        "ai_confidence": None,
     }
     append_attempt_log(player_id, attempt_entry)
     
-    node_data = knowledge_graph.get("graph_nodes", {}).get(fallback_node_id, {}) if fallback_node_id else {}
+    node_data = knowledge_graph.get("graph_nodes", {}).get(chosen_node_id, {}) if chosen_node_id else {}
+    concept_id = node_data.get("concept_id")
+    concept = knowledge_graph.get("concepts", {}).get(concept_id, {}) if concept_id else {}
+    concept_label = concept.get("label") or concept_id or "General"
 
-    # Show testcase matching the node we decided to show (less confusing)
-    shown = next((f for f in failures if f.get("fail_node_id") == fallback_node_id), failures[0])
+    shown = next((f for f in failures if f.get("fail_node_id") == chosen_node_id), failures[0])
 
-    # Compose final hint: AI micro-hint + KG hint_text
+    micro_hint = ai_explain_failure(chosen_node_id, concept_label, code, shown)
+
     kg_hint = node_data.get("hint_text")
     if micro_hint and kg_hint:
         final_hint = micro_hint.strip() + "\n\nTip: " + kg_hint
@@ -440,10 +322,9 @@ def submit_code():
         "failed_test_case": shown.get("input", ""),
         "student_output": shown.get("actual", ""),
         "expected_output": shown.get("expected", ""),
-        "concept_gap": node_data.get("related_concept", "General"),
-        # Keep during dev; remove later
-        "debug_chosen_node_id": fallback_node_id,
-        "debug_ai_confidence": confidence,
+        "concept_gap": node_data.get("concept_id", "General"),
+        "debug_chosen_node_id": chosen_node_id,
+        "debug_ai_confidence": None,
         "debug_ai_micro_hint": micro_hint,
         "debug_failures": failures,
     })
@@ -512,7 +393,7 @@ def request_hint():
         "status": "success",
         "concept_id": chosen_id,
         "hint": hint_text,
-        "related_concept": concept_id or "General",
+        "concept_id": concept_id or "General",
     })
 
 # ============================================================
@@ -540,11 +421,84 @@ def token():
     if request.method == "OPTIONS":
         return ("", 204)
     return jsonify({"ok": True}), 200
+
+# ============================================================
+# Tracking student mastery of concepts based on failed nodes
+# ============================================================
+def clamp(x: float, low: float = 0.0, high: float = 1.0) -> float:
+    return max(low, min(high, x))
+
+def aggregate_penalties(knowledge_graph: dict, fail_node_ids: Set[str],) -> Dict[str, float]:
+    """
+    Sum penalties per concept across the given fail nodes.
+    """
+    delta = defaultdict(float)
+    graph_nodes = knowledge_graph.get("graph_nodes", {})
+
+    for node_id in fail_node_ids:
+        node = graph_nodes.get(node_id, {})
+        penalties = node.get("penalties", {}) or {}
+        for concept_id, p in penalties.items():
+            delta[concept_id] += float(p)
+    return dict(delta)
+
+
+def update_mastery(
+    mastery: Dict[str, float],
+    knowledge_graph: dict,
+    prev_fail_nodes: List[str],
+    curr_fail_nodes: List[str],
+    recovery_factor: float = 0.5,
+) -> Tuple[Dict[str, float], Dict[str, float]]:
+    """
+    Returns:
+      (updated_mastery, applied_delta_by_concept)
+
+    Behaviour:
+      - Penalize concepts for CURRENT fail nodes.
+      - Reward concepts for RESOLVED fail nodes (those that were failing last attempt but not now),
+        by adding recovery_factor * abs(penalty).
+    """
+    prev_set = set(prev_fail_nodes or [])
+    curr_set = set(curr_fail_nodes or [])
+
+    resolved = prev_set - curr_set
+    current = curr_set
+
+    penalty_delta = aggregate_penalties(knowledge_graph, current)
+
+    resolved_penalties = aggregate_penalties(knowledge_graph, resolved)
+    recovery_delta = {c: recovery_factor * abs(p) for c, p in resolved_penalties.items()}
+
+    total_delta = defaultdict(float)
+    for c, d in penalty_delta.items():
+        total_delta[c] += d
+    for c, d in recovery_delta.items():
+        total_delta[c] += d
+
+    updated = dict(mastery)  # copy
+    for concept_id, d in total_delta.items():
+        old = float(updated.get(concept_id, 0.0))
+        updated[concept_id] = clamp(old + d)
+
+    return updated, dict(total_delta)
+
+def load_student_mastery(player_id: int) -> dict:
+    path = os.path.join(STORE_FILE_PATH, f"mastery_{player_id}.json")
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            return json.load(f)
+    # Default state if new student
+    return {cid: 0.5 for cid in knowledge_graph.get("concepts", {})}
+
+def save_student_mastery(player_id: int, mastery: dict):
+    path = os.path.join(STORE_FILE_PATH, f"mastery_{player_id}.json")
+    with open(path, "w") as f:
+        json.dump(mastery, f)
 # ============================================================
 # Playerdata storage (GET/PATCH)
 # ============================================================
 def now_iso_sg() -> str:
-    # Singapore is UTC+08:00 with no DST.
     return datetime.now(timezone(timedelta(hours=8))).isoformat()
 
 def concept_counts_from_failures(failures: list[dict]) -> dict:
