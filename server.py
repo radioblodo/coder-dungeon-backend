@@ -343,12 +343,19 @@ def submit_code():
     micro_hint = ai_explain_failure(chosen_node_id, concept_label, code, shown)
 
     kg_hint = node_data.get("hint_text")
-    if micro_hint and kg_hint:
-        final_hint = micro_hint.strip() + "\n\nTip: " + kg_hint
-    elif micro_hint:
-        final_hint = micro_hint.strip()
-    else:
-        final_hint = kg_hint or "Check your logic."
+    # if micro_hint and kg_hint:
+    #     final_hint = micro_hint.strip() + "\n\nTip: " + kg_hint
+    # elif micro_hint:
+    #     final_hint = micro_hint.strip()
+    # else:
+    #     final_hint = kg_hint or "Check your logic."
+    if micro_hint and kg_hint:                                                                                                               
+      tip = f"<color=#C4E538>Tip: {kg_hint}</color>"                                                                                       
+      final_hint = micro_hint.strip() + "\n\n" + tip                                                                                       
+    elif micro_hint:                                                                                                                         
+        final_hint = micro_hint.strip()                                                                                                      
+    else:                                                                                                                                    
+        final_hint = f"<color=#C4E538>Tip: {kg_hint or 'Check your logic.'}</color>"
 
     return jsonify({
         "status": "failed",
@@ -356,7 +363,7 @@ def submit_code():
         "failed_test_case": shown.get("input", ""),
         "student_output": shown.get("actual", ""),
         "expected_output": shown.get("expected", ""),
-        "concept_gap": node_data.get("concept_id", "General"),
+        "concept_gap": concept_label,
         "debug_chosen_node_id": chosen_node_id,
         "debug_ai_confidence": None,
         "debug_ai_micro_hint": micro_hint,
@@ -413,6 +420,28 @@ def request_hint():
         hint_text = f"{concept_label}: {generic_hint}\n\nTip: {specific_hint}"
     else:
         hint_text = specific_hint
+    prior_wrong_attempts = 0
+    for entry in _load_attempt_logs(player_id):
+        if entry.get("puzzle_name") != problem_id:
+            continue
+        if int(entry.get("solved", 0)) == 0:
+            prior_wrong_attempts += 1
+    if prior_wrong_attempts >= 2:
+        prereq_ids = concept.get("prerequisites") or []
+        prereq_hints = []
+        if isinstance(prereq_ids, list):
+            for pid in prereq_ids:
+                prereq = concepts.get(pid, {})
+                prereq_hint = prereq.get("generic_hint")
+                if prereq_hint:
+                    prereq_label = prereq.get("label") or pid
+                    prereq_hints.append(f"{prereq_label}: {prereq_hint}")
+                if len(prereq_hints) >= 2:
+                    break
+        if prereq_hints:
+            hint_text = hint_text + "\n\nPrerequisites:\n" + "\n".join(
+                f"- {h}" for h in prereq_hints
+            )
     attempt_entry = {
         "player_id": player_id,
         "puzzle_name": problem_id,
