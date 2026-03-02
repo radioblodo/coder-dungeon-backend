@@ -420,6 +420,20 @@ def request_hint():
         hint_text = f"{concept_label}: {generic_hint}\n\nTip: {specific_hint}"
     else:
         hint_text = specific_hint
+    prev_fail_nodes = []
+    for entry in reversed(_load_attempt_logs(player_id)):
+        if entry.get("puzzle_name") == problem_id:
+            prev_fail_nodes = entry.get("failed_node_ids") or []
+            break
+    mastery = load_student_mastery(player_id)
+    mastery, _ = update_mastery(
+        mastery,
+        knowledge_graph,
+        prev_fail_nodes,
+        [chosen_id],
+        recovery_factor=0.5,
+    )
+    save_student_mastery(player_id, mastery)
     prior_wrong_attempts = 0
     for entry in _load_attempt_logs(player_id):
         if entry.get("puzzle_name") != problem_id:
@@ -450,6 +464,7 @@ def request_hint():
         "solved": 0,
         "failed_node_ids": [chosen_id],
         "concept_counts": {concept_id or "General": 1},
+        "concept_mastery_log": {concept_id or "General": round(mastery.get(concept_id, 0.5), 2)},
     }
     append_attempt_log(player_id, attempt_entry)
     return jsonify({
