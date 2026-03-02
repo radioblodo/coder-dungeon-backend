@@ -8,43 +8,57 @@
           "id": "evens_tc_01",
           "input": "1,2,3,4,5",
           "expected_output": "1,3,5,2,4",
-          "fail_node_id": "l1_c1_p1_node_evens_basic"
+          "fail_node_id": "l1_c1_p1_node_evens_basic",
+          "priority": 5
         },
         {
           "id": "evens_tc_02",
           "input": "2,4,6",
           "expected_output": "2,4,6",
-          "fail_node_id": "l1_c1_p1_node_evens_all_even"
+          "fail_node_id": "l1_c1_p1_node_evens_all_even",
+          "priority": 1
         },
         {
           "id": "evens_tc_03",
           "input": "1,3,5",
           "expected_output": "1,3,5",
-          "fail_node_id": "l1_c1_p1_node_evens_all_odd"
+          "fail_node_id": "l1_c1_p1_node_evens_all_odd",
+          "priority": 1
         },
         {
           "id": "evens_tc_04",
           "input": "2,1,4,3,6,5",
           "expected_output": "1,3,5,2,4,6",
-          "fail_node_id": "l1_c1_p1_node_evens_stability"
+          "fail_node_id": "l1_c1_p1_node_evens_stability",
+          "priority": 5
         },
         {
           "id": "evens_tc_05_even_head",
           "input": "2,1,3,5",
           "expected_output": "1,3,5,2",
-          "fail_node_id": "l1_c1_p1_node_evens_head_update"
+          "fail_node_id": "l1_c1_p1_node_evens_head_update",
+          "priority": 4
         },
         {
           "id": "evens_tc_06_even_tail",
           "input": "1,3,5,2",
           "expected_output": "1,3,5,2",
-          "fail_node_id": "l1_c1_p1_node_evens_tail_handling"
+          "fail_node_id": "l1_c1_p1_node_evens_tail_handling",
+          "priority": 2
+        },
+        {
+          "id": "evens_tc_07_single_odd",
+          "input": "1",
+          "expected_output": "1",
+          "fail_node_id": "l1_c1_p1_node_evens_single_element",
+          "priority": 1
         },
         {
           "id": "evens_tc_08_single_even",
           "input": "2",
           "expected_output": "2",
-          "fail_node_id": "l1_c1_p1_node_evens_single_element"
+          "fail_node_id": "l1_c1_p1_node_evens_single_element",
+          "priority": 1
         }
       ]
     },
@@ -56,7 +70,8 @@
           "id": "max_tc_01",
           "input": "1,2,3,4,5",
           "expected_output": "5,1,2,3,4",
-          "fail_node_id": "l1_c1_p2_node_max_not_front"
+          "fail_node_id": "l1_c1_p2_node_max_not_front",
+          "priority": 5
         }
       ]
     },
@@ -68,25 +83,36 @@
           "id": "dup_tc_01",
           "input": "1,1,2,3,3,3",
           "expected_output": "1,2,3",
-          "fail_node_id": "l1_c2_p1_node_duplicates_basic"
+          "fail_node_id": "l1_c2_p1_node_duplicates_basic",
+          "priority": 5
         },
         {
           "id": "dup_tc_02",
           "input": "1,2,3,4",
           "expected_output": "1,2,3,4",
-          "fail_node_id": "l1_c2_p1_node_no_duplicates"
+          "fail_node_id": "l1_c2_p1_node_no_duplicates",
+          "priority": 2
         },
         {
           "id": "dup_tc_03",
           "input": "2,2,2,2",
           "expected_output": "2",
-          "fail_node_id": "l1_c2_p1_node_duplicates_all_same"
+          "fail_node_id": "l1_c2_p1_node_duplicates_all_same",
+          "priority": 4
         },
         {
           "id": "dup_tc_04",
           "input": "1,1,1,2,2,3,3,3,3",
           "expected_output": "1,2,3",
-          "fail_node_id": "l1_c2_p1_node_duplicates_multiple_blocks"
+          "fail_node_id": "l1_c2_p1_node_duplicates_multiple_blocks",
+          "priority": 5
+        },
+        {
+          "id": "dup_tc_05",
+          "input": "7",
+          "expected_output": "7",
+          "fail_node_id": "l1_c2_p1_node_single_element",
+          "priority": 1
         }
       ]
     },
@@ -161,38 +187,44 @@
           "id": "sortstack_tc_01_basic",
           "input": "3,1,4,2",
           "expected_output": "1,2,3,4",
-          "fail_node_id": "l2_c2_p3_node_sortstack_basic"
+          "fail_node_id": "l2_c2_p3_node_sortstack_basic",
+          "priority": 5
         },
         {
           "id": "sortstack_tc_02_already_sorted",
           "input": "1,2,3,4",
           "expected_output": "1,2,3,4",
-          "fail_node_id": "l2_c2_p3_node_sortstack_already_sorted"
+          "fail_node_id": "l2_c2_p3_node_sortstack_already_sorted",
+          "priority": 2
         },
         {
           "id": "sortstack_tc_03_reverse_sorted",
           "input": "4,3,2,1",
           "expected_output": "1,2,3,4",
-          "fail_node_id": "l2_c2_p3_node_sortstack_reverse_sorted"
+          "fail_node_id": "l2_c2_p3_node_sortstack_reverse_sorted",
+          "priority": 4
         },
         {
           "id": "sortstack_tc_04_with_duplicates",
           "input": "3,1,2,1,3",
           "expected_output": "1,1,2,3,3",
-          "fail_node_id": "l2_c2_p3_node_sortstack_duplicates"
+          "fail_node_id": "l2_c2_p3_node_sortstack_duplicates",
+          "priority": 3
         },
         {
           "id": "sortstack_tc_05_single",
           "input": "7",
           "expected_output": "7",
-          "fail_node_id": "l2_c2_p3_node_sortstack_single"
+          "fail_node_id": "l2_c2_p3_node_sortstack_single",
+          "priority": 1
         },
 
         {
           "id": "sortstack_tc_06_tutorial_example",
           "input": "6,5,4,3,2,1",
           "expected_output": "1,2,3,4,5,6",
-          "fail_node_id": "l2_c2_p3_node_sortstack_reverse_sorted"
+          "fail_node_id": "l2_c2_p3_node_sortstack_reverse_sorted",
+          "priority": 4
         }
       ]
     },
@@ -213,58 +245,67 @@
       "type": "code_function",
       "test_cases": [
         {
-          "id": "maxdepth_tc_02_single",
+          "id": "maxdepth_tc_01_single",
           "input": "1-N",
           "expected_output": "0",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_single_node"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_single_node",
+          "priority": 6
         },
         {
-          "id": "maxdepth_tc_03_two_levels",
+          "id": "maxdepth_tc_02_two_levels",
           "input": "1,2,3-N,L,R",
           "expected_output": "1",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_basic_height"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_basic_height",
+          "priority": 5
         },
         {
-          "id": "maxdepth_tc_04_left_skewed",
+          "id": "maxdepth_tc_03_left_skewed",
           "input": "1,2,3,4-N,L,LL,LLL",
           "expected_output": "3",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_skewed_left"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_skewed_left",
+          "priority": 4
         },
         {
-          "id": "maxdepth_tc_05_right_skewed",
+          "id": "maxdepth_tc_04_right_skewed",
           "input": "1,2,3,4-N,R,RR,RRR",
           "expected_output": "3",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_skewed_right"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_skewed_right",
+          "priority": 4
         },
         {
-          "id": "maxdepth_tc_06_unbalanced_deeper_left",
+          "id": "maxdepth_tc_05_unbalanced_deeper_left",
           "input": "1,2,3,4,5-N,L,R,LL,LLL",
           "expected_output": "3",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_unbalanced_tree"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_unbalanced_tree",
+          "priority": 3
         },
         {
-          "id": "maxdepth_tc_07_sparse_with_nulls",
+          "id": "maxdepth_tc_06_sparse_with_nulls",
           "input": "1,2,3,4,5-N,L,R,LR,RL",
           "expected_output": "2",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_null_children_handling"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_null_children_handling",
+          "priority": 2
         },
         {
-          "id": "maxdepth_tc_08_complete_three_levels",
+          "id": "maxdepth_tc_07_complete_three_levels",
           "input": "1,2,3,4,5,6,7-N,L,R,LL,LR,RL,RR",
           "expected_output": "2",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_complete_tree"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_complete_tree",
+          "priority": 5
         },
         {
-          "id": "maxdepth_tc_09_zigzag_chain",
+          "id": "maxdepth_tc_08_zigzag_chain",
           "input": "1,2,3,4,5-N,L,LR,LRL,LRLR",
           "expected_output": "4",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_zigzag_structure"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_zigzag_structure",
+          "priority": 3
         },
         {
-          "id": "maxdepth_tc_10_tutorial_example",
+          "id": "maxdepth_tc_09_tutorial_example",
           "input": "50,20,60,10,30,55,80-N,L,R,LL,LR,LRL,RR",
           "expected_output": "3",
-          "fail_node_id": "l3_c2_p1_node_maxdepth_basic_height"
+          "fail_node_id": "l3_c2_p1_node_maxdepth_basic_height",
+          "priority": 1
         }
       ]
     },
@@ -384,31 +425,36 @@
           "id": "min_tc_01_sorted_no_rotation",
           "input": "1,2,3,4,5",
           "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_already_sorted_segment"
+          "fail_node_id": "l4_c1_p4_node_already_sorted_segment",
+          "priority": 4
         },
         {
           "id": "min_tc_02_simple_rotation",
           "input": "4,5,1,2,3",
           "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_rotation_binary_search"
+          "fail_node_id": "l4_c1_p4_node_rotation_binary_search",
+          "priority": 5
         },
         {
           "id": "min_tc_03_single_element",
           "input": "7",
           "expected_output": "7",
-          "fail_node_id": "l4_c1_p4_node_single_element"
+          "fail_node_id": "l4_c1_p4_node_single_element",
+          "priority": 1
         },
         {
           "id": "min_tc_04_two_elements_rotated",
           "input": "2,1",
           "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_two_element_boundary"
+          "fail_node_id": "l4_c1_p4_node_two_element_boundary",
+          "priority": 2
         },
         {
           "id": "min_tc_05_rotation_compare_boundary",
           "input": "3,4,5,1,2",
           "expected_output": "1",
-          "fail_node_id": "l4_c1_p4_node_compare_wrong_boundary"
+          "fail_node_id": "l4_c1_p4_node_compare_wrong_boundary",
+          "priority": 3
         }
       ]
     },
@@ -445,31 +491,36 @@
           "id": "trie_prefix_tc_01",
           "input": "kit,kitten,kin,keep-ki",
           "expected_output": "kin,kit,kitten",
-          "fail_node_id": "l6_c3_p1_node_trie_prefix_core"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_core",
+          "priority": 5
         },
         {
           "id": "trie_prefix_tc_02",
           "input": "cat,car,carbon,dog-ca",
           "expected_output": "car,carbon,cat",
-          "fail_node_id": "l6_c3_p1_node_trie_prefix_alphabetical"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_alphabetical",
+          "priority": 3
         },
         {
           "id": "trie_prefix_tc_03",
           "input": "apple,banana,cherry-do",
           "expected_output": "empty!",
-          "fail_node_id": "l6_c3_p1_node_trie_prefix_not_found"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_not_found",
+          "priority": 5
         },
         {
           "id": "trie_prefix_tc_04",
           "input": "a,app,apple,apply-app",
           "expected_output": "app,apple,apply",
-          "fail_node_id": "l6_c3_p1_node_trie_prefix_word_vs_prefix"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_word_vs_prefix",
+          "priority": 4
         },
         {
           "id": "trie_prefix_tc_05",
           "input": "bat,ball,bark-ba",
           "expected_output": "ball,bark,bat",
-          "fail_node_id": "l6_c3_p1_node_trie_prefix_sibling_traversal"
+          "fail_node_id": "l6_c3_p1_node_trie_prefix_sibling_traversal",
+          "priority": 1
         }
       ]
     }
@@ -1611,6 +1662,14 @@
       "concept_id": "concept_ll_traversal",
       "penalties": {
         "concept_ll_traversal": -0.2
+      }
+    },
+    "l1_c2_p1_node_single_element": {
+      "hint_text": "If the list contains only one node, it should remain unchanged. Make sure your function handles this edge case correctly.",
+      "concept_id": "concept_ll_single_node_handling",
+      "penalties": {
+        "concept_ll_single_node_handling": -0.2,
+        "concept_ll_edge_case_no_change": -0.05
       }
     },
     "l1_c3_p1_node_circ_last_next_assignment": {

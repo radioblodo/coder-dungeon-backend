@@ -212,6 +212,7 @@ def submit_code():
                 "expected": expected,
                 "actual": actual,
                 "stderr": (result.stderr or "").strip(),
+                "priority": case.get("priority", 0),
             })
 
     if not failures:
@@ -278,17 +279,33 @@ def submit_code():
 
     def mastery_for_node(node_id: str) -> float:
         node = graph_nodes.get(node_id, {})
+        concept_ids = set((node.get("penalties") or {}).keys())
         concept_id = node.get("concept_id")
-        if concept_id in mastery:
-            return mastery[concept_id]
-        return 0.5
+        if concept_id:
+            concept_ids.add(concept_id)
+        if not concept_ids:
+            return 0.5
+        total = 0.0
+        for cid in concept_ids:
+            total += mastery.get(cid, 0.5)
+        return total / len(concept_ids)
+
+    max_failure_priority = max(
+        (f.get("priority", 0) for f in failures if f.get("fail_node_id")),
+        default=0,
+    )
+    priority_failed_node_ids = [
+        f.get("fail_node_id")
+        for f in failures
+        if f.get("fail_node_id") and f.get("priority", 0) == max_failure_priority
+    ]
 
     chosen_node_id = (
         min(
-            failed_node_ids,
+            priority_failed_node_ids,
             key=lambda node_id: (mastery_for_node(node_id), node_id),
         )
-        if failed_node_ids
+        if priority_failed_node_ids
         else None
     )
     if not chosen_node_id:
@@ -313,7 +330,15 @@ def submit_code():
     concept = knowledge_graph.get("concepts", {}).get(concept_id, {}) if concept_id else {}
     concept_label = concept.get("label") or concept_id or "General"
 
-    shown = next((f for f in failures if f.get("fail_node_id") == chosen_node_id), failures[0])
+    shown = next(
+        (
+            f
+            for f in failures
+            if f.get("fail_node_id") == chosen_node_id
+            and f.get("priority", 0) == max_failure_priority
+        ),
+        failures[0],
+    )
 
     micro_hint = ai_explain_failure(chosen_node_id, concept_label, code, shown)
 
