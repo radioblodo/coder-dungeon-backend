@@ -413,13 +413,8 @@ def request_hint():
     concept_id = node.get("concept_id")
     concepts = knowledge_graph.get("concepts", {})
     concept = concepts.get(concept_id, {}) if concept_id else {}
-    concept_label = concept.get("label") or concept_id or "General"
-    generic_hint = concept.get("generic_hint")
     specific_hint = node.get("hint_text", "Think about this part again.")
-    if generic_hint:
-        hint_text = f"{concept_label}: {generic_hint}\n\nTip: {specific_hint}"
-    else:
-        hint_text = specific_hint
+    hint_text = f"<color=#C4E538>Tip: {specific_hint}</color>"
     prev_fail_nodes = []
     for entry in reversed(_load_attempt_logs(player_id)):
         if entry.get("puzzle_name") == problem_id:
@@ -453,8 +448,8 @@ def request_hint():
                 if len(prereq_hints) >= 2:
                     break
         if prereq_hints:
-            hint_text = hint_text + "\n\nPrerequisites:\n" + "\n".join(
-                f"- {h}" for h in prereq_hints
+            hint_text = hint_text + "\n\n" + "\n".join(
+                f"<color=#C4E538>Tip: {h}</color>" for h in prereq_hints
             )
     attempt_entry = {
         "player_id": player_id,
