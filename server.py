@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 GRAPH_FILE_PATH = os.path.join(BASE_DIR, "knowledge_graph.json")
 
 # put it inside the Railway volume mount
-STORE_FILE_PATH = "/data/store"
+STORE_FILE_PATH = "/data/store_prod"
 os.makedirs(STORE_FILE_PATH, exist_ok=True)
 OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-4.1-mini")
 
