@@ -14,8 +14,16 @@ from openai import OpenAI
 # ============================================================
 # Config
 # ============================================================
-GRAPH_FILE_PATH = "knowledge_graph.json"
-STORE_FILE_PATH = "./store/"
+# GRAPH_FILE_PATH = "knowledge_graph.json"
+# STORE_FILE_PATH = "./store/"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# knowledge_graph.json 
+GRAPH_FILE_PATH = os.path.join(BASE_DIR, "knowledge_graph.json")
+
+# put it inside the Railway volume mount
+STORE_FILE_PATH = "/data/store"
+os.makedirs(STORE_FILE_PATH, exist_ok=True)
 OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-4.1-mini")
 
 ALLOWED_ORIGINS = [
@@ -24,11 +32,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
-# If you want to control logging without editing code, set on Railway:
-# AI_LOG=1
-AI_LOG = os.environ.get("AI_LOG", "1") in ("1", "true", "True", "yes", "YES")
-
-os.makedirs(STORE_FILE_PATH, exist_ok=True)
+# os.makedirs(STORE_FILE_PATH, exist_ok=True)
 
 app = Flask(__name__)
 CORS(
@@ -99,7 +103,7 @@ def ai_explain_failure(
     )
     user_prompt = (
         f"The student is struggling with {concept_label}. "
-        "Looking at their code, explain why they failed this specific test case in 15 words. Explain it to the student as if you are talking to the student directly."
+        "Looking at their code, explain why they failed this specific test case in 20 words. Explain it to the student as if you are talking to the student directly."
     )
 
     try:
@@ -374,15 +378,6 @@ def submit_code():
 # ============================================================
 @app.route("/request-hint", methods=["POST", "OPTIONS"])
 def request_hint():
-    """
-    Client sends:
-      {
-        "problem_id": "...",
-        "remaining_concept_ids": ["nodeA","nodeB",...]
-      }
-
-    Deterministic: return first concept_id that exists in graph_nodes.
-    """
     if request.method == "OPTIONS":
         return ("", 204)
 
@@ -502,9 +497,6 @@ def clamp(x: float, low: float = 0.0, high: float = 1.0) -> float:
     return max(low, min(high, x))
 
 def aggregate_penalties(knowledge_graph: dict, fail_node_ids: Set[str],) -> Dict[str, float]:
-    """
-    Sum penalties per concept across the given fail nodes.
-    """
     delta = defaultdict(float)
     graph_nodes = knowledge_graph.get("graph_nodes", {})
 
@@ -526,15 +518,6 @@ def update_mastery(
     curr_fail_nodes: List[str],
     recovery_factor: float = 0.5,
 ) -> Tuple[Dict[str, float], Dict[str, float]]:
-    """
-    Returns:
-      (updated_mastery, applied_delta_by_concept)
-
-    Behaviour:
-      - Penalize concepts for CURRENT fail nodes.
-      - Reward concepts for RESOLVED fail nodes (those that were failing last attempt but not now),
-        by adding recovery_factor * abs(penalty).
-    """
     prev_set = set(prev_fail_nodes or [])
     curr_set = set(curr_fail_nodes or [])
 
@@ -578,10 +561,6 @@ def now_iso_sg() -> str:
     return datetime.now(timezone(timedelta(hours=8))).isoformat()
 
 def concept_counts_from_failures(failures: list[dict]) -> dict:
-    """
-    Map fail_node_id -> graph_nodes[fail_node_id].concept_id and count.
-    Returns dict like {"concept_ll_stable_partition": 2, ...}
-    """
     graph_nodes = knowledge_graph.get("graph_nodes", {})
     c = Counter()
 
@@ -642,10 +621,6 @@ def playerdata(player_id):
     return jsonify({"ok": True, "player_id": player_id})
 
 def append_attempt_log(player_id: int, entry: dict) -> None:
-    """
-    Append a single attempt entry to store/attemptlog_<player_id>.json
-    File format: a JSON list of entries.
-    """
     path = os.path.join(STORE_FILE_PATH, f"attemptlog_{player_id}.json")
 
     logs = []
@@ -699,7 +674,6 @@ def next_attempt_no_for_player(player_id: int, puzzle_name: str) -> int:
 # CSV Export
 # ============================================================
 def _iter_playerdata_files():
-    """Yield (player_id:int, filepath:str) for all playerdata_*.json files."""
     pattern = os.path.join(STORE_FILE_PATH, "playerdata_*.json")
     for path in sorted(glob.glob(pattern)):
         base = os.path.basename(path)  # e.g. playerdata_12.json
