@@ -103,7 +103,7 @@ def ai_explain_failure(
     )
     user_prompt = (
         f"The student is struggling with {concept_label}. "
-        "Looking at their code, explain why they failed this specific test case in 20 words. Explain it to the student as if you are talking to the student directly."
+        "Looking at their code, explain why they failed this specific test case in 20 words. Explain it to the student as if you are talking to the student directly. Keep it short and within 20 words"
     )
 
     try:
