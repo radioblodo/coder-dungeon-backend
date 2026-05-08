@@ -119,8 +119,8 @@ def ai_explain_failure(
         micro_hint = (resp.output_text or "").strip()
         if micro_hint:
             words = micro_hint.split()
-            if len(words) > 15:
-                micro_hint = " ".join(words[:15])
+            if len(words) > 20:
+                micro_hint = " ".join(words[:20])
         return micro_hint or None
     except Exception as e:
         print("[AI] explain_failure error:", e)

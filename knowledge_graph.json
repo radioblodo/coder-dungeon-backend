@@ -1611,7 +1611,7 @@
       }
     },
     "l1_c1_p2_node_max_not_front": {
-      "hint_text": "After your function runs, the largest value in the list should become the head node. Verify you are relinking nodes so the max node is first, not just swapping values incorrectly.",
+      "hint_text": "After your function runs, the largest value in the list should become the head node. Verify you are relinking nodes so the max node is first.",
       "concept_id": "concept_ll_head_pointer_update",
       "penalties": {
         "concept_ll_head_pointer_update": -0.2,
